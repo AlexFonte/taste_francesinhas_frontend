@@ -1,0 +1,12 @@
+export interface Review {
+  id: number;
+  francesinhaId: number;
+  userEmail: string;
+  scoreFlavor: number;
+  scoreSauce: number;
+  scoreBread: number;
+  scorePresentation: number;
+  avgScore: number;
+  comment: string;
+  createdAt: string;
+}

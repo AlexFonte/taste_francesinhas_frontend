@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 100" fill="none">
+
+  <!-- Sombra -->
+  <ellipse cx="60" cy="95" rx="40" ry="4" fill="#00000012"/>
+
+  <!-- === PAN SUPERIOR (rebanada plana con corteza) === -->
+  <!-- Corteza exterior -->
+  <rect x="14" y="10" width="92" height="20" rx="4" fill="#8B3820"/>
+  <!-- Miga (interior más claro) -->
+  <rect x="18" y="13" width="84" height="14" rx="2" fill="#D4733F"/>
+  <!-- Tono tostado -->
+  <rect x="18" y="13" width="84" height="5" rx="2" fill="#C45C2A" opacity="0.5"/>
+  <!-- Línea corteza inferior del pan de arriba -->
+  <rect x="14" y="28" width="92" height="4" rx="1" fill="#8B3820"/>
+
+  <!-- === CAPAS DE RELLENO === -->
+
+  <!-- Salsa naranja/tomate (capa fina) -->
+  <rect x="12" y="32" width="96" height="6" rx="1" fill="#C45C2A" opacity="0.85"/>
+
+  <!-- Queso derretido ondulado -->
+  <path d="M12 38 Q22 44 32 38 Q42 32 52 38 Q62 44 72 38 Q82 32 92 38 Q100 43 108 38 L108 46 L12 46 Z" fill="#F5C4B3"/>
+
+  <!-- Carne / fiambre (grueso, oscuro) -->
+  <rect x="12" y="45" width="96" height="12" rx="1" fill="#6B2510"/>
+  <!-- Veta de la carne -->
+  <rect x="12" y="45" width="96" height="4" rx="1" fill="#8B3820" opacity="0.6"/>
+
+  <!-- Loncha de jamón/linguiça (color rosado) -->
+  <rect x="12" y="57" width="96" height="7" rx="1" fill="#A04530" opacity="0.8"/>
+
+  <!-- === PAN INFERIOR (rebanada plana con corteza) === -->
+  <!-- Corteza exterior -->
+  <rect x="14" y="64" width="92" height="22" rx="4" fill="#8B3820"/>
+  <!-- Miga -->
+  <rect x="18" y="67" width="84" height="15" rx="2" fill="#D4733F"/>
+  <!-- Tono tostado -->
+  <rect x="18" y="67" width="84" height="6" rx="2" fill="#C45C2A" opacity="0.5"/>
+
+</svg>
