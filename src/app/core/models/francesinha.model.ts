@@ -5,8 +5,7 @@ export type FrancesinhaType = 'CLASICA' | 'ESPECIAL' | 'VEGANA' | 'KEBAB' | 'MAR
 
 export interface Francesinha {
   id: number;
-  restaurantId: number;
-  restaurant?: Restaurant;
+  restaurant: Restaurant;
   proposedByEmail: string;
   name: string;
   description?: string;

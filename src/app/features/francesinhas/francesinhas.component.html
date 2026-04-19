@@ -1,4 +1,4 @@
-<div class="min-h-screen bg-neutral">
+<div class="min-h-screen">
 
   <!-- Header -->
   <header class="bg-white shadow-sm px-4 py-3">
@@ -7,80 +7,60 @@
 
   <main class="px-4 py-4 md:px-6 md:py-6 max-w-6xl mx-auto">
 
-    <!-- Card de filtros colapsable -->
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 mb-4">
+    <!-- Filtros colapsables -->
+    <mat-accordion class="block mb-4" id="filterPanel">
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>filter_list</mat-icon>
+            Filtros
+          </mat-panel-title>
+        </mat-expansion-panel-header>
 
-      <!-- Cabecera del card -->
-      <button type="button"
-        (click)="filtrosAbiertos.set(!filtrosAbiertos())"
-        class="w-full flex items-center justify-between px-4 py-3 text-left">
-        <div class="flex items-center gap-2">
-          <!-- Icono filtro -->
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"/>
-          </svg>
-          <span class="text-sm font-semibold text-gray-700">Filtros</span>
-        </div>
-        <!-- Chevron animado -->
-        <svg xmlns="http://www.w3.org/2000/svg"
-          class="w-4 h-4 text-gray-400 transition-transform duration-200"
-          [class.rotate-180]="filtrosAbiertos()"
-          fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-        </svg>
-      </button>
+        <form [formGroup]="filterForm" (ngSubmit)="search()">
 
-      <!-- Contenido colapsable -->
-      @if (filtrosAbiertos()) {
-        <div class="border-t border-gray-100 px-4 py-4">
-          <form [formGroup]="filterForm" (ngSubmit)="search()"
-            class="flex flex-col gap-3 md:flex-row md:flex-wrap md:items-end">
+          <div class="flex flex-col gap-3 md:flex-row md:flex-wrap pt-2">
+            <mat-form-field appearance="outline" class="flex-1">
+              <mat-label>Nombre</mat-label>
+              <input matInput formControlName="name" placeholder="Buscar..."/>
+            </mat-form-field>
 
-            <div class="flex flex-col gap-1 md:flex-1 md:min-w-[160px]">
-              <label class="text-xs text-gray-500 font-medium">Nombre</label>
-              <input formControlName="name" type="text" placeholder="Buscar..."
-                class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"/>
-            </div>
+            <mat-form-field appearance="outline" class="flex-1">
+              <mat-label>Ciudad</mat-label>
+              <input matInput formControlName="city" placeholder="Ciudad..."/>
+            </mat-form-field>
 
-            <div class="flex flex-col gap-1 md:flex-1 md:min-w-[140px]">
-              <label class="text-xs text-gray-500 font-medium">Ciudad</label>
-              <input formControlName="city" type="text" placeholder="Ciudad..."
-                class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"/>
-            </div>
-
-            <div class="flex flex-col gap-1 md:flex-1 md:min-w-[160px]">
-              <label class="text-xs text-gray-500 font-medium">Tipo</label>
-              <select formControlName="type"
-                class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30">
-                <option value="">Todos los tipos</option>
+            <mat-form-field appearance="outline" class="flex-1">
+              <mat-label>Tipo</mat-label>
+              <mat-select formControlName="type">
+                <mat-option value="">Todos los tipos</mat-option>
                 @for (tipo of tipos; track tipo.value) {
-                  <option [value]="tipo.value">{{ tipo.label }}</option>
+                  <mat-option [value]="tipo.value">{{ tipo.label }}</mat-option>
                 }
-              </select>
-            </div>
+              </mat-select>
+            </mat-form-field>
+          </div>
 
-            <div class="flex gap-2 md:pb-0">
-              <button type="button" (click)="reset()"
-                class="flex-1 md:flex-none px-4 py-2 text-sm text-gray-500 border border-gray-200 rounded-lg hover:bg-gray-50">
-                Reset
-              </button>
-              <button type="submit"
-                class="flex-1 md:flex-none px-4 py-2 text-sm bg-primary text-white rounded-lg hover:bg-secondary">
-                Buscar
-              </button>
-            </div>
+          <mat-action-row>
+            <button mat-stroked-button type="button" (click)="reset()" style="border-color: #8B3820; color: #8B3820;">
+              <mat-icon>restart_alt</mat-icon>
+              Reset
+            </button>
+            <button mat-flat-button type="submit" color="primary">
+              <mat-icon>search</mat-icon>
+              Buscar
+            </button>
+          </mat-action-row>
 
-          </form>
-        </div>
-      }
-    </div>
+        </form>
+      </mat-expansion-panel>
+    </mat-accordion>
 
     <!-- Grid de cards -->
     @if (francesinhasList().length > 0) {
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         @for (f of francesinhasList(); track f.id) {
-          <app-francesinha-card [francesinha]="f" />
+          <app-francesinha-card [francesinha]="f"/>
         }
       </div>
     }
@@ -88,7 +68,8 @@
     <!-- Estado vacío -->
     @if (francesinhasList().length === 0 && !isLoading()) {
       <div class="text-center py-16 text-gray-400">
-        <p class="text-lg">No se encontraron francesinhas</p>
+        <mat-icon class="text-5xl! w-auto! h-auto! opacity-30">lunch_dining</mat-icon>
+        <p class="text-lg mt-2">No se encontraron francesinhas</p>
         <p class="text-sm mt-1">Prueba con otros filtros</p>
       </div>
     }
@@ -96,15 +77,15 @@
     <!-- Loading -->
     @if (isLoading()) {
       <div class="flex justify-center py-8">
-        <div class="w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+        <mat-spinner diameter="40" color="primary"/>
       </div>
     }
 
     <!-- Cargar más -->
     @if (hayMas() && !isLoading()) {
       <div class="flex justify-center mt-6">
-        <button (click)="loadMore()"
-          class="px-6 py-2.5 bg-white border border-primary text-primary text-sm font-medium rounded-full hover:bg-primary hover:text-white transition-colors">
+        <button mat-flat-button color="primary" (click)="loadMore()" style="min-width: 200px;">
+          <mat-icon>add</mat-icon>
           Cargar más
         </button>
       </div>

@@ -1,16 +1,37 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { FrancesinhaService } from '../../core/services/francesinha.service';
 import { Francesinha, FrancesinhaType } from '../../core/models/francesinha.model';
 import { FrancesinhaCardComponent } from './francesinha-card/francesinha-card.component';
-import {FrancesinhasPagedResponse} from '../../core/models/page.model';
+import { FrancesinhasPagedResponse } from '../../core/models/page.model';
 
 @Component({
   selector: 'app-francesinhas',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FrancesinhaCardComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatCardModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
+    MatExpansionModule,
+    FrancesinhaCardComponent,
+  ],
   templateUrl: './francesinhas.component.html',
+  styleUrl: './francesinhas.component.scss',
 })
 export class FrancesinhasComponent implements OnInit {
 
@@ -22,7 +43,6 @@ export class FrancesinhasComponent implements OnInit {
   paginaActual = signal(0);
   totalPaginas = signal(0);
   hayMas = computed(() => this.paginaActual() < this.totalPaginas() - 1);
-  filtrosAbiertos = signal(false);
 
   tipos = [
     { value: 'CLASICA',  label: 'Clásica' },
