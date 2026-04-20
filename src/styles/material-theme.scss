@@ -1,0 +1,42 @@
+@use '@angular/material' as mat;
+
+$taste-primary: (
+  0:   #000000,
+  10:  #2D0D00,
+  20:  #4E1A00,
+  25:  #5E2000,
+  30:  #6F2700,
+  35:  #802E00,
+  40:  #8B3820,
+  50:  #A84820,
+  60:  #C45C2A,
+  70:  #D4733F,
+  80:  #E8A882,
+  90:  #F5C4B3,
+  95:  #FAE0D5,
+  98:  #FDF3EE,
+  99:  #FFFBF8,
+  100: #FFFFFF,
+);
+
+html {
+  height: 100%;
+  @include mat.theme(
+    (
+      color: (
+        primary: $taste-primary,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+}
+
+body {
+  color-scheme: light;
+  background-color: #F1EFE8;
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+  margin: 0;
+  height: 100%;
+}

@@ -1,9 +1,13 @@
 <mat-card class="!rounded-2xl overflow-hidden h-full !shadow-sm !border !border-gray-100">
 
   <!-- Imagen placeholder -->
-  <div class="relative bg-[#F1EFE8] aspect-video flex items-center justify-center">
+  <div class="relative bg-neutral aspect-video flex items-center justify-center">
     <span class="text-5xl">🥪</span>
-    <!-- Botón favorito -->
+    <!-- Chip tipo — top left -->
+    <mat-chip class="!absolute !top-2 !left-2 !text-xs !h-6 !text-secondary">
+      {{ francesinha().type }}
+    </mat-chip>
+    <!-- Botón favorito — top right -->
     <button mat-icon-button class="!absolute !top-1 !right-1">
       <mat-icon class="!text-gray-400">favorite_border</mat-icon>
     </button>
@@ -17,23 +21,38 @@
     </h2>
 
     <!-- Restaurante -->
-    <p class="text-sm text-gray-600  pt-1 pb-1 line-clamp-1">
+    <p class="text-base text-gray-600 pt-1 line-clamp-1">
       {{ francesinha().restaurant?.name }} · {{ francesinha().restaurant?.city }}
     </p>
 
-    <!-- Score + ciudad + precio -->
+    <!-- Badges -->
+    <div class="flex flex-nowrap gap-1.5 py-1.5 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+
+<!--      @if (francesinha().hasFries) {-->
+        <span class="text-sm bg-amber-100 text-amber-900 border border-amber-300 px-2 py-0.5 rounded-full flex items-center gap-1">
+          <img src="icons/fries.svg" class="w-3.5 h-3.5" alt=""/> Patatas
+        </span>
+<!--      }-->
+<!--      @if (francesinha().hasEgg) {-->
+        <span class="text-sm bg-yellow-100 text-yellow-900 border border-yellow-300 px-2 py-0.5 rounded-full flex items-center gap-1">
+          <img src="icons/egg.svg" class="w-3.5 h-3.5" alt=""/> Huevo
+        </span>
+<!--      }-->
+<!--      @if (francesinha().isSpicy) {-->
+        <span class="text-sm bg-red-100 text-red-900 border border-red-300 px-2 py-0.5 rounded-full flex items-center gap-1">
+          <img src="icons/chilli.svg" class="w-3.5 h-3.5" alt=""/> Picante
+        </span>
+<!--      }-->
+    </div>
+
+    <!-- Score + precio -->
     <div class="flex items-center gap-2 mt-0.5 flex-wrap">
 
       <!-- Score -->
       <div class="flex items-center gap-0.5">
-        <mat-icon style="font-size: 24px; width: 24px; height: 24px; line-height: 24px;" class="!text-yellow-400">star</mat-icon>
+        <mat-icon class="!text-yellow-400 !text-2xl !w-6 !h-6 !leading-6">star</mat-icon>
         <span class="text-xs font-medium text-gray-700">{{ francesinha().avgScore | number:'1.1-1' }}</span>
       </div>
-
-      <!-- Ciudad -->
-      <mat-chip class="!text-sm !h-6 border-primary">
-        {{ francesinha().restaurant?.city }}
-      </mat-chip>
 
 
       <!-- Precio -->

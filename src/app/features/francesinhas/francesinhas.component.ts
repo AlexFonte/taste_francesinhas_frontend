@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit, AfterViewInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -32,8 +32,12 @@ import { FrancesinhasPagedResponse } from '../../core/models/page.model';
   ],
   templateUrl: './francesinhas.component.html',
   styleUrl: './francesinhas.component.scss',
+
 })
-export class FrancesinhasComponent implements OnInit {
+export class FrancesinhasComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  @ViewChild('sentinel') private sentinel!: ElementRef;
+  private observer!: IntersectionObserver;
 
   private readonly francesinhaService = inject(FrancesinhaService);
   private readonly fb = inject(FormBuilder);
@@ -60,6 +64,20 @@ export class FrancesinhasComponent implements OnInit {
 
   ngOnInit() {
     this.load(0);
+  }
+
+  ngAfterViewInit() {
+    this.observer = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && this.hayMas() && !this.isLoading()) {
+        this.loadMore();
+      }
+    }, { threshold: 0.1 });
+
+    this.observer.observe(this.sentinel.nativeElement);
+  }
+
+  ngOnDestroy() {
+    this.observer?.disconnect();
   }
 
   search() {

@@ -3,3 +3,14 @@ h2, h3 {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
+
+/* Animación de entrada desactivada — para activar, añadir al card: animate.enter="card-enter" [style.--i]="i % 10"
+:host.card-enter {
+  animation: card-slide-in 600ms ease-in-out calc(var(--i, 0) * 100ms) both;
+}
+
+@keyframes card-slide-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+*/

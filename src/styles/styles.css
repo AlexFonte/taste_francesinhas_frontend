@@ -10,14 +10,10 @@
 
 
 :root {
-  /* Fuerza el color primario de Material al naranja tostado en lugar del tono 40 de la paleta */
-  --mat-sys-primary: #C45C2A;
-  --mat-sys-on-primary: #ffffff;
-
-  --mat-expansion-header-text-color: #C45C2A;
+  /* Chevron del mat-expansion-panel */
   --mat-expansion-header-indicator-color: #C45C2A;
-  --mdc-chip-outline-color: #8B3820;
 
+  /* Surfaces blancas para cards, overlays y paneles */
   --mat-sys-surface: #ffffff;
   --mat-sys-surface-container: #ffffff;
   --mat-sys-surface-container-low: #ffffff;
