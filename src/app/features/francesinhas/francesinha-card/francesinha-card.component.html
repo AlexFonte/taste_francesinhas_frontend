@@ -1,12 +1,16 @@
-<mat-card class="!rounded-2xl overflow-hidden h-full !shadow-sm !border !border-gray-100">
+<mat-card class="!rounded-2xl overflow-hidden h-full !shadow-sm">
 
   <!-- Imagen placeholder -->
-  <div class="relative bg-[#F0997B] aspect-video flex items-center justify-center">
-    <span class="text-5xl">🥪</span>
+  <div class="relative bg-tertiary/50 aspect-video flex items-center justify-center border-b border-b-primary">
+    <div class="bg-white/60 border border-primary rounded-full p-4 shadow-xl">
+      <img src="icons/francesinha.svg" class="w-12 h-12 opacity-70" alt=""/>
+    </div>
+
     <!-- Chip tipo — top left -->
-    <mat-chip class="!absolute !top-2 !left-2 !text-xs !h-6 !text-secondary">
-      {{ francesinha().type }}
+    <mat-chip class="!absolute !top-2 !left-2 !text-xs !h-6 bg-secondary cutom-header-chip !shadow-xl">
+      <i>{{ francesinha().type }}</i>
     </mat-chip>
+
     <!-- Botón favorito — top right -->
     <button mat-icon-button class="!absolute !top-1 !right-1">
       <mat-icon class="!text-gray-400">favorite_border</mat-icon>
@@ -16,7 +20,7 @@
   <mat-card-content class="!p-3 flex flex-col gap-1.5">
 
     <!-- Nombre -->
-    <h2 class="font-semibold text-lg line-clamp-1">
+    <h2 class="font-medium text-lg line-clamp-1 !text-text-main">
       {{ francesinha().name }}
     </h2>
 
@@ -28,35 +32,40 @@
     <!-- Badges -->
     <div class="flex flex-nowrap gap-1.5 py-1.5 overflow-x-auto [&::-webkit-scrollbar]:hidden">
 
-<!--      @if (francesinha().hasFries) {-->
+      @if (francesinha().hasFries) {
         <span class="text-sm bg-amber-100 text-amber-900 border border-amber-300 px-2 py-0.5 rounded-full flex items-center gap-1">
           <img src="icons/fries.svg" class="w-3.5 h-3.5" alt=""/> Patatas
         </span>
-<!--      }-->
-<!--      @if (francesinha().hasEgg) {-->
+      }
+
+      @if (francesinha().hasEgg) {
         <span class="text-sm bg-yellow-100 text-yellow-900 border border-yellow-300 px-2 py-0.5 rounded-full flex items-center gap-1">
           <img src="icons/egg.svg" class="w-3.5 h-3.5" alt=""/> Huevo
         </span>
-<!--      }-->
-<!--      @if (francesinha().isSpicy) {-->
+      }
+
+      @if (francesinha().isSpicy) {
         <span class="text-sm bg-red-100 text-red-900 border border-red-300 px-2 py-0.5 rounded-full flex items-center gap-1">
           <img src="icons/chilli.svg" class="w-3.5 h-3.5" alt=""/> Picante
         </span>
-<!--      }-->
+      }
+
+      @if (!francesinha().hasFries && !francesinha().hasEgg && !francesinha().isSpicy) {
+        <span class="invisible text-sm px-2 py-0.5 rounded-full">_</span>
+      }
     </div>
 
     <!-- Score + precio -->
     <div class="flex items-center gap-2 mt-0.5 flex-wrap">
 
       <!-- Score -->
-      <div class="flex items-center gap-0.5">
-        <mat-icon class="!text-yellow-400 !text-2xl !w-6 !h-6 !leading-6">star</mat-icon>
-        <span class="text-xs font-medium text-gray-700">{{ francesinha().avgScore | number:'1.1-1' }}</span>
+      <div class="flex items-center gap-1">
+        <mat-icon class="!text-yellow-400 !text-3xl !w-7 !h-7 !leading-7">star</mat-icon>
+        <span class="text-sm font-semibold text-gray-700">{{ francesinha().avgScore | number:'1.1-1' }}</span>
       </div>
 
-
       <!-- Precio -->
-      <span class="text-sm bg-primary/10 text-primary font-medium px-2 py-0.5 rounded-full ml-auto">
+      <span class="text-sm font-semibold bg-primary/10 text-primary px-3 py-1 rounded-full ml-auto border border-primary/30">
         {{ francesinha().price | number:'1.2-2' }} €
       </span>
 

@@ -5,7 +5,7 @@
     <h1 class="text-lg font-bold text-primary md:text-xl">Taste Francesinhas</h1>
   </header>
 
-  <main class="px-4 py-4 md:px-6 md:py-6 max-w-6xl mx-auto">
+  <main class="px-4 py-4 md:px-6 md:py-6 max-w-7xl mx-auto">
 
     <!-- Filtros colapsables -->
     <mat-accordion class="block mb-4" id="filterPanel">
@@ -58,7 +58,7 @@
 
     <!-- Grid de cards -->
     @if (francesinhasList().length > 0) {
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         @for (f of francesinhasList(); track f.id; let i = $index) {
           <!-- animate.enter="card-enter" [style.--i]="i % 10" — animación desactivada -->
           <app-francesinha-card [francesinha]="f"/>
