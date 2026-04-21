@@ -1,0 +1,41 @@
+<!-- ===== HEADER DESKTOP ===== -->
+<header class="bg-white shadow-sm px-4 py-3 flex items-center justify-between">
+  <h1 class="text-lg font-bold text-primary md:text-xl">Taste Francesinhas</h1>
+
+  <!-- Nav links — solo visibles en md+ -->
+  <nav class="hidden md:flex items-center gap-1">
+    @for (item of navItems; track item.route) {
+      <a
+        [routerLink]="item.enabled ? item.route : null"
+        routerLinkActive="!text-primary font-semibold"
+        [routerLinkActiveOptions]="{ exact: false }"
+        class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors"
+        [class.text-gray-700]="item.enabled"
+        [class.hover:bg-neutral]="item.enabled"
+        [class.text-gray-300]="!item.enabled"
+        [class.cursor-not-allowed]="!item.enabled"
+        [attr.aria-disabled]="!item.enabled">
+        <mat-icon class="!text-xl !w-5 !h-5 !leading-5">{{ item.icon }}</mat-icon>
+        {{ item.label }}
+      </a>
+    }
+  </nav>
+</header>
+
+<!-- ===== BOTTOM NAV MÓVIL ===== -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 flex">
+  @for (item of navItems; track item.route) {
+    <a
+      [routerLink]="item.enabled ? item.route : null"
+      routerLinkActive="text-primary"
+      [routerLinkActiveOptions]="{ exact: false }"
+      class="flex flex-col items-center justify-center flex-1 py-4 gap-0.5 text-xs transition-colors"
+      [class.text-gray-400]="!item.enabled"
+      [class.text-gray-500]="item.enabled"
+      [class.cursor-not-allowed]="!item.enabled"
+      [attr.aria-disabled]="!item.enabled">
+      <mat-icon class="!text-2xl !w-6 !h-6 !leading-6">{{ item.icon }}</mat-icon>
+      {{ item.label }}
+    </a>
+  }
+</nav>
