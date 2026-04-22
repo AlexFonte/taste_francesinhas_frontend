@@ -1,0 +1,9 @@
+<a
+  [routerLink]="item().enabled ? [item().route] : null"
+  [routerLinkActive]="item().enabled ? activeClass() : ''"
+  [routerLinkActiveOptions]="{ exact: false }"
+  [class]="linkClass()"
+  [attr.aria-disabled]="!item().enabled">
+  <mat-icon [class]="iconClass()">{{ item().icon }}</mat-icon>
+  {{ item().label }}
+</a>
