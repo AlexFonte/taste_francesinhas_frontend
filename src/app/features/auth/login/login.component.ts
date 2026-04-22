@@ -57,7 +57,7 @@ export class LoginComponent {
 
     const { email, password } = this.form.value;
     this.authService.login({ email: email!, password: password! }).subscribe({
-      next: () => this.router.navigate(['/francesinhas']),
+      next: (res) => this.router.navigate([res.role === 'ADMIN' ? '/admin' : '/francesinhas']),
       error: (err) => {
         this.errorMessage.set(err.error?.detail ?? 'Error al iniciar sesión. Inténtalo de nuevo.');
         this.isLoading.set(false);

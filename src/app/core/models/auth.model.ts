@@ -8,9 +8,9 @@ export interface RegisterRequest {
   password: string;
 }
 
-export interface AuthResponse {
-  accessToken: string;
+export interface LoginResponse {
+  accessToken:  string;
   refreshToken: string;
-  emailUser: string;
-  idUser: number;
+  email:        string;
+  role:         'ADMIN' | 'USER';
 }

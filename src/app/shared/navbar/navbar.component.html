@@ -1,12 +1,25 @@
-<!-- ===== HEADER DESKTOP ===== -->
-<header class="bg-white shadow-sm px-4 py-3 flex items-center justify-between">
+<!-- ===== HEADER (desktop + móvil) ===== -->
+<header class="bg-white shadow-sm px-4 py-3 grid grid-cols-[auto_1fr_auto] items-center gap-2">
+
   <h1 class="text-lg font-bold text-primary md:text-xl">Taste Francesinhas</h1>
 
-  <nav class="hidden md:flex items-center gap-1">
+  <!-- Nav desktop — en móvil queda vacío y actúa de spacer -->
+  <nav class="hidden md:flex items-center justify-center gap-1">
     @for (item of navItems(); track item.route) {
       <app-nav-item [item]="item" variant="desktop" />
     }
   </nav>
+  <div class="md:hidden"></div>
+
+  <!-- Logout — visible en header tanto móvil como desktop -->
+  @if (isLoggedIn()) {
+    <button mat-icon-button (click)="logout()" matTooltip="Cerrar sesión" class="text-gray-500">
+      <mat-icon>logout</mat-icon>
+    </button>
+  } @else {
+    <div></div>
+  }
+
 </header>
 
 <!-- ===== BOTTOM NAV MÓVIL ===== -->

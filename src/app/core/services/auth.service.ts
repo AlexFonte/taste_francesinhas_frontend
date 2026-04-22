@@ -1,63 +1,67 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, inject, signal, computed, effect } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { AuthResponse, LoginRequest, RegisterRequest } from '../models/auth.model';
+import { LoginRequest, LoginResponse, RegisterRequest } from '../models/auth.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-  private readonly http = inject(HttpClient);
-  private readonly base = `${environment.apiUrl}/auth`;
+  private readonly http   = inject(HttpClient);
+  private readonly router = inject(Router);
+  private readonly base   = `${environment.apiUrl}/auth`;
 
-  private readonly TOKEN_KEY = 'accessToken';
-  private readonly REFRESH_KEY = 'refreshToken';
-  private readonly EMAIL_KEY = 'email_user';
-  private readonly IDUSER_KEY = 'id_user';
+  private readonly _auth = signal<LoginResponse | null>(this.loadFromStorage());
 
-  private readonly _isLoggedIn = signal<boolean>(!!localStorage.getItem(this.TOKEN_KEY));
-  readonly isLoggedIn = this._isLoggedIn.asReadonly();
+  readonly auth = this._auth.asReadonly();
+  readonly isLoggedIn   = computed(() => this._auth() !== null);
+  readonly accessToken  = computed(() => this._auth()?.accessToken  ?? null);
+  readonly refreshToken = computed(() => this._auth()?.refreshToken ?? null);
+  readonly email        = computed(() => this._auth()?.email        ?? null);
+  readonly role         = computed(() => this._auth()?.role         ?? 'ANONYMOUS' as const);
+  readonly isAdmin      = computed(() => this._auth()?.role === 'ADMIN');
 
-  login(request: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.base}/login`, request).pipe(
-      tap(res => this.saveTokens(res))
+  constructor() {
+    effect(() => {
+      const auth = this._auth();
+      if (auth) {
+        localStorage.setItem('auth', JSON.stringify(auth));
+      } else {
+        localStorage.removeItem('auth');
+      }
+    });
+  }
+
+  login(request: LoginRequest): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.base}/login`, request).pipe(
+      tap(res => this._auth.set(res))
     );
   }
 
-  register(request: RegisterRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.base}/signup`, request).pipe(
-      tap(res => this.saveTokens(res))
+  register(request: RegisterRequest): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.base}/signup`, request).pipe(
+      tap(res => this._auth.set(res))
     );
   }
 
-  refresh(): Observable<AuthResponse> {
-    const refreshToken = this.getRefreshToken();
-    return this.http.post<AuthResponse>(`${this.base}/refresh`, { refreshToken }).pipe(
-      tap(res => this.saveTokens(res))
+  refresh(): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.base}/refresh`, { refreshToken: this.refreshToken() }).pipe(
+      tap(res => this._auth.set(res))
     );
   }
 
   logout(): void {
-    localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem(this.REFRESH_KEY);
-    localStorage.removeItem(this.EMAIL_KEY);
-    localStorage.removeItem(this.IDUSER_KEY);
-    this._isLoggedIn.set(false);
+    this._auth.set(null);
+    this.router.navigate(['/auth/login']);
   }
 
-  getToken(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY);
-  }
-
-  getRefreshToken(): string | null {
-    return localStorage.getItem(this.REFRESH_KEY);
-  }
-
-  private saveTokens(res: AuthResponse): void {
-    localStorage.setItem(this.TOKEN_KEY, res.accessToken);
-    localStorage.setItem(this.REFRESH_KEY, res.refreshToken);
-    localStorage.setItem(this.EMAIL_KEY, res.emailUser);
-    localStorage.setItem(this.IDUSER_KEY, res.idUser.toString());
-    this._isLoggedIn.set(true);
+  private loadFromStorage(): LoginResponse | null {
+    try {
+      const raw = localStorage.getItem('auth');
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
   }
 }
