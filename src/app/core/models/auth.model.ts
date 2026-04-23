@@ -4,13 +4,15 @@ export interface LoginRequest {
 }
 
 export interface RegisterRequest {
-  email: string;
+  name:     string;
+  email:    string;
   password: string;
 }
 
 export interface LoginResponse {
   accessToken:  string;
   refreshToken: string;
+  name:         string;
   email:        string;
   role:         'ADMIN' | 'USER';
 }

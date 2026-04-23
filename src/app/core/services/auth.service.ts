@@ -18,6 +18,7 @@ export class AuthService {
   readonly isLoggedIn   = computed(() => this._auth() !== null);
   readonly accessToken  = computed(() => this._auth()?.accessToken  ?? null);
   readonly refreshToken = computed(() => this._auth()?.refreshToken ?? null);
+  readonly name         = computed(() => this._auth()?.name         ?? null);
   readonly email        = computed(() => this._auth()?.email        ?? null);
   readonly role         = computed(() => this._auth()?.role         ?? 'ANONYMOUS' as const);
   readonly isAdmin      = computed(() => this._auth()?.role === 'ADMIN');

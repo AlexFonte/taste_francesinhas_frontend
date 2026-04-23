@@ -1,0 +1,123 @@
+<div class="flex-1 bg-neutral flex items-center justify-center p-4 md:p-8">
+
+	<div class="w-full md:max-w-4xl md:rounded-2xl md:shadow-xl md:overflow-hidden md:flex">
+
+		<!-- Panel izquierdo — solo desktop -->
+		<div class="hidden md:flex md:w-1/2 bg-primary flex-col items-center justify-center gap-5 p-12">
+			<div class="bg-white/85 border rounded-full p-4 shadow-xl">
+				<img src="icons/francesinha.svg" class="w-24 h-24 opacity-90" alt="Logo Taste Francesinhas"/>
+			</div>
+
+			<h1 class="text-3xl font-bold tracking-widest text-white text-center uppercase">
+				Taste Francesinhas
+			</h1>
+			<p class="text-center text-white/95 text-sm leading-relaxed">
+				Descubre, valora y propone<br>las mejores francesinhas de todo Portugal
+			</p>
+		</div>
+
+		<!-- Panel del formulario -->
+		<div class="w-full md:w-1/2 bg-white rounded-2xl shadow-sm md:rounded-none md:shadow-none px-6 py-10 md:px-12 md:py-16 flex flex-col justify-center">
+
+			<!-- Logo móvil -->
+			<div class="flex flex-col items-center mb-8 md:hidden">
+				<img src="icons/francesinha.svg" class="w-16 h-16 mb-3" alt="Logo Taste Francesinha"/>
+				<h1 class="text-2xl font-bold text-primary tracking-widest uppercase text-center">Taste<br>Francesinhas</h1>
+			</div>
+
+			<!-- Encabezado desktop -->
+			<h2 class="hidden md:block text-2xl font-bold text-primary mb-1">Crear cuenta</h2>
+
+			<p class="text-sm text-text-muted mb-7 text-center md:text-left">
+				Únete para valorar y proponer francesinhas
+			</p>
+
+			<form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-2">
+
+				<mat-form-field appearance="fill" class="w-full">
+					<mat-label>Nombre</mat-label>
+					<input matInput type="text" formControlName="name" [errorStateMatcher]="matcher"
+					       placeholder="Tu nombre" autocomplete="name" required/>
+					<mat-icon matSuffix class="text-gray-400">person</mat-icon>
+					@if (form.get('name')?.hasError('required')) {
+						<mat-error>El nombre es obligatorio</mat-error>
+					} @else if (form.get('name')?.hasError('minlength')) {
+						<mat-error>Mínimo 2 caracteres</mat-error>
+					}
+				</mat-form-field>
+
+				<mat-form-field appearance="fill" class="w-full">
+					<mat-label>Email</mat-label>
+					<input matInput type="email" formControlName="email" [errorStateMatcher]="matcher"
+					       placeholder="tu@email.com" autocomplete="email" required/>
+					<mat-icon matSuffix class="text-gray-400">alternate_email</mat-icon>
+					@if (form.get('email')?.hasError('required')) {
+						<mat-error>El email es obligatorio</mat-error>
+					} @else if (form.get('email')?.hasError('pattern')) {
+						<mat-error>Introduce un email válido</mat-error>
+					}
+				</mat-form-field>
+
+				<mat-form-field appearance="fill" class="w-full">
+					<mat-label>Contraseña</mat-label>
+					<input matInput [type]="showPassword() ? 'text' : 'password'" formControlName="password"
+					       [errorStateMatcher]="matcher" autocomplete="new-password" required/>
+					<button mat-icon-button matSuffix type="button" (click)="showPassword.set(!showPassword())"
+					        [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+						<mat-icon class="text-gray-400">{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+					</button>
+					@if (form.get('password')?.hasError('required')) {
+						<mat-error>La contraseña es obligatoria</mat-error>
+					} @else if (form.get('password')?.hasError('pattern')) {
+						<mat-error>Mínimo 8 caracteres, una mayúscula y un número</mat-error>
+					}
+				</mat-form-field>
+
+				<mat-form-field appearance="fill" class="w-full">
+					<mat-label>Confirmar contraseña</mat-label>
+					<input matInput [type]="showConfirm() ? 'text' : 'password'" formControlName="confirmPassword"
+					       [errorStateMatcher]="confirmMatcher" autocomplete="new-password" required/>
+					<button mat-icon-button matSuffix type="button" (click)="showConfirm.set(!showConfirm())"
+					        [attr.aria-label]="showConfirm() ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+						<mat-icon class="text-gray-400">{{ showConfirm() ? 'visibility_off' : 'visibility' }}</mat-icon>
+					</button>
+					@if (form.get('confirmPassword')?.hasError('required')) {
+						<mat-error>Confirma tu contraseña</mat-error>
+					} @else if (form.hasError('passwordMismatch')) {
+						<mat-error>Las contraseñas no coinciden</mat-error>
+					}
+				</mat-form-field>
+
+				@if (errorMessage()) {
+					<p class="text-sm text-white bg-[#e11d48] text-center px-4 py-2 rounded-full">{{ errorMessage() }}</p>
+				}
+
+				<button
+					mat-flat-button
+					color="primary"
+					type="submit"
+					class="w-full !h-12 !text-base !mt-2"
+					[disabled]="isLoading()">
+					@if (isLoading()) {
+						<mat-spinner diameter="22" class="!text-white"/>
+					} @else {
+						<span class="flex items-center justify-center gap-2">
+							<mat-icon>person_add</mat-icon>
+							Crear cuenta
+						</span>
+					}
+				</button>
+
+			</form>
+
+			<p class="text-sm text-center text-gray-500 mt-6">
+				¿Ya tienes cuenta?
+				<a routerLink="/auth/login" class="text-base text-primary font-medium hover:underline ml-1">
+					Iniciar sesión
+				</a>
+			</p>
+
+		</div>
+	</div>
+
+</div>

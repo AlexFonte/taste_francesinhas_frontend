@@ -17,6 +17,7 @@ export class NavbarComponent {
   private readonly authService = inject(AuthService);
 
   readonly isLoggedIn = this.authService.isLoggedIn;
+  readonly userName   = this.authService.name;
 
   logout(): void { this.authService.logout(); }
 
@@ -41,9 +42,10 @@ export class NavbarComponent {
     }
 
     return [
-      { label: 'Francesinhas', icon: 'lunch_dining', route: '/francesinhas', enabled: true  },
-      { label: 'Restaurantes', icon: 'restaurant',   route: '/restaurants',  enabled: false },
-      { label: 'Login',        icon: 'login',        route: '/auth/login',   enabled: true  },
+      { label: 'Francesinhas', icon: 'lunch_dining', route: '/francesinhas',  enabled: true  },
+      { label: 'Restaurantes', icon: 'restaurant',   route: '/restaurants',   enabled: false },
+      { label: 'Registrarse',  icon: 'person_add',   route: '/auth/register', enabled: true  },
+      { label: 'Login',        icon: 'login',        route: '/auth/login',    enabled: true  },
     ];
   });
 }
