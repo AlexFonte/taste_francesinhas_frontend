@@ -17,5 +17,6 @@ import { AuthService } from '../../../core/services/auth.service';
 })
 export class FrancesinhaCardComponent {
   francesinha = input.required<Francesinha>();
+  isFavorite  = input<boolean>(false);
   readonly isLoggedIn = inject(AuthService).isLoggedIn;
 }

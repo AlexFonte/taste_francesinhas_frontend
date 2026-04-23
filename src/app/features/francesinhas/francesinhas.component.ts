@@ -10,6 +10,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { FrancesinhaService } from '../../core/services/francesinha.service';
+import { FavoriteService } from '../../core/services/favorite.service';
+import { AuthService } from '../../core/services/auth.service';
 import { Francesinha, FrancesinhaType } from '../../core/models/francesinha.model';
 import { FrancesinhaCardComponent } from './francesinha-card/francesinha-card.component';
 import { FrancesinhasPagedResponse } from '../../core/models/page.model';
@@ -38,9 +40,12 @@ export class FrancesinhasComponent implements OnInit {
 
   private readonly sentinel = viewChild.required<ElementRef>('sentinel');
   private readonly francesinhaService = inject(FrancesinhaService);
+  private readonly favoriteService    = inject(FavoriteService);
+  private readonly authService        = inject(AuthService);
   private readonly fb = inject(FormBuilder);
 
   francesinhasList = signal<Francesinha[]>([]);
+  favoriteIds      = signal<Set<number>>(new Set());
   isLoading = signal(false);
   paginaActual = signal(0);
   totalPaginas = signal(0);
@@ -75,6 +80,11 @@ export class FrancesinhasComponent implements OnInit {
 
   ngOnInit() {
     this.load(0);
+    if (this.authService.isLoggedIn()) {
+      this.favoriteService.getFavoriteIds().subscribe({
+        next: ids => this.favoriteIds.set(ids),
+      });
+    }
   }
 
   search() {

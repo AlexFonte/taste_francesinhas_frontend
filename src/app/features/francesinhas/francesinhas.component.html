@@ -7,7 +7,7 @@
       <mat-expansion-panel>
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <mat-icon fontSet="material-icons-outlined">filter_alt</mat-icon>
+            <mat-icon>filter_alt</mat-icon>
             Filtros
           </mat-panel-title>
         </mat-expansion-panel-header>
@@ -56,7 +56,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         @for (f of francesinhasList(); track f.id; let i = $index) {
           <!-- animate.enter="card-enter" [style.--i]="i % 10" - animación desactivada -->
-          <app-francesinha-card [francesinha]="f"/>
+          <app-francesinha-card [francesinha]="f" [isFavorite]="favoriteIds().has(f.id)"/>
         }
       </div>
     }

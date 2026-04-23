@@ -15,7 +15,7 @@
     <!-- indicador favorito - solo si esta logeado -->
     @if (isLoggedIn()) {
       <span class="!absolute !top-2 !right-2 text-secondary pointer-events-none">
-        <mat-icon>favorite_border</mat-icon>
+        <mat-icon [class]="isFavorite() ? 'icon-filled' : ''">favorite</mat-icon>
       </span>
     }
   </div>
