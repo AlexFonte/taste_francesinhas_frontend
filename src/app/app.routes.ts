@@ -19,4 +19,8 @@ export const routes: Routes = [
     path: 'auth/register',
     loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent)
   },
+  {
+    path: 'francesinhas/:id',
+    loadComponent: () => import('./features/francesinhas/francesinha-detail/francesinha-detail.component').then(m => m.FrancesinhaDetailComponent)
+  },
 ];

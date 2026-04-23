@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Francesinha, FrancesinhaType } from '../models/francesinha.model';
 import { FrancesinhasPagedResponse } from '../models/page.model';
+import { Review } from '../models/review.model';
 
 @Injectable({ providedIn: 'root' })
 export class FrancesinhaService {
@@ -21,5 +22,9 @@ export class FrancesinhaService {
 
   getById(id: number): Observable<Francesinha> {
     return this.http.get<Francesinha>(`${this.base}/${id}`);
+  }
+
+  getReviews(id: number): Observable<Review[]> {
+    return this.http.get<Review[]>(`${this.base}/${id}/reviews`);
   }
 }

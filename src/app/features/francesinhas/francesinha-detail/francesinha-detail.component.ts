@@ -1,0 +1,86 @@
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { CommonModule, NgClass } from '@angular/common';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatChipsModule } from '@angular/material/chips';
+import { Francesinha } from '../../../core/models/francesinha.model';
+import { Review } from '../../../core/models/review.model';
+import { FrancesinhaService } from '../../../core/services/francesinha.service';
+import { ReviewService } from '../../../core/services/review.service';
+import { FavoriteService } from '../../../core/services/favorite.service';
+import { AuthService } from '../../../core/services/auth.service';
+import { ToastService } from '../../../shared/toast/toast.service';
+
+@Component({
+  selector: 'app-francesinha-detail',
+  standalone: true,
+  imports: [CommonModule, NgClass, RouterLink, MatCardModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule, MatChipsModule],
+  templateUrl: './francesinha-detail.component.html',
+  styleUrl: './francesinha-detail.component.scss',
+})
+export class FrancesinhaDetailComponent implements OnInit {
+
+  private readonly route              = inject(ActivatedRoute);
+  private readonly router             = inject(Router);
+  private readonly francesinhaService = inject(FrancesinhaService);
+  private readonly reviewService      = inject(ReviewService);
+  private readonly favoriteService    = inject(FavoriteService);
+  private readonly authService        = inject(AuthService);
+  private readonly toastService       = inject(ToastService);
+
+  francesinha = signal<Francesinha | null>(null);
+  reviews     = signal<Review[]>([]);
+  isFavorite  = signal(false);
+  isLoading   = signal(true);
+
+  readonly isUser = computed(() => this.authService.role() === 'USER');
+
+  readonly restaurantInfo = computed(() => {
+    const r = this.francesinha()?.restaurant;
+    if (!r) return '';
+    return [r.name, r.address, r.city].filter(Boolean).join(' · ');
+  });
+
+  readonly avgFlavor       = computed(() => this.avg(r => r.scoreFlavor));
+  readonly avgSauce        = computed(() => this.avg(r => r.scoreSauce));
+  readonly avgBread        = computed(() => this.avg(r => r.scoreBread));
+  readonly avgPresentation = computed(() => this.avg(r => r.scorePresentation));
+
+  ngOnInit() {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.francesinhaService.getById(id).subscribe({
+      next: f => { this.francesinha.set(f); this.isLoading.set(false); },
+      error: () => this.router.navigate(['/francesinhas']),
+    });
+    this.reviewService.getByFrancesinha(id).subscribe({
+      next: res => this.reviews.set(res.reviews as Review[]),
+    });
+    if (this.isUser()) {
+      this.favoriteService.isFavorite(id).subscribe({
+        next: v => this.isFavorite.set(v),
+      });
+    }
+  }
+
+  toggleFavorite() {
+    const id = this.francesinha()?.id;
+    if (!id) return;
+    this.favoriteService.toggle(id).subscribe({
+      next: res => {
+        this.isFavorite.set(res.added);
+        this.toastService.success(res.added ? 'Guardado en favoritos' : 'Eliminado de favoritos');
+      },
+      error: () => this.toastService.error('No se pudo actualizar favoritos'),
+    });
+  }
+
+  goBack() { this.router.navigate(['/francesinhas']); }
+
+  private avg(fn: (r: Review) => number): number {
+    const r = this.reviews();
+    return r.length ? r.reduce((s, x) => s + fn(x), 0) / r.length : 0;
+  }
+}

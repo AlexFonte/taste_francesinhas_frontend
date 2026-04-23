@@ -1,0 +1,173 @@
+<!-- loading -->
+@if (isLoading()) {
+  <div class="flex items-center justify-center py-24">
+    <mat-spinner diameter="48" color="primary"/>
+  </div>
+}
+
+@if (!isLoading() && francesinha()) {
+  <div class="pb-24 lg:pb-10">
+
+    <div class="max-w-6xl mx-auto px-4 py-6">
+      <button (click)="goBack()"
+              class="flex items-center gap-1 text-sm text-primary hover:underline transition-all">
+        <mat-icon class="!text-lg !w-5 !h-5 !leading-5">arrow_back</mat-icon>
+        Volver
+      </button>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-4 pb-6 lg:grid lg:grid-cols-[3fr_2fr] lg:gap-10">
+
+      <!-- columna izquierda -->
+      <mat-card class="!rounded-2xl overflow-hidden !shadow-sm">
+
+        <!-- imagen -->
+        <div class="relative aspect-video bg-tertiary/50 flex items-center justify-center border-b border-b-primary">
+          <div class="bg-white/60 border border-primary rounded-full p-6 shadow-xl">
+            <img src="icons/francesinha.svg" class="w-20 h-20 opacity-70" alt="Imagen francesinha"/>
+          </div>
+
+          <!-- chip tipo - top left -->
+          <mat-chip class="!absolute !top-2 !left-2 !text-sm !h-8 bg-secondary cutom-header-chip !shadow-xl">
+            <i>{{ francesinha()!.type }}</i>
+          </mat-chip>
+        </div>
+
+        <mat-card-content class="!p-3 flex flex-col gap-1.5">
+
+          <div class="flex items-start justify-between gap-2">
+            <h2 class="font-medium text-xl !text-text-main">{{ francesinha()!.name }}</h2>
+            @if (isUser()) {
+              <button (click)="toggleFavorite()"
+                      class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium transition-colors"
+                      [ngClass]="isFavorite()
+                        ? 'border-secondary bg-secondary text-white hover:bg-secondary/80'
+                        : 'border-secondary text-secondary hover:bg-secondary hover:text-white'">
+                <mat-icon class="!text-sm !w-4 !h-4 !leading-4">{{ isFavorite() ? 'heart_minus' : 'heart_plus' }}</mat-icon>
+                <span class="hidden sm:inline">{{ isFavorite() ? 'Guardado' : 'Guardar' }}</span>
+              </button>
+            }
+          </div>
+
+          <p class="text-base text-gray-500 line-clamp-2 !mt-2">{{ restaurantInfo() }}</p>
+
+          <!-- ver restaurante + precio -->
+          <div class="flex items-center gap-2 mt-2">
+            <button [routerLink]="['/restaurants', francesinha()!.restaurant.id]"
+                    class="w-fit flex items-center gap-2 px-4 py-2 rounded-full border border-primary text-primary text-sm font-medium transition-colors hover:bg-primary hover:text-white">
+              <mat-icon class="!text-lg !w-5 !h-5 !leading-5">store</mat-icon>
+              Ver restaurante
+            </button>
+            <span class="text-lg font-bold bg-primary/10 text-primary px-4 py-1 rounded-full ml-auto border border-primary/30">
+              {{ francesinha()!.price | number:'1.2-2' }} €
+            </span>
+          </div>
+
+          @if (francesinha()!.description) {
+            <p class="text-sm text-gray-500 line-clamp-2">{{ francesinha()!.description }}</p>
+          }
+
+          <!-- badges -->
+          <div class="flex items-center justify-center gap-1.5 mt-2 flex-wrap">
+            @if (francesinha()!.hasFries) {
+              <span class="text-sm bg-amber-100 text-amber-900 border border-amber-300 px-2 py-0.5 rounded-full flex items-center gap-1">
+                <img src="icons/fries.svg" class="w-3.5 h-3.5" alt=""/> Patatas
+              </span>
+            }
+            @if (francesinha()!.hasEgg) {
+              <span class="text-sm bg-yellow-100 text-yellow-900 border border-yellow-300 px-2 py-0.5 rounded-full flex items-center gap-1">
+                <img src="icons/egg.svg" class="w-3.5 h-3.5" alt=""/> Huevo
+              </span>
+            }
+            @if (francesinha()!.isSpicy) {
+              <span class="text-sm bg-red-100 text-red-900 border border-red-300 px-2 py-0.5 rounded-full flex items-center gap-1">
+                <img src="icons/chilli.svg" class="w-3.5 h-3.5" alt=""/> Picante
+              </span>
+            }
+          </div>
+
+
+        </mat-card-content>
+      </mat-card>
+
+      <!-- columna derecha: puntuacion + valorar -->
+      <div class="mt-8 lg:mt-0">
+
+        <!-- puntuacion global -->
+        <div class="border border-gray-200 rounded-2xl p-5 mb-5 bg-white">
+          <p class="text-sm text-gray-500 mb-2">Puntuación global</p>
+          <div class="flex items-center gap-2">
+            <mat-icon class="!text-yellow-400 !text-4xl !w-10 !h-10 !leading-10">star</mat-icon>
+            <span class="text-5xl font-bold text-text-main">{{ francesinha()!.avgScore | number:'1.1-1' }}</span>
+          </div>
+          <p class="text-sm text-gray-400 mt-2">{{ francesinha()!.totalReviews }} valoraciones</p>
+        </div>
+
+        <!-- valoracion por criterios -->
+        @if (reviews().length > 0) {
+          <div class="border border-gray-200 rounded-2xl p-5 mb-5 bg-white">
+            <p class="text-sm font-medium text-gray-600 mb-4">Valoración por criterios</p>
+            <div class="flex flex-col gap-3">
+              @for (criterio of [
+                { label: 'Sabor',         valor: avgFlavor() },
+                { label: 'Salsa',         valor: avgSauce() },
+                { label: 'Pan',           valor: avgBread() },
+                { label: 'Presentación',  valor: avgPresentation() }
+              ]; track criterio.label) {
+                <div class="flex items-center justify-between">
+                  <span class="text-sm text-gray-600">{{ criterio.label }}</span>
+                  <div class="flex items-center gap-1">
+                    <mat-icon class="!text-yellow-400 !text-lg !w-5 !h-5 !leading-5">star</mat-icon>
+                    <span class="text-sm font-semibold text-gray-700">{{ criterio.valor | number:'1.1-1' }}</span>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- boton valorar -->
+        @if (isUser()) {
+          <button class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-primary text-white text-base font-medium transition-colors hover:bg-secondary">
+            <mat-icon>star</mat-icon>
+            Valorar esta francesinha
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- opiniones -->
+    @if (reviews().length > 0) {
+      <div class="max-w-6xl mx-auto px-4">
+        <h2 class="text-lg font-semibold text-text-main mb-4">Opiniones ({{ reviews().length }})</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          @for (review of reviews(); track review.id) {
+            <div class="bg-white border border-gray-200 rounded-2xl p-4 flex flex-col gap-2">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <mat-icon class="!text-gray-400 !text-3xl !w-8 !h-8">account_circle</mat-icon>
+                  <span class="text-sm font-medium text-gray-700">{{ review.userName }}</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <mat-icon class="!text-yellow-400 !text-lg !w-5 !h-5 !leading-5">star</mat-icon>
+                  <span class="text-sm font-semibold text-gray-700">{{ review.avgScore | number:'1.1-1' }}</span>
+                </div>
+              </div>
+              @if (review.comment) {
+                <p class="text-sm text-gray-600 leading-relaxed">{{ review.comment }}</p>
+              }
+              <p class="text-xs text-gray-400">{{ review.createdAt | date:'dd MMM yyyy' }}</p>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    @if (reviews().length === 0 && !isLoading()) {
+      <div class="max-w-6xl mx-auto px-4">
+        <p class="text-sm text-gray-400 text-center py-6">Todavía no hay opiniones. ¡Sé el primero!</p>
+      </div>
+    }
+
+  </div>
+}

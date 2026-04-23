@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* Material 3 — surface blanca para cards, overlays y paneles */
+/* Material 3 - surface blanca para cards, overlays y paneles */
 @theme {
   --color-primary:   #C45C2A;
   --color-secondary: #8B3820;

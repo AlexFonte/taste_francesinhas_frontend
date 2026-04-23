@@ -1,7 +1,7 @@
 export interface Review {
   id: number;
   francesinhaId: number;
-  userEmail: string;
+  userName: string;
   scoreFlavor: number;
   scoreSauce: number;
   scoreBread: number;

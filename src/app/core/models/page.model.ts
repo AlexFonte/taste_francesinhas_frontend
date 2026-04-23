@@ -21,3 +21,11 @@ export interface FavoritesPagedResponse {
   pageNumber: number;
   pageSize: number;
 }
+
+export interface ReviewsPagedResponse {
+  reviews: any[];
+  total: number;
+  totalPages: number;
+  pageNumber: number;
+  pageSize: number;
+}

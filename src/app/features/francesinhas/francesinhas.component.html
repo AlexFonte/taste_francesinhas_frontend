@@ -55,7 +55,7 @@
     @if (francesinhasList().length > 0) {
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         @for (f of francesinhasList(); track f.id; let i = $index) {
-          <!-- animate.enter="card-enter" [style.--i]="i % 10" — animación desactivada -->
+          <!-- animate.enter="card-enter" [style.--i]="i % 10" - animación desactivada -->
           <app-francesinha-card [francesinha]="f"/>
         }
       </div>
