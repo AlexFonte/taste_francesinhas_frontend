@@ -1,4 +1,5 @@
 import { Component, inject, computed } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { NavItemComponent, NavItem } from './nav-item/nav-item.component';
 import { MatIconButton } from '@angular/material/button';
@@ -8,7 +9,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [NavItemComponent, MatIconButton, MatIconModule, MatTooltipModule],
+  imports: [RouterLink, NavItemComponent, MatIconButton, MatIconModule, MatTooltipModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })
