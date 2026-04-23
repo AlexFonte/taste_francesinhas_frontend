@@ -12,10 +12,12 @@
       <i>{{ francesinha().type }}</i>
     </mat-chip>
 
-    <!-- indicador favorito - top right -->
-    <span class="!absolute !top-2 !right-2 text-secondary pointer-events-none">
-      <mat-icon>favorite_border</mat-icon>
-    </span>
+    <!-- indicador favorito - solo si esta logeado -->
+    @if (isLoggedIn()) {
+      <span class="!absolute !top-2 !right-2 text-secondary pointer-events-none">
+        <mat-icon>favorite_border</mat-icon>
+      </span>
+    }
   </div>
 
   <mat-card-content class="!p-3 flex flex-col gap-1.5">
