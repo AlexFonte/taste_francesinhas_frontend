@@ -6,6 +6,17 @@ import { Francesinha, FrancesinhaType } from '../models/francesinha.model';
 import { FrancesinhasPagedResponse } from '../models/page.model';
 import { Review } from '../models/review.model';
 
+export interface FrancesinhaProposeRequest {
+  restaurantId: number;
+  name:         string;
+  description?: string;
+  price:        number;
+  hasEgg:       boolean;
+  hasFries:     boolean;
+  isSpicy:      boolean;
+  type:         FrancesinhaType;
+}
+
 @Injectable({ providedIn: 'root' })
 export class FrancesinhaService {
 
@@ -26,5 +37,9 @@ export class FrancesinhaService {
 
   getReviews(id: number): Observable<Review[]> {
     return this.http.get<Review[]>(`${this.base}/${id}/reviews`);
+  }
+
+  propose(payload: FrancesinhaProposeRequest): Observable<Francesinha> {
+    return this.http.post<Francesinha>(`${this.base}/propose`, payload);
   }
 }

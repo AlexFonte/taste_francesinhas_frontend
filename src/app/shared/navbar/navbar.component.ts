@@ -36,7 +36,7 @@ export class NavbarComponent {
       return [
         { label: 'Francesinhas', icon: 'lunch_dining', route: '/francesinhas', enabled: true  },
         { label: 'Restaurantes', icon: 'restaurant',   route: '/restaurants',  enabled: false },
-        { label: 'Proponer',     icon: 'add_circle',   route: '/propose',      enabled: false },
+        { label: 'Proponer',     icon: 'add_circle',   route: '/propose',      enabled: true  },
         { label: 'Favoritos',    icon: 'favorite',     route: '/favorites',    enabled: false },
         { label: 'Perfil',       icon: 'person',       route: '/profile',      enabled: true  },
       ];

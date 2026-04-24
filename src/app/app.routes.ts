@@ -1,10 +1,16 @@
 import { Routes } from '@angular/router';
+import { userGuard } from './core/guards/user.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'francesinhas', pathMatch: 'full' },
   {
     path: 'francesinhas',
     loadComponent: () => import('./features/francesinhas/francesinhas.component').then(m => m.FrancesinhasComponent)
+  },
+  {
+    path: 'propose',
+    canActivate: [userGuard],
+    loadComponent: () => import('./features/propose/propose.component').then(m => m.ProposeComponent)
   },
   {
     path: 'auth',

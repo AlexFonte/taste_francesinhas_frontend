@@ -39,15 +39,15 @@
   --color-white:  #ffffff;
 }
 
-/* Sliders del diálogo de valoración */
-.review-dialog .mdc-slider__track--inactive {
+/* Sliders del formulario de valoración (dialog + pagina proponer) */
+app-review-form .mdc-slider__track--inactive {
   background-color: #e5e7eb;
   opacity: 1;
 }
-.review-dialog .mdc-slider__track--active_fill {
+app-review-form .mdc-slider__track--active_fill {
   border-color: #C45C2A;
 }
-.review-dialog .mdc-slider__thumb-knob {
+app-review-form .mdc-slider__thumb-knob {
   background-color: #C45C2A;
   border-color: #C45C2A;
   width: 20px;
@@ -65,7 +65,17 @@
   border-color: #e11d48 !important;
 }
 
+/* Borde rojo en inputs con appearance="fill" cuando son invalidos */
+.mat-form-field-invalid .mdc-line-ripple::before,
+.mat-form-field-invalid .mdc-line-ripple::after {
+  border-bottom-color: #e11d48 !important;
+}
+
 .mat-form-field-invalid .mat-mdc-floating-label {
+  color: #e11d48 !important;
+}
+
+.mat-form-field-invalid .mat-icon {
   color: #e11d48 !important;
 }
 

@@ -1,19 +1,13 @@
 import { Component, inject, signal } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { ErrorStateMatcher } from '@angular/material/core';
+import { DirtyOrTouchedErrorStateMatcher } from '../../../shared/error-state-matchers';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../../core/services/auth.service';
-
-class DirtyOrTouchedErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    return !!(control?.invalid && (control.dirty || control.touched));
-  }
-}
 
 @Component({
   selector: 'app-login',

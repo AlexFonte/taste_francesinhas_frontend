@@ -6,48 +6,12 @@
 	<div class="flex items-center justify-center gap-2 !mb-2">
 		<span class="text-lg font-bold text-text-main">Media: </span>
 		<mat-icon class="icon-filled text-yellow-400! text-2xl! w-6! h-6! leading-6!">star</mat-icon>
-		<span class="text-xl font-bold text-text-main">{{ avgScore() | number:'1.2-2' }}</span>
+		<span class="text-xl font-bold text-text-main">{{ reviewFormRef.avgScore() | number:'1.2-2' }}</span>
 	</div>
-
 </div>
 
-
-
-
 <mat-dialog-content>
-	<form [formGroup]="form" class="flex flex-col gap-5">
-
-		<p class="text-sm font-medium text-gray-500">Criterios de valoración</p>
-
-		@for (criterio of criterios; track criterio.key) {
-<!--		<div class="flex flex-col gap-0.5">
-		<span class="text-base font-medium text-gray-700">{{ criterio.label }}</span>
-		<div class="flex items-center gap-2">
-		  <span class="text-sm text-gray-400 w-3 shrink-0">1</span>
-		  <mat-slider min="1" max="5" step="1" discrete class="flex-1 w-full!">
-		    <input matSliderThumb [formControlName]="criterio.key"/>
-		  </mat-slider>
-		  <span class="text-sm text-gray-400 w-3 shrink-0">5</span>
-		</div>-->
-				<div class="flex items-center gap-3">
-				<span class="text-base font-medium text-gray-700 w-28 shrink-0">{{ criterio.label }}	</span>
-				<span class="text-sm text-gray-400 shrink-0 whitespace-nowrap">: 1</span>
-				<mat-slider min="1" max="5" step="1" discrete class="flex-1 w-full!">
-					<input matSliderThumb [formControlName]="criterio.key"/>
-				</mat-slider>
-				<span class="text-sm text-gray-400 w-3 shrink-0">5</span>
-			</div>
-		}
-
-		<mat-form-field appearance="fill" class="w-full">
-			<mat-label>Comentario</mat-label>
-			<textarea matInput formControlName="comment" rows="3"
-			          placeholder="Cuéntanos tu experiencia..."></textarea>
-			@if (form.get('comment')?.hasError('required') && form.get('comment')?.touched) {
-				<mat-error>El comentario es obligatorio</mat-error>
-			}
-		</mat-form-field>
-	</form>
+	<app-review-form #reviewFormRef [form]="form"/>
 </mat-dialog-content>
 
 @if (errorMessage()) {

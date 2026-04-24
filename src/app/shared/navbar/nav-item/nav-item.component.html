@@ -1,5 +1,5 @@
 <a
-  [routerLink]="item().enabled ? [item().route] : null"
+  [routerLink]="item().enabled ? item().route : null"
   [routerLinkActive]="item().enabled ? activeClass() : ''"
   [routerLinkActiveOptions]="{ exact: false }"
   [class]="linkClass()"
