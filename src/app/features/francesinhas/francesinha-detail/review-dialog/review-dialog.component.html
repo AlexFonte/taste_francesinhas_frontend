@@ -2,14 +2,16 @@
 	<h2 mat-dialog-title class="!font-bold !text-text-main text-base m-0">{{ data.francesinhaName }}<br>
 		<span class="text-sm text-gray-500 font-medium mt-0.5">{{ data.restaurantName }} · {{ data.restaurantCity }}</span>
 	</h2>
+
+	<div class="flex items-center justify-center gap-2 !mb-2">
+		<span class="text-lg font-bold text-text-main">Media: </span>
+		<mat-icon class="icon-filled text-yellow-400! text-4xl! w-8! h-8! leading-8!">star</mat-icon>
+		<span class="text-2xl font-bold text-text-main">{{ avgScore() | number:'1.2-2' }}</span>
+	</div>
+
 </div>
 
-<!--
-<div mat-dialog-title class="border-b! border-gray-200! px-4! py-3! m-0! leading-tight!">
-	<h2 class="font-bold text-text-main text-base m-0">{{ data.francesinhaName }}</h2>
-	<p class="text-xs text-gray-500 font-medium mt-0.5">{{ data.restaurantName }} · {{ data.restaurantCity }}</p>
-</div>
--->
+
 
 
 <mat-dialog-content>
@@ -38,13 +40,6 @@
 				<mat-error>El comentario es obligatorio</mat-error>
 			}
 		</mat-form-field>
-
-		<div class="flex items-center justify-center gap-2 !mb-4">
-			<span class="text-lg font-bold text-text-main">Media: </span>
-			<mat-icon class="icon-filled text-yellow-400! text-4xl! w-8! h-8! leading-8!">star</mat-icon>
-			<span class="text-2xl font-bold text-text-main">{{ avgScore() | number:'1.2-2' }}</span>
-		</div>
-
 	</form>
 </mat-dialog-content>
 
@@ -53,20 +48,20 @@
 }
 
 <mat-dialog-actions class="flex! items-center! justify-center! px-4! pb-3! pt-2! gap-2! border-t! border-gray-200!">
-		<button mat-stroked-button (click)="cancel()">
+	<button mat-stroked-button (click)="cancel()">
       <span class="flex items-center gap-1">
         <mat-icon>close</mat-icon>
         Cancelar
       </span>
-		</button>
-		<button mat-flat-button color="primary" (click)="submit()" [disabled]="isLoading()">
-			@if (isLoading()) {
-				<mat-spinner diameter="18"/>
-			} @else {
-				<span class="flex items-center gap-1">
+	</button>
+	<button mat-flat-button color="primary" (click)="submit()" [disabled]="isLoading()">
+		@if (isLoading()) {
+			<mat-spinner diameter="18"/>
+		} @else {
+			<span class="flex items-center gap-1">
           <mat-icon>check</mat-icon>
           Publicar
         </span>
-			}
-		</button>
+		}
+	</button>
 </mat-dialog-actions>
