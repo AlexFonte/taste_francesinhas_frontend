@@ -20,15 +20,22 @@
 		<p class="text-sm font-medium text-gray-500">Criterios de valoración</p>
 
 		@for (criterio of criterios; track criterio.key) {
-			<div class="flex flex-col gap-0.5">
-				<span class="text-sm font-medium text-gray-700">{{ criterio.label }}</span>
-				<div class="flex items-center gap-2">
-					<span class="text-xs text-gray-400 w-3 shrink-0">1</span>
-					<mat-slider min="1" max="5" step="1" discrete class="flex-1 w-full!">
-						<input matSliderThumb [formControlName]="criterio.key"/>
-					</mat-slider>
-					<span class="text-xs text-gray-400 w-3 shrink-0">5</span>
-				</div>
+<!--		<div class="flex flex-col gap-0.5">
+		<span class="text-base font-medium text-gray-700">{{ criterio.label }}</span>
+		<div class="flex items-center gap-2">
+		  <span class="text-sm text-gray-400 w-3 shrink-0">1</span>
+		  <mat-slider min="1" max="5" step="1" discrete class="flex-1 w-full!">
+		    <input matSliderThumb [formControlName]="criterio.key"/>
+		  </mat-slider>
+		  <span class="text-sm text-gray-400 w-3 shrink-0">5</span>
+		</div>-->
+				<div class="flex items-center gap-3">
+				<span class="text-base font-medium text-gray-700 w-28 shrink-0">{{ criterio.label }}</span>
+				<span class="text-sm text-gray-400 w-3 shrink-0">1</span>
+				<mat-slider min="1" max="5" step="1" discrete class="flex-1 w-full!">
+					<input matSliderThumb [formControlName]="criterio.key"/>
+				</mat-slider>
+				<span class="text-sm text-gray-400 w-3 shrink-0">5</span>
 			</div>
 		}
 
@@ -54,7 +61,7 @@
         Cancelar
       </span>
 	</button>
-	<button mat-flat-button color="primary" (click)="submit()" [disabled]="isLoading()">
+	<button mat-flat-button color="primary" (click)="submit()" [disabled]="isLoading() || form.invalid">
 		@if (isLoading()) {
 			<mat-spinner diameter="18"/>
 		} @else {
