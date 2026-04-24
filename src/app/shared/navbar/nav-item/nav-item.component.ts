@@ -27,12 +27,12 @@ export class NavItemComponent {
       return 'flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors '
         + (enabled ? 'text-gray-700 hover:bg-neutral' : 'text-gray-300 cursor-not-allowed');
     }
-    return 'flex flex-col items-center justify-center flex-1 py-4 gap-0.5 text-xs font-medium transition-colors '
+    return 'flex flex-col items-center justify-center flex-1 px-1 py-4 gap-0.5 text-xs font-medium text-center transition-colors '
       + (enabled ? 'text-gray-500' : 'text-gray-400 cursor-not-allowed');
   });
 
   readonly activeClass = computed(() =>
-    this.variant() === 'desktop' ? '!text-primary font-black' : 'text-primary font-black'
+    this.variant() === 'desktop' ? '!text-primary font-black ! !text-base' : '!text-primary font-black !text-sm'
   );
 
   readonly iconClass = computed(() =>
