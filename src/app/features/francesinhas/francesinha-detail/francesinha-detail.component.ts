@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDialog } from '@angular/material/dialog';
 import { Francesinha } from '../../../core/models/francesinha.model';
 import { Review } from '../../../core/models/review.model';
 import { FrancesinhaService } from '../../../core/services/francesinha.service';
@@ -13,6 +14,7 @@ import { ReviewService } from '../../../core/services/review.service';
 import { FavoriteService } from '../../../core/services/favorite.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { ToastService } from '../../../shared/toast/toast.service';
+import { ReviewDialogComponent } from './review-dialog/review-dialog.component';
 
 @Component({
   selector: 'app-francesinha-detail',
@@ -25,6 +27,7 @@ export class FrancesinhaDetailComponent implements OnInit {
 
   private readonly route              = inject(ActivatedRoute);
   private readonly router             = inject(Router);
+  private readonly dialog             = inject(MatDialog);
   private readonly francesinhaService = inject(FrancesinhaService);
   private readonly reviewService      = inject(ReviewService);
   private readonly favoriteService    = inject(FavoriteService);
@@ -74,6 +77,28 @@ export class FrancesinhaDetailComponent implements OnInit {
         this.toastService.success(res.added ? 'Guardado en favoritos' : 'Eliminado de favoritos');
       },
       error: () => this.toastService.error('No se pudo actualizar favoritos'),
+    });
+  }
+
+  openReviewDialog(): void {
+    const f = this.francesinha();
+    if (!f) return;
+    const ref = this.dialog.open(ReviewDialogComponent, {
+      width:      '480px',
+      maxWidth:   '95vw',
+      panelClass: 'review-dialog',
+      data:       { francesinhaId: f.id, francesinhaName: f.name, restaurantName: f.restaurant.name, restaurantCity: f.restaurant.city },
+    });
+    ref.afterClosed().subscribe((review: Review | undefined) => {
+      if (!review) return;
+      const id = f.id;
+      this.reviewService.getByFrancesinha(id).subscribe({
+        next: res => this.reviews.set(res.reviews as Review[]),
+      });
+      this.francesinhaService.getById(id).subscribe({
+        next: updated => this.francesinha.set(updated),
+      });
+      this.toastService.success('¡Valoración publicada!');
     });
   }
 

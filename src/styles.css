@@ -39,6 +39,21 @@
   --color-white:  #ffffff;
 }
 
+/* Sliders del diálogo de valoración */
+.review-dialog .mdc-slider__track--inactive {
+  background-color: #e5e7eb;
+  opacity: 1;
+}
+.review-dialog .mdc-slider__track--active_fill {
+  border-color: #C45C2A;
+}
+.review-dialog .mdc-slider__thumb-knob {
+  background-color: #C45C2A;
+  border-color: #C45C2A;
+  width: 20px;
+  height: 20px;
+}
+
 .mat-mdc-form-field-error {
   font-weight: 500;
 }

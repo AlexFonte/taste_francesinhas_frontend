@@ -128,7 +128,8 @@
 
         <!-- boton valorar -->
         @if (isUser()) {
-          <button class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-primary text-white text-base font-medium transition-colors hover:bg-secondary">
+          <button (click)="openReviewDialog()"
+                  class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-primary text-white text-base font-medium transition-colors hover:bg-secondary">
             <mat-icon>star</mat-icon>
             Valorar esta francesinha
           </button>
