@@ -24,15 +24,15 @@ export class NavItemComponent {
   readonly linkClass = computed(() => {
     const enabled = this.item().enabled;
     if (this.variant() === 'desktop') {
-      return 'flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-colors '
+      return 'flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors '
         + (enabled ? 'text-gray-700 hover:bg-neutral' : 'text-gray-300 cursor-not-allowed');
     }
-    return 'flex flex-col items-center justify-center flex-1 py-4 gap-0.5 text-xs transition-colors '
+    return 'flex flex-col items-center justify-center flex-1 py-4 gap-0.5 text-xs font-medium transition-colors '
       + (enabled ? 'text-gray-500' : 'text-gray-400 cursor-not-allowed');
   });
 
   readonly activeClass = computed(() =>
-    this.variant() === 'desktop' ? '!text-primary font-semibold' : 'text-primary'
+    this.variant() === 'desktop' ? '!text-primary font-black' : 'text-primary font-black'
   );
 
   readonly iconClass = computed(() =>

@@ -1,11 +1,17 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
 @import "tailwindcss";
 @import 'material-symbols/outlined.css';
+
 
 .icon-filled {
   font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
 @theme {
+  --font-sans: 'Inter', sans-serif;
+	--default-font-family:'Inter', sans-serif;
+
   /* Principales */
   --color-primary:   #C45C2A;
   --color-secondary: #8B3820;
@@ -31,6 +37,14 @@
   /* Terciario */
   --color-tertiary: #ffdfa0;
   --color-white:  #ffffff;
+}
+
+.mat-mdc-form-field-error {
+  font-weight: 500;
+}
+
+.mat-mdc-floating-label {
+  font-weight: 500 !important;
 }
 
 .cutom-header-chip {

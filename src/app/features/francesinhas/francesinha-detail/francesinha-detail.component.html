@@ -36,7 +36,7 @@
         <mat-card-content class="!p-3 flex flex-col gap-1.5">
 
           <div class="flex items-start justify-between gap-2">
-            <h2 class="font-medium text-xl !text-text-main">{{ francesinha()!.name }}</h2>
+            <h2 class="font-bold text-xl !text-text-main">{{ francesinha()!.name }}</h2>
             @if (isUser()) {
               <button (click)="toggleFavorite()"
                       class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium transition-colors"

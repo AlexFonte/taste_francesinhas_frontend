@@ -8,10 +8,10 @@
 				<img src="icons/francesinha.svg" class="w-24 h-24 opacity-90" alt="Logo Taste Francesinhas"/>
 			</div>
 
-			<h1 class="text-3xl font-bold tracking-widest text-white text-center uppercase">
+			<h1 class="text-3xl font-bold tracking-widest text-white text-center uppercase italic">
 				Taste Francesinhas
 			</h1>
-			<p class="text-center text-white/95 text-sm leading-relaxed">
+			<p class="text-center text-white/95 text-sm leading-relaxed font-medium">
 				Descubre, valora y propone<br>las mejores francesinhas de todo Portugal
 			</p>
 		</div>
@@ -21,13 +21,13 @@
 			<!-- Logo móvil -->
 			<div class="flex flex-col items-center mb-8 md:hidden">
 				<img src="icons/francesinha.svg" class="w-16 h-16 mb-3" alt="Logo Taste Francesinha"/>
-				<h1 class="text-2xl font-bold text-primary tracking-widest uppercase text-center">Taste<br>Francesinhas</h1>
+				<h1 class="text-2xl font-bold text-primary tracking-widest uppercase text-center italic">Taste<br>Francesinhas</h1>
 			</div>
 
 			<!-- Encabezado desktop -->
 			<h2 class="hidden md:block text-2xl font-bold text-primary mb-1">Bienvenido</h2>
 
-			<p class="text-sm text-text-muted mb-7 text-center md:text-left">
+			<p class="text-sm text-text-muted mb-7 text-center md:text-left font-medium">
 				Únete para valorar y proponer francesinhas
 			</p>
 
@@ -70,12 +70,12 @@
 					mat-flat-button
 					color="primary"
 					type="submit"
-					class="w-full !h-12 !text-base !mt-2"
+					class="w-full !h-12 !text-base !mt-2 "
 					[disabled]="isLoading()">
 					@if (isLoading()) {
 						<mat-spinner diameter="22" class="!text-white"/>
 					} @else {
-						<span class="flex items-center justify-center gap-2">
+						<span class="flex items-center justify-center gap-2 font">
 							<mat-icon>login</mat-icon>
 							Iniciar sesión
 						</span>
@@ -86,7 +86,7 @@
 
 			<p class="text-sm text-center text-gray-500 mt-6">
 				¿No tienes cuenta?
-				<a routerLink="/auth/register" class="text-base text-primary font-medium hover:underline ml-1">
+				<a routerLink="/auth/register" class="text-base text-primary font-semibold hover:underline ml-1">
 					Regístrate
 				</a>
 			</p>
