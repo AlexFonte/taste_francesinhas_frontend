@@ -98,7 +98,7 @@
           <p class="text-sm text-gray-500 mb-2">Puntuación global</p>
           <div class="flex items-center gap-2">
             <mat-icon class="icon-filled !text-yellow-400 !text-4xl !w-10 !h-10 !leading-10">star</mat-icon>
-            <span class="text-5xl font-bold text-text-main">{{ francesinha()!.avgScore | number:'1.1-1' }}</span>
+            <span class="text-5xl font-bold text-text-main">{{ francesinha()!.avgScore | number:'1.2-2' }}</span>
           </div>
           <p class="text-sm text-gray-400 mt-2">{{ francesinha()!.totalReviews }} valoraciones</p>
         </div>
@@ -118,7 +118,7 @@
                   <span class="text-sm text-gray-600">{{ criterio.label }}</span>
                   <div class="flex items-center gap-1">
                     <mat-icon class="icon-filled !text-yellow-400 !text-lg !w-5 !h-5 !leading-5">star</mat-icon>
-                    <span class="text-sm font-semibold text-gray-700">{{ criterio.valor | number:'1.1-1' }}</span>
+                    <span class="text-sm font-semibold text-gray-700">{{ criterio.valor | number:'1.2-2' }}</span>
                   </div>
                 </div>
               }
@@ -151,7 +151,7 @@
                 </div>
                 <div class="flex items-center gap-1">
                   <mat-icon class="!text-yellow-400 !text-lg !w-5 !h-5 !leading-5">star</mat-icon>
-                  <span class="text-sm font-semibold text-gray-700">{{ review.avgScore | number:'1.1-1' }}</span>
+                  <span class="text-sm font-semibold text-gray-700">{{ review.avgScore | number:'1.2-2' }}</span>
                 </div>
               </div>
               @if (review.comment) {

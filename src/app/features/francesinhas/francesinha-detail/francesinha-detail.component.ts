@@ -83,13 +83,13 @@ export class FrancesinhaDetailComponent implements OnInit {
   openReviewDialog(): void {
     const f = this.francesinha();
     if (!f) return;
-    const ref = this.dialog.open(ReviewDialogComponent, {
+    const dialogRef = this.dialog.open(ReviewDialogComponent, {
       width:      '480px',
       maxWidth:   '95vw',
       panelClass: 'review-dialog',
       data:       { francesinhaId: f.id, francesinhaName: f.name, restaurantName: f.restaurant.name, restaurantCity: f.restaurant.city },
     });
-    ref.afterClosed().subscribe((review: Review | undefined) => {
+		dialogRef.afterClosed().subscribe((review: Review | undefined) => {
       if (!review) return;
       const id = f.id;
       this.reviewService.getByFrancesinha(id).subscribe({

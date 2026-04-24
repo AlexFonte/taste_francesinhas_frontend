@@ -1,4 +1,5 @@
 import { Component, inject, signal, computed } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatSliderModule } from '@angular/material/slider';
@@ -42,14 +43,15 @@ export class ReviewDialogComponent {
   readonly         data          = inject<ReviewDialogData>(MAT_DIALOG_DATA);
   private readonly reviewService = inject(ReviewService);
 
-  readonly isLoading = signal(false);
+  readonly isLoading    = signal(false);
+  readonly errorMessage = signal<string | null>(null);
 
   readonly form = this.fb.group({
     scoreFlavor:       [3, [Validators.required, Validators.min(1), Validators.max(5)]],
     scoreSauce:        [3, [Validators.required, Validators.min(1), Validators.max(5)]],
     scoreBread:        [3, [Validators.required, Validators.min(1), Validators.max(5)]],
     scorePresentation: [3, [Validators.required, Validators.min(1), Validators.max(5)]],
-    comment:           [''],
+    comment:           ['', Validators.required],
   });
 
   readonly criterios: { label: string; key: string }[] = [
@@ -69,7 +71,11 @@ export class ReviewDialogComponent {
   });
 
   submit(): void {
-    if (this.form.invalid || this.isLoading()) return;
+    if (this.isLoading()) return;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
     this.isLoading.set(true);
     const v = this.form.getRawValue();
     const request: ReviewRequest = {
@@ -80,8 +86,11 @@ export class ReviewDialogComponent {
       comment:           v.comment ?? '',
     };
     this.reviewService.create(this.data.francesinhaId, request).subscribe({
-      next:  (review) => this.dialogRef.close(review),
-      error: ()       => this.isLoading.set(false),
+      next: (review) => this.dialogRef.close(review),
+      error: (err: HttpErrorResponse) => {
+        this.isLoading.set(false);
+        this.errorMessage.set(err.error?.detail ?? 'No se pudo publicar la valoración');
+      },
     });
   }
 
