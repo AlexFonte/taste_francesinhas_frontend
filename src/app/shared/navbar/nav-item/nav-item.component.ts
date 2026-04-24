@@ -32,7 +32,7 @@ export class NavItemComponent {
   });
 
   readonly activeClass = computed(() =>
-    this.variant() === 'desktop' ? '!text-primary font-black ! !text-base' : '!text-primary font-black !text-sm'
+    this.variant() === 'desktop' ? '!text-primary !font-black' : '!text-primary !font-extrabold'
   );
 
   readonly iconClass = computed(() =>
