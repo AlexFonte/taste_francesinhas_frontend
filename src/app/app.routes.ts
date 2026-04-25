@@ -23,7 +23,7 @@ export const routes: Routes = [
   {
     path: 'admin',
     canActivate: [adminGuard],
-    loadComponent: () => import('./features/admin/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent)
+    loadComponent: () => import('./features/admin/admin-home/admin-home.component').then(m => m.AdminHomeComponent)
   },
   {
     path: 'admin/pending/:id',

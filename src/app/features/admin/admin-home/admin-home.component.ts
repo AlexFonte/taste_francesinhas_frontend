@@ -12,7 +12,7 @@ import { ConfirmDialogComponent, ConfirmDialogData } from '../../../shared/compo
 import {Router} from '@angular/router';
 
 @Component({
-  selector: 'app-admin-dashboard',
+  selector: 'app-admin-home',
   standalone: true,
   imports: [
     CommonModule,
@@ -21,10 +21,10 @@ import {Router} from '@angular/router';
     MatProgressSpinnerModule,
     MatDialogModule,
   ],
-  templateUrl: './admin-dashboard.component.html',
-  styleUrl:    './admin-dashboard.component.scss',
+  templateUrl: './admin-home.component.html',
+  styleUrl:    './admin-home.component.scss',
 })
-export class AdminDashboardComponent {
+export class AdminHomeComponent {
 
   private readonly adminService = inject(AdminService);
   private readonly toastService = inject(ToastService);
