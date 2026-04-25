@@ -1,8 +1,8 @@
 @if (toastService.toast(); as t) {
   <div
     class="fixed bottom-24 left-1/2 -translate-x-1/2 md:bottom-auto md:top-6 md:right-6 md:left-auto md:translate-x-0 z-[9999] flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg text-white text-sm font-medium min-w-64 max-w-sm"
-    [class.bg-emerald-600]="t.type === 'success'"
-    [class.bg-red-600]="t.type === 'error'">
+    [class.bg-success]="t.type === 'success'"
+    [class.bg-danger]="t.type === 'error'">
     <mat-icon class="!text-xl !w-5 !h-5 !leading-5 shrink-0">
       {{ t.type === 'success' ? 'check_circle' : 'error' }}
     </mat-icon>
