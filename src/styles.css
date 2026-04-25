@@ -95,7 +95,7 @@ app-review-form .mdc-slider__thumb-knob {
 :root {
   --mat-tooltip-container-color: #424242;
   --mat-tooltip-supporting-text-color: #ffffff;
-  /* Tokens de componentes MDC - no cubiertos por mat.theme-overrides */
+
   --mat-expansion-header-text-color: #C45C2A;
   --mat-expansion-header-indicator-color: #C45C2A;
 

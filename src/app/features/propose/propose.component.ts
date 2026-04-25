@@ -1,6 +1,6 @@
 import { Component, inject, signal, computed, effect } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { CommonModule, Location } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { DirtyOrTouchedErrorStateMatcher } from '../../shared/error-state-matchers';
@@ -45,6 +45,8 @@ export class ProposeComponent {
 
   private readonly fb                 = inject(FormBuilder);
   private readonly router             = inject(Router);
+  private readonly route              = inject(ActivatedRoute);
+  private readonly location           = inject(Location);
   private readonly restaurantService  = inject(RestaurantService);
   private readonly francesinhaService = inject(FrancesinhaService);
   private readonly reviewService      = inject(ReviewService);
@@ -58,6 +60,9 @@ export class ProposeComponent {
 
   // Toggle: false = restaurante existente, true = nuevo restaurante
   readonly newRestaurantMode = signal(false);
+  // Cuando vienen con ?restaurantId=X bloqueamos el panel de restaurante para que no
+  // se pueda cambiar la seleccion ni alternar al modo "Nuevo restaurante".
+  readonly restaurantLocked = signal(false);
 
   // Sub-form para restaurante existente: solo el id + texto de busqueda
   readonly existingRestaurantForm = this.fb.group({
@@ -98,7 +103,9 @@ export class ProposeComponent {
     // Activa/desactiva el sub-form segun el toggle.
     // NO usamos { emitEvent: false } porque necesitamos que statusChanges emita
     // para que los toSignal de `existingStatus`/`newStatus` reflejen el cambio.
+    // Si el restaurante esta bloqueado (vienen con ?restaurantId=X) no tocamos los forms.
     effect(() => {
+      if (this.restaurantLocked()) return;
       if (this.newRestaurantMode()) {
         this.existingRestaurantForm.disable();
         this.newRestaurantForm.enable();
@@ -115,6 +122,24 @@ export class ProposeComponent {
         switchMap(term => this.restaurantService.getAll({ name: term ?? '' }, 0, 10)),
       )
       .subscribe(res => this.restaurantOptions.set(res.restaurants as Restaurant[]));
+
+    // Si vienen con ?restaurantId=X (desde el listado de restaurantes), precargamos
+    // el restaurante en el modo "existente" y bloqueamos el panel para que no se pueda
+    // cambiar la seleccion ni alternar al modo "Nuevo restaurante".
+    const idParam = this.route.snapshot.queryParamMap.get('restaurantId');
+    if (idParam) {
+      const id = Number(idParam);
+      this.restaurantService.getById(id).subscribe({
+        next: r => {
+          this.newRestaurantMode.set(false);
+          this.existingRestaurantForm.controls.search.setValue(this.displayRestaurant(r), { emitEvent: false });
+          this.existingRestaurantForm.controls.restaurantId.setValue(r.id);
+          this.newRestaurantForm.disable();
+          this.existingRestaurantForm.disable();
+          this.restaurantLocked.set(true);
+        },
+      });
+    }
   }
 
   selectRestaurant(r: Restaurant): void {
@@ -234,8 +259,10 @@ export class ProposeComponent {
     this.errorMessage.set(err.error?.detail ?? fallback);
   }
 
+  // El boton "Volver" usa Location.back() para regresar a la pagina previa
+  // (puede ser /restaurants si vinieron desde alli, o /francesinhas, etc.)
   cancel(): void {
-    this.router.navigate(['/francesinhas']);
+    this.location.back();
   }
 
   // Redondeamos a 2 decimales cuando pierde foco.

@@ -5,5 +5,6 @@ export interface Restaurant {
   address?: string;
   city: string;
   phone?: string;
+  totalFrancesinhas: number;
   createdAt: string;
 }

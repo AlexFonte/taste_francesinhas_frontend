@@ -16,6 +16,16 @@ export const routes: Routes = [
 		loadComponent: () => import('./features/francesinhas/francesinha-detail/francesinha-detail.component').then(m => m.FrancesinhaDetailComponent)
 	},
   {
+    path: 'restaurants',
+    canActivate: [notAdminGuard],
+    loadComponent: () => import('./features/restaurants/restaurants.component').then(m => m.RestaurantsComponent)
+  },
+  {
+    path: 'restaurants/:id',
+    canActivate: [notAdminGuard],
+    loadComponent: () => import('./features/restaurants/restaurant-detail/restaurant-detail.component').then(m => m.RestaurantDetailComponent)
+  },
+  {
     path: 'propose',
     canActivate: [userGuard],
     loadComponent: () => import('./features/propose/propose.component').then(m => m.ProposeComponent)

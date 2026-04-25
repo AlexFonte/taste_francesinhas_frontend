@@ -51,7 +51,7 @@ export class AdminValidateComponent {
   readonly errorMessage = signal<string | null>(null);
 
   // Heuristica: si la francesinha y el restaurante se crearon casi a la vez,
-  // asumimos que el restaurante es nuevo (lo creo el proponente al hacer la propuesta).
+  // asumimos que el restaurante es nuevo (lo creo el usuario al hacer la propuesta).
   readonly isNewRestaurant = computed(() => {
     const f = this.francesinha();
     if (!f) return false;
@@ -109,7 +109,7 @@ export class AdminValidateComponent {
           type:  f.type,
           price: f.price,
         });
-        // Las reviews vienen aparte: cogemos la primera (la del proponente)
+        // Las reviews vienen aparte: cogemos la primera (la del usuario)
         this.adminService.getPendingReviews(id, 0, 1).subscribe({
           next: res => {
             const r: Review | undefined = (res.reviews as Review[])[0];

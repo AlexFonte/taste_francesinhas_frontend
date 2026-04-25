@@ -23,11 +23,12 @@ export class FrancesinhaService {
   private readonly http = inject(HttpClient);
   private readonly base = `${environment.apiUrl}/francesinhas`;
 
-  getAllFrancesinhas(filters: { name?: string; city?: string; type?: FrancesinhaType }, page: number, size = 10): Observable<FrancesinhasPagedResponse> {
+  getAllFrancesinhas(filters: { name?: string; city?: string; type?: FrancesinhaType; restaurantId?: number }, page: number, size = 10): Observable<FrancesinhasPagedResponse> {
     let params = new HttpParams().set('page', page).set('size', size);
-    if (filters.name) params = params.set('name', filters.name);
-    if (filters.city) params = params.set('city', filters.city);
-    if (filters.type) params = params.set('type', filters.type);
+    if (filters.name)         params = params.set('name', filters.name);
+    if (filters.city)         params = params.set('city', filters.city);
+    if (filters.type)         params = params.set('type', filters.type);
+    if (filters.restaurantId) params = params.set('restaurantId', filters.restaurantId);
     return this.http.get<FrancesinhasPagedResponse>(this.base, { params });
   }
 

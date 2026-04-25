@@ -35,7 +35,7 @@ export class NavbarComponent {
     if (role === 'USER') {
       return [
         { label: 'Francesinhas', icon: 'lunch_dining', route: '/francesinhas', enabled: true  },
-        { label: 'Restaurantes', icon: 'restaurant',   route: '/restaurants',  enabled: false },
+        { label: 'Restaurantes', icon: 'restaurant',   route: '/restaurants',  enabled: true  },
         { label: 'Proponer',     icon: 'add_circle',   route: '/propose',      enabled: true  },
         { label: 'Favoritos',    icon: 'favorite',     route: '/favorites',    enabled: false },
         { label: 'Perfil',       icon: 'person',       route: '/profile',      enabled: true  },
@@ -44,7 +44,7 @@ export class NavbarComponent {
 
     return [
       { label: 'Francesinhas', icon: 'lunch_dining', route: '/francesinhas',  enabled: true  },
-      { label: 'Restaurantes', icon: 'restaurant',   route: '/restaurants',   enabled: false },
+      { label: 'Restaurantes', icon: 'restaurant',   route: '/restaurants',   enabled: true  },
       { label: 'Registrarse',  icon: 'person_add',   route: '/auth/register', enabled: true  },
       { label: 'Login',        icon: 'login',        route: '/auth/login',    enabled: true  },
     ];

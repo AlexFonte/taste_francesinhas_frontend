@@ -1,5 +1,5 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
-import { CommonModule, NgClass } from '@angular/common';
+import { CommonModule, Location, NgClass } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -27,6 +27,7 @@ export class FrancesinhaDetailComponent implements OnInit {
 
   private readonly route              = inject(ActivatedRoute);
   private readonly router             = inject(Router);
+  private readonly location           = inject(Location);
   private readonly dialog             = inject(MatDialog);
   private readonly francesinhaService = inject(FrancesinhaService);
   private readonly reviewService      = inject(ReviewService);
@@ -102,7 +103,8 @@ export class FrancesinhaDetailComponent implements OnInit {
     });
   }
 
-  goBack() { this.router.navigate(['/francesinhas']); }
+  // Volvemos a la pagina anterior real (puede ser /francesinhas o /restaurants/:id)
+  goBack() { this.location.back(); }
 
   private avg(fn: (r: Review) => number): number {
     const r = this.reviews();

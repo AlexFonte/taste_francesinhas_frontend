@@ -1,0 +1,105 @@
+<div class="min-h-screen">
+
+	<main class="px-4 py-4 pb-24 md:pb-6 md:px-6 md:py-6 max-w-7xl mx-auto">
+
+		<!-- Filtros colapsables -->
+		<mat-accordion class="block mb-4" id="filterPanel">
+			<mat-expansion-panel>
+				<mat-expansion-panel-header>
+					<mat-panel-title>
+						<mat-icon>filter_alt</mat-icon>
+						Filtros
+					</mat-panel-title>
+				</mat-expansion-panel-header>
+
+				<form [formGroup]="filterForm" (ngSubmit)="search()">
+
+					<div class="flex flex-col gap-3 md:flex-row md:flex-wrap pt-2">
+						<mat-form-field appearance="outline" class="flex-1">
+							<mat-label>Nombre</mat-label>
+							<input matInput formControlName="name" placeholder="Buscar..."/>
+						</mat-form-field>
+
+						<mat-form-field appearance="outline" class="flex-1">
+							<mat-label>Ciudad</mat-label>
+							<input matInput formControlName="city" placeholder="Ciudad..."/>
+						</mat-form-field>
+					</div>
+
+					<mat-action-row>
+						<button mat-stroked-button type="button" (click)="reset()" class="!border !border-primary !text-primary">
+							<mat-icon>restart_alt</mat-icon>
+							Reset
+						</button>
+						<button mat-flat-button type="submit" color="primary">
+							<mat-icon>search</mat-icon>
+							Buscar
+						</button>
+					</mat-action-row>
+
+				</form>
+			</mat-expansion-panel>
+		</mat-accordion>
+
+		<!-- Grid de cards -->
+		@if (restaurants().length > 0) {
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+				@for (r of restaurants(); track r.id) {
+					<article (click)="openDetail(r.id)"
+					         class="border border-gray-200 rounded-2xl p-4 bg-white flex flex-col gap-2 cursor-pointer hover:shadow-md transition-shadow">
+						<div class="flex items-start justify-between gap-2">
+							<h3 class="text-base font-bold text-text-main uppercase">{{ r.name }}</h3>
+							<span
+								class="text-xs font-medium border border-gray-300 px-2 py-0.5 rounded-full bg-neutral text-text-main shrink-0">
+								{{ r.totalFrancesinhas }} francesinhas
+							</span>
+						</div>
+						<p class="text-sm text-gray-500">{{ r.city }}</p>
+						@if (r.address) {
+							<p class="text-sm text-gray-600 flex items-center gap-1">
+								<mat-icon class="!text-base !w-4 !h-4 !leading-4 text-primary">location_on</mat-icon>
+								{{ r.address }}
+							</p>
+						}
+						@if (r.phone) {
+							<p class="text-sm text-gray-600 flex items-center gap-1">
+								<mat-icon class="!text-base !w-4 !h-4 !leading-4 text-primary">phone</mat-icon>
+								{{ r.phone }}
+							</p>
+						}
+						@if (isUser()) {
+							<button mat-flat-button color="primary" class="!mt-2 !self-center"
+							        (click)="$event.stopPropagation(); proponer(r)">
+								<span class="flex items-center justify-center gap-1">
+									<mat-icon>add</mat-icon>
+									Proponer francesinha
+								</span>
+							</button>
+						}
+					</article>
+				}
+			</div>
+		}
+
+		<!-- Estado vacio -->
+		@if (restaurants().length === 0 && !isLoading()) {
+			<div class="text-center py-16 text-gray-400">
+				<mat-icon class="text-5xl! w-auto! h-auto! opacity-30">restaurant</mat-icon>
+				<p class="text-lg mt-2">No se encontraron restaurantes</p>
+				<p class="text-sm mt-1">Prueba con otros filtros</p>
+			</div>
+		}
+
+		<!-- Loading -->
+		@if (isLoading()) {
+			<div class="flex flex-col items-center justify-center gap-3 py-16">
+				<mat-spinner diameter="48" color="primary"/>
+				<p class="text-sm text-gray-400 animate-pulse">Cargando restaurantes...</p>
+			</div>
+		}
+
+		<!-- Centinela para scroll infinito -->
+		<div #sentinel class="h-4"></div>
+
+	</main>
+</div>

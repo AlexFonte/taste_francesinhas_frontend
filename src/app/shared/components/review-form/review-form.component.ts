@@ -20,7 +20,7 @@ export class ReviewFormComponent {
 
   readonly form     = input.required<FormGroup>();
   // Cuando es true, deshabilitamos los controles para mostrar la review
-  // del proponente sin que el admin pueda editarla
+  // del usuario sin que el admin pueda editarla
   readonly readOnly = input<boolean>(false);
 
   readonly criterios: { label: string; key: string }[] = [
