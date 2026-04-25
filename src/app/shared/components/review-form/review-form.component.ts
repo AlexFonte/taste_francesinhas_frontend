@@ -18,7 +18,10 @@ import { MatInputModule } from '@angular/material/input';
 })
 export class ReviewFormComponent {
 
-  readonly form = input.required<FormGroup>();
+  readonly form     = input.required<FormGroup>();
+  // Cuando es true, deshabilitamos los controles para mostrar la review
+  // del proponente sin que el admin pueda editarla
+  readonly readOnly = input<boolean>(false);
 
   readonly criterios: { label: string; key: string }[] = [
     { label: 'Sabor',        key: 'scoreFlavor' },
@@ -34,6 +37,10 @@ export class ReviewFormComponent {
   constructor() {
     effect((onCleanup) => {
       const f = this.form();
+      // Aplicamos el modo lectura sobre el form que recibimos
+      if (this.readOnly()) f.disable({ emitEvent: false });
+      else                 f.enable({ emitEvent: false });
+
       this.values.set(f.value);
       const sub = f.valueChanges.subscribe(v => this.values.set(v));
       onCleanup(() => sub.unsubscribe());

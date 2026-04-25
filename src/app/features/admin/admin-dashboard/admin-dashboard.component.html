@@ -1,0 +1,80 @@
+<div class="max-w-6xl mx-auto px-4 py-6 pb-24 lg:pb-10">
+
+	<!-- Estadisticas (mockeadas) -->
+	<section class="mb-6">
+		<h2 class="text-base font-bold text-text-main mb-3">Estadísticas</h2>
+		<div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+			<div class="border border-gray-200 rounded-2xl p-4 bg-white text-center">
+				<p class="text-xs font-medium text-gray-500 uppercase">Pendientes</p>
+				<p class="text-3xl font-bold text-primary mt-1">{{ stats().pending }}</p>
+				<p class="text-xs text-gray-400">por revisar</p>
+			</div>
+			<div class="border border-gray-200 rounded-2xl p-4 bg-white text-center">
+				<p class="text-xs font-medium text-gray-500 uppercase">Total</p>
+				<p class="text-3xl font-bold text-text-main mt-1">{{ stats().total }}</p>
+				<p class="text-xs text-gray-400">francesinhas</p>
+			</div>
+			<div class="border border-gray-200 rounded-2xl p-4 bg-white text-center">
+				<p class="text-xs font-medium text-gray-500 uppercase">Rechazadas</p>
+				<p class="text-3xl font-bold text-danger mt-1">{{ stats().rejected }}</p>
+				<p class="text-xs text-gray-400">francesinhas</p>
+			</div>
+			<div class="border border-gray-200 rounded-2xl p-4 bg-white text-center">
+				<p class="text-xs font-medium text-gray-500 uppercase">Aprobadas</p>
+				<p class="text-3xl font-bold text-success mt-1">{{ stats().accepted }}</p>
+				<p class="text-xs text-gray-400">francesinhas</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- Propuestas pendientes -->
+	<section>
+		<h2 class="text-base font-bold text-text-main mb-3">Propuestas pendientes</h2>
+
+		@if (isLoading()) {
+			<div class="flex justify-center py-8">
+				<mat-spinner diameter="32"/>
+			</div>
+		} @else if (errorMessage()) {
+			<p class="text-sm text-white bg-danger text-center px-4 py-2 rounded-full">{{ errorMessage() }}</p>
+		} @else if (pending().length === 0) {
+			<p class="text-sm text-gray-500 text-center py-8">No hay propuestas pendientes.</p>
+		} @else {
+			<div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
+				@for (f of pending(); track f.id) {
+					<article (click)="openDetail(f.id)"
+					         class="border border-gray-200 rounded-2xl p-4 bg-white flex flex-col gap-3 cursor-pointer hover:shadow-md transition-shadow">
+						<div>
+							<h3 class="text-sm font-bold text-text-main uppercase">{{ f.name }}</h3>
+							<p class="text-xs text-gray-500 mt-1">
+								{{ f.restaurant.name }} · {{ f.restaurant.city }} · {{ f.price }}€
+							</p>
+							<p class="text-xs text-gray-400 mt-1">
+								Propuesta por
+								<span class="font-medium text-text-main">{{ f.proposedByEmail }}</span>
+								· {{ f.createdAt | date:'dd/MM/yyyy' }}
+							</p>
+						</div>
+						<div class="flex gap-2">
+							<button type="button"
+							        class="flex-1 text-xs font-medium border border-red-300 text-red-800 bg-red-100 hover:bg-red-200 rounded-md py-1.5 flex items-center justify-center gap-1 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+							        [disabled]="processingId() === f.id"
+							        (click)="$event.stopPropagation(); reject(f)">
+								<mat-icon class="!text-base !w-4 !h-4 !leading-4">close</mat-icon>
+								RECHAZAR
+							</button>
+							<button type="button"
+							        class="flex-1 text-xs font-medium border border-green-300 text-green-800 bg-green-100 hover:bg-green-200 rounded-md py-1.5 flex items-center justify-center gap-1 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+							        [disabled]="processingId() === f.id"
+							        (click)="$event.stopPropagation(); approve(f)">
+								<mat-icon class="!text-base !w-4 !h-4 !leading-4">check</mat-icon>
+								APROBAR
+							</button>
+						</div>
+					</article>
+				}
+			</div>
+		}
+	</section>
+
+</div>

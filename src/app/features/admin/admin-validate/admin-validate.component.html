@@ -1,0 +1,176 @@
+<div class="pb-24 lg:pb-10">
+
+	<!-- cabecera con volver -->
+	<div class="max-w-6xl mx-auto px-4 py-6">
+		<button (click)="back()"
+		        class="flex items-center gap-1 text-sm text-primary hover:underline transition-all cursor-pointer">
+			<mat-icon class="!text-lg !w-5 !h-5 !leading-5">arrow_back</mat-icon>
+			VOLVER
+		</button>
+	</div>
+
+	@if (isLoading()) {
+		<div class="flex justify-center py-8">
+			<mat-spinner diameter="32"/>
+		</div>
+	} @else if (errorMessage()) {
+		<div class="max-w-6xl mx-auto px-4">
+			<p class="text-sm text-white bg-danger text-center px-4 py-2 rounded-full">{{ errorMessage() }}</p>
+		</div>
+	} @else if (francesinha(); as f) {
+
+		<div class="max-w-6xl mx-auto px-4 pb-6 lg:grid lg:grid-cols-[1fr_1fr_auto] lg:gap-6">
+
+			<!-- columna izquierda: restaurante + francesinha -->
+			<div class="flex flex-col gap-5">
+
+				<!-- restaurante (lectura): cambia segun si era existente o nuevo, igual que en propose -->
+				<div class="border border-gray-200 rounded-2xl p-5 bg-white">
+					<h3 class="text-base font-bold text-text-main mb-4">
+						{{ isNewRestaurant() ? 'Nuevo restaurante' : 'Restaurante' }}
+					</h3>
+					<form [formGroup]="restaurantForm" class="flex flex-col gap-3">
+						@if (!isNewRestaurant()) {
+							<mat-form-field appearance="fill" class="w-full">
+								<mat-label>Buscar restaurante</mat-label>
+								<input matInput formControlName="search"/>
+							</mat-form-field>
+						} @else {
+							<mat-form-field appearance="fill" class="w-full">
+								<mat-label>Nombre del restaurante</mat-label>
+								<input matInput formControlName="name"/>
+							</mat-form-field>
+							<mat-form-field appearance="fill" class="w-full">
+								<mat-label>Ciudad</mat-label>
+								<input matInput formControlName="city"/>
+							</mat-form-field>
+							<mat-form-field appearance="fill" class="w-full">
+								<mat-label>Dirección</mat-label>
+								<input matInput formControlName="address"/>
+							</mat-form-field>
+							<mat-form-field appearance="fill" class="w-full">
+								<mat-label>Teléfono</mat-label>
+								<input matInput formControlName="phone"/>
+							</mat-form-field>
+						}
+					</form>
+				</div>
+
+				<!-- francesinha (lectura) -->
+				<div class="border border-gray-200 rounded-2xl p-5 bg-white">
+					<h3 class="text-base font-bold text-text-main mb-4">Propuesta de Francesinha</h3>
+					<form [formGroup]="francesinhaForm" class="flex flex-col gap-3">
+						<mat-form-field appearance="fill" class="w-full">
+							<mat-label>Nombre</mat-label>
+							<input matInput formControlName="name"/>
+						</mat-form-field>
+						<mat-form-field appearance="fill" class="w-full">
+							<mat-label>Tipo</mat-label>
+							<input matInput formControlName="type"/>
+						</mat-form-field>
+						<mat-form-field appearance="fill" class="w-full">
+							<mat-label>Precio</mat-label>
+							<input matInput formControlName="price"/>
+							<span matTextSuffix>&nbsp;€</span>
+						</mat-form-field>
+
+						<p class="text-sm font-medium text-gray-500">Características</p>
+						<div class="flex justify-center gap-1.5">
+							<span class="flex-1 text-sm border px-2 py-1 rounded-full flex items-center justify-center gap-1"
+							      [class]="f.hasFries
+							        ? 'bg-amber-100 text-amber-900 border-amber-300'
+							        : 'bg-white text-gray-400 border-gray-300 opacity-60'">
+								<img src="icons/fries.svg" class="w-3.5 h-3.5" alt=""/> Patatas
+							</span>
+							<span class="flex-1 text-sm border px-2 py-1 rounded-full flex items-center justify-center gap-1"
+							      [class]="f.hasEgg
+							        ? 'bg-yellow-100 text-yellow-900 border-yellow-300'
+							        : 'bg-white text-gray-400 border-gray-300 opacity-60'">
+								<img src="icons/egg.svg" class="w-3.5 h-3.5" alt=""/> Huevo
+							</span>
+							<span class="flex-1 text-sm border px-2 py-1 rounded-full flex items-center justify-center gap-1"
+							      [class]="f.isSpicy
+							        ? 'bg-red-100 text-red-900 border-red-300'
+							        : 'bg-white text-gray-400 border-gray-300 opacity-60'">
+								<img src="icons/chilli.svg" class="w-3.5 h-3.5" alt=""/> Picante
+							</span>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<!-- columna central: criterios de valoracion (lectura) -->
+			<div class="mt-5 lg:mt-0">
+				<div class="border border-gray-200 rounded-2xl p-5 bg-white">
+					<h3 class="text-base font-bold text-text-main mb-4">Criterios de valoración</h3>
+					@if (review()) {
+						<app-review-form #reviewFormRef [form]="reviewForm" [readOnly]="true"/>
+					} @else {
+						<p class="text-sm text-gray-500">El proponente no dejó valoración con la propuesta.</p>
+					}
+				</div>
+			</div>
+
+			<!-- columna derecha: acciones (solo desktop) -->
+			<div class="hidden lg:flex flex-col gap-3 min-w-[180px]">
+				@if (review()) {
+					<div class="flex items-center justify-center gap-2 mb-2">
+						<span class="text-lg font-bold text-text-main">Valoración media: </span>
+						<mat-icon class="icon-filled text-yellow-400! text-2xl! w-6! h-6! leading-6!">star</mat-icon>
+						<span class="text-xl font-bold text-text-main">{{ review()!.avgScore | number:'1.1-1' }}</span>
+					</div>
+				}
+				<button type="button"
+				        class="text-sm font-medium border border-red-300 text-red-800 bg-red-100 hover:bg-red-200 rounded-md py-2 flex items-center justify-center gap-1 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+				        [disabled]="isSubmitting()"
+				        (click)="reject()">
+					<mat-icon class="!text-base !w-4 !h-4 !leading-4">close</mat-icon>
+					DENEGAR
+				</button>
+				<button type="button"
+				        class="text-sm font-medium border border-green-300 text-green-800 bg-green-100 hover:bg-green-200 rounded-md py-2 flex items-center justify-center gap-1 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+				        [disabled]="isSubmitting()"
+				        (click)="approve()">
+					@if (isSubmitting()) {
+						<mat-spinner diameter="18"/>
+					} @else {
+						<mat-icon class="!text-base !w-4 !h-4 !leading-4">check</mat-icon>
+						ACEPTAR
+					}
+				</button>
+			</div>
+		</div>
+
+		<!-- acciones mobile (al final) -->
+		<div class="lg:hidden max-w-6xl mx-auto px-4 mt-5 flex flex-col gap-3">
+			@if (review()) {
+				<div class="flex items-center justify-center gap-2">
+					<span class="text-lg font-bold text-text-main">Valoración media: </span>
+					<mat-icon class="icon-filled text-yellow-400! text-2xl! w-6! h-6! leading-6!">star</mat-icon>
+					<span class="text-xl font-bold text-text-main">{{ review()!.avgScore | number:'1.1-1' }}</span>
+				</div>
+			}
+			<div class="flex gap-2">
+				<button type="button"
+				        class="flex-1 text-sm font-medium border border-red-300 text-red-800 bg-red-100 hover:bg-red-200 rounded-md py-2 flex items-center justify-center gap-1 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+				        [disabled]="isSubmitting()"
+				        (click)="reject()">
+					<mat-icon class="!text-base !w-4 !h-4 !leading-4">close</mat-icon>
+					DENEGAR
+				</button>
+				<button type="button"
+				        class="flex-1 text-sm font-medium border border-green-300 text-green-800 bg-green-100 hover:bg-green-200 rounded-md py-2 flex items-center justify-center gap-1 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+				        [disabled]="isSubmitting()"
+				        (click)="approve()">
+					@if (isSubmitting()) {
+						<mat-spinner diameter="18"/>
+					} @else {
+						<mat-icon class="!text-base !w-4 !h-4 !leading-4">check</mat-icon>
+						ACEPTAR
+					}
+				</button>
+			</div>
+		</div>
+
+	}
+</div>

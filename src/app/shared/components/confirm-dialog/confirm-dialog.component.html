@@ -1,0 +1,28 @@
+<h2 mat-dialog-title class="font-bold! text-text-main! text-lg! flex! items-center gap-2">
+	@if (data.icon) {
+		<mat-icon [class]="variant === 'danger' ? 'text-danger!' : 'text-primary!'">{{ data.icon }}</mat-icon>
+	}
+	{{ data.title }}
+</h2>
+
+<mat-dialog-content>
+	<p class="text-base text-gray-700 m-0">{{ data.message }}</p>
+</mat-dialog-content>
+
+<mat-dialog-actions class="flex! items-center! mt-2! pt-3! pb-3! gap-2!">
+	<button mat-stroked-button (click)="cancel()" class="flex-1!">
+		<span class="flex items-center justify-center gap-1 font-bold!">
+			<mat-icon>close</mat-icon>
+			{{ data.cancelLabel ?? 'Cancelar' }}
+		</span>
+	</button>
+	<button mat-flat-button
+	        [color]="variant === 'danger' ? 'warn' : 'primary'"
+	        (click)="confirm()"
+	        class="flex-1!">
+		<span class="flex items-center justify-center gap-1 font-bold!">
+			<mat-icon>{{ variant === 'danger' ? 'cancel' : 'done_all' }}</mat-icon>
+			{{ data.confirmLabel }}
+		</span>
+	</button>
+</mat-dialog-actions>
