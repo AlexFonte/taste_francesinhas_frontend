@@ -153,7 +153,7 @@ export class AdminValidateComponent {
     this.openConfirm({
       title:        'Rechazar propuesta',
       message:      `¿Seguro que quieres rechazar "${f.name}"?`,
-      confirmLabel: 'Denegar',
+      confirmLabel: 'Rechazar',
       icon:         'cancel',
       variant:      'danger',
     }).subscribe(ok => { if (ok) this.changeStatus('REJECTED'); });
