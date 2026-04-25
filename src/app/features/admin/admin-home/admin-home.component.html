@@ -40,7 +40,7 @@
 		} @else if (pending().length === 0) {
 			<p class="text-sm text-gray-500 text-center py-8">No hay propuestas pendientes.</p>
 		} @else {
-			<div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
+			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
 				@for (f of pending(); track f.id) {
 					<article (click)="openDetail(f.id)"
 					         class="border border-gray-200 rounded-2xl p-4 bg-white flex flex-col gap-3 cursor-pointer hover:shadow-md transition-shadow">
