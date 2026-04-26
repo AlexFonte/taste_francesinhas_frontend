@@ -174,9 +174,13 @@ export class ProposeComponent {
   );
 
   readonly isFormValid = computed(() => {
-    const restaurantOk = this.newRestaurantMode()
-      ? this.newStatus() === 'VALID'
-      : this.existingStatus() === 'VALID';
+    // Si viene bloqueado por ?restaurantId=X el form esta deshabilitado (status DISABLED),
+    // pero el restaurantId ya esta seleccionado por construccion -> lo damos por valido.
+    const restaurantOk = this.restaurantLocked()
+      ? this.existingRestaurantForm.controls.restaurantId.value != null
+      : this.newRestaurantMode()
+        ? this.newStatus() === 'VALID'
+        : this.existingStatus() === 'VALID';
     return restaurantOk
       && this.francesinhaStatus() === 'VALID'
       && this.reviewStatus() === 'VALID';
