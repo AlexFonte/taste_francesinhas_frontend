@@ -50,7 +50,7 @@ export class AdminValidateComponent {
   readonly isSubmitting = signal(false);
   readonly errorMessage = signal<string | null>(null);
 
-  // Heuristica: si la francesinha y el restaurante se crearon casi a la vez,
+  //si la francesinha y el restaurante se crearon casi a la vez,
   // asumimos que el restaurante es nuevo (lo creo el usuario al hacer la propuesta).
   readonly isNewRestaurant = computed(() => {
     const f = this.francesinha();
@@ -60,7 +60,7 @@ export class AdminValidateComponent {
   });
 
   // Forms en lectura para que se pinten igual que en la pantalla de proponer.
-  // El campo `search` se usa cuando el restaurante ya existia (modo busqueda),
+  // El campo 'search' se usa cuando el restaurante ya existia (modo busqueda),
   // los otros cuando es nuevo (modo formulario completo).
   readonly restaurantForm = this.fb.group({
     search:  [{ value: '', disabled: true }],

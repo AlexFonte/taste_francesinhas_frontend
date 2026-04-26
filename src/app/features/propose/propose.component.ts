@@ -61,7 +61,7 @@ export class ProposeComponent {
   // Toggle: false = restaurante existente, true = nuevo restaurante
   readonly newRestaurantMode = signal(false);
   // Cuando vienen con ?restaurantId=X bloqueamos el panel de restaurante para que no
-  // se pueda cambiar la seleccion ni alternar al modo "Nuevo restaurante".
+  // se pueda cambiar la seleccion ni alternar al modo 'Nuevo restaurante'.
   readonly restaurantLocked = signal(false);
 
   // Sub-form para restaurante existente: solo el id + texto de busqueda
@@ -102,8 +102,8 @@ export class ProposeComponent {
   constructor() {
     // Activa/desactiva el sub-form segun el toggle.
     // NO usamos { emitEvent: false } porque necesitamos que statusChanges emita
-    // para que los toSignal de `existingStatus`/`newStatus` reflejen el cambio.
-    // Si el restaurante esta bloqueado (vienen con ?restaurantId=X) no tocamos los forms.
+    // para que los toSignal de 'existingStatus'/'newStatus' reflejen el cambio.
+    // Si el restaurante esta bloqueado (vienen con ?restauranId=X) no tocamos los forms.
     effect(() => {
       if (this.restaurantLocked()) return;
       if (this.newRestaurantMode()) {
@@ -124,8 +124,8 @@ export class ProposeComponent {
       .subscribe(res => this.restaurantOptions.set(res.restaurants as Restaurant[]));
 
     // Si vienen con ?restaurantId=X (desde el listado de restaurantes), precargamos
-    // el restaurante en el modo "existente" y bloqueamos el panel para que no se pueda
-    // cambiar la seleccion ni alternar al modo "Nuevo restaurante".
+    // el restaurante en el modo 'existente' y bloqueamos el panel para que no se pueda
+    // cambiar la seleccion ni alternar al modo 'Nuevo restaurante'.
     const idParam = this.route.snapshot.queryParamMap.get('restaurantId');
     if (idParam) {
       const id = Number(idParam);
@@ -143,7 +143,7 @@ export class ProposeComponent {
   }
 
   selectRestaurant(r: Restaurant): void {
-    // Solo actualizamos restaurantId. El control `search` lo gestiona mat-autocomplete
+    // Solo actualizamos restaurantId. El control 'search' lo gestiona mat-autocomplete
     // con displayWith, asi no disparamos una nueva busqueda.
     this.existingRestaurantForm.controls.restaurantId.setValue(r.id);
   }
@@ -155,7 +155,7 @@ export class ProposeComponent {
   };
 
   // Convertimos statusChanges a signals para que isFormValid reaccione cuando
-  // cambia la validez de cualquier form, no solo cuando cambia el toggle.
+  // cambia la validacion de cualquier form, no solo cuando cambia el toggle.
   private readonly existingStatus = toSignal(
     this.existingRestaurantForm.statusChanges.pipe(startWith(this.existingRestaurantForm.status)),
     { initialValue: this.existingRestaurantForm.status },
@@ -264,7 +264,6 @@ export class ProposeComponent {
   }
 
   // El boton "Volver" usa Location.back() para regresar a la pagina previa
-  // (puede ser /restaurants si vinieron desde alli, o /francesinhas, etc.)
   cancel(): void {
     this.location.back();
   }
