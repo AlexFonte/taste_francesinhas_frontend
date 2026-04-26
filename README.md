@@ -166,24 +166,6 @@ Para probar el SW localmente:
 npm run build
 npx http-server -p 4200 -c-1 dist/taste-francesinhas-frontend/browser
 ```
-
----
-
-## Deploy
-
-### Netlify
-
-El fichero `netlify.toml` ya está configurado:
-
-- Build: `npm run build`
-- Publish dir: `dist/taste-francesinhas-frontend/browser`
-- Redirects SPA: todo `/*` → `/index.html` (status 200)
-
-Pasos:
-1. Conectar el repo a Netlify.
-2. Variables de entorno: ninguna obligatoria (la URL de la API ya está en `environment.prod.ts`).
-3. Deploy.
-
 ---
 
 ## Troubleshooting
