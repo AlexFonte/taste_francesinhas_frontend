@@ -17,5 +17,9 @@ export interface Francesinha {
   status: FrancesinhaStatus;
   totalReviews: number;
   avgScore: number;
+  avgFlavor: number;
+  avgSauce: number;
+  avgBread: number;
+  avgPresentation: number;
   createdAt: string;
 }

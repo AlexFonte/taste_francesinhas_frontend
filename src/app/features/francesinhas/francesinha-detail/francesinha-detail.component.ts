@@ -48,10 +48,11 @@ export class FrancesinhaDetailComponent implements OnInit {
     return [r.name, r.address, r.city].filter(Boolean).join(' · ');
   });
 
-  readonly avgFlavor       = computed(() => this.avg(r => r.scoreFlavor));
-  readonly avgSauce        = computed(() => this.avg(r => r.scoreSauce));
-  readonly avgBread        = computed(() => this.avg(r => r.scoreBread));
-  readonly avgPresentation = computed(() => this.avg(r => r.scorePresentation));
+  // Las medias por criterio las calcula el backend en updateScore() y vienen en el response.
+  readonly avgFlavor       = computed(() => this.francesinha()?.avgFlavor       ?? 0);
+  readonly avgSauce        = computed(() => this.francesinha()?.avgSauce        ?? 0);
+  readonly avgBread        = computed(() => this.francesinha()?.avgBread        ?? 0);
+  readonly avgPresentation = computed(() => this.francesinha()?.avgPresentation ?? 0);
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -105,9 +106,4 @@ export class FrancesinhaDetailComponent implements OnInit {
 
   // Volvemos a la pagina anterior real (puede ser /francesinhas o /restaurants/:id)
   goBack() { this.location.back(); }
-
-  private avg(fn: (r: Review) => number): number {
-    const r = this.reviews();
-    return r.length ? r.reduce((s, x) => s + fn(x), 0) / r.length : 0;
-  }
 }
