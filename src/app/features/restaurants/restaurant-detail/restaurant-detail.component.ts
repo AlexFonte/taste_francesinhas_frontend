@@ -60,7 +60,7 @@ export class RestaurantDetailComponent {
         // Cargamos las francesinhas del restaurante (todas, sin paginar para esta pantalla)
         this.francesinhaService.getAllFrancesinhas({ restaurantId: id }, 0, 100).subscribe({
           next: res => {
-            this.francesinhas.set(res.francesinhas as Francesinha[]);
+            this.francesinhas.set(res.francesinhas);
             this.isLoading.set(false);
           },
           error: () => this.isLoading.set(false),

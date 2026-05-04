@@ -61,7 +61,7 @@ export class FrancesinhaDetailComponent implements OnInit {
       error: () => this.router.navigate(['/francesinhas']),
     });
     this.reviewService.getByFrancesinha(id).subscribe({
-      next: res => this.reviews.set(res.reviews as Review[]),
+      next: res => this.reviews.set(res.reviews),
     });
     if (this.isUser()) {
       this.favoriteService.isFavorite(id).subscribe({
@@ -95,7 +95,7 @@ export class FrancesinhaDetailComponent implements OnInit {
       if (!review) return;
       const id = f.id;
       this.reviewService.getByFrancesinha(id).subscribe({
-        next: res => this.reviews.set(res.reviews as Review[]),
+        next: res => this.reviews.set(res.reviews),
       });
       this.francesinhaService.getById(id).subscribe({
         next: updated => this.francesinha.set(updated),

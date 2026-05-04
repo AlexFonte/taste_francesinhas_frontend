@@ -110,7 +110,7 @@ export class FrancesinhasComponent implements OnInit {
       pagina
     ).subscribe({
       next: (res: FrancesinhasPagedResponse) => {
-        const items = res.francesinhas as Francesinha[];
+        const items = res.francesinhas;
         this.francesinhasList.update(prev => pagina === 0 ? items : [...prev, ...items]);
         this.paginaActual.set(res.pageNumber);
         this.totalPaginas.set(res.totalPages);

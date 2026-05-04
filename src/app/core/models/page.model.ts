@@ -1,31 +1,36 @@
+import { Francesinha } from './francesinha.model';
+import { Restaurant } from './restaurant.model';
+import { Review } from './review.model';
+import { Favorite } from './favorite.model';
+
 export interface FrancesinhasPagedResponse {
-  francesinhas: any[];
-  total: number;
-  totalPages: number;
-  pageNumber: number;
-  pageSize: number;
+  francesinhas: Francesinha[];
+  total:        number;
+  totalPages:   number;
+  pageNumber:   number;
+  pageSize:     number;
 }
 
 export interface RestaurantsPagedResponse {
-  restaurants: any[];
-  total: number;
-  totalPages: number;
-  pageNumber: number;
-  pageSize: number;
+  restaurants: Restaurant[];
+  total:       number;
+  totalPages:  number;
+  pageNumber:  number;
+  pageSize:    number;
 }
 
 export interface FavoritesPagedResponse {
-  favorites: any[];
-  total: number;
+  favorites:  Favorite[];
+  total:      number;
   totalPages: number;
   pageNumber: number;
-  pageSize: number;
+  pageSize:   number;
 }
 
 export interface ReviewsPagedResponse {
-  reviews: any[];
-  total: number;
+  reviews:    Review[];
+  total:      number;
   totalPages: number;
   pageNumber: number;
-  pageSize: number;
+  pageSize:   number;
 }

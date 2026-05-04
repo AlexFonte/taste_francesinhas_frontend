@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { DirtyOrTouchedErrorStateMatcher } from '../../../shared/error-state-matchers';
+import { DirtyOrTouchedErrorStateMatcher } from '../../../shared/error-state-matchers/dirty-or-touched.matcher';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';

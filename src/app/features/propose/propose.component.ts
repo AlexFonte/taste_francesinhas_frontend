@@ -3,7 +3,7 @@ import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { NonNullableFormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { DirtyOrTouchedErrorStateMatcher } from '../../shared/error-state-matchers';
+import { DirtyOrTouchedErrorStateMatcher } from '../../shared/error-state-matchers/dirty-or-touched.matcher';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -128,7 +128,7 @@ export class ProposeComponent {
         debounceTime(250),
         switchMap(term => this.restaurantService.getAll({ name: term ?? '' }, 0, 10)),
       )
-      .subscribe(res => this.restaurantOptions.set(res.restaurants as Restaurant[]));
+      .subscribe(res => this.restaurantOptions.set(res.restaurants));
 
     // Si vienen con ?restaurantId=X (desde el listado de restaurantes), precargamos
     // el restaurante en el modo 'existente' y bloqueamos el panel para que no se pueda

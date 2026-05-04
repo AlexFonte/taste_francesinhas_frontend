@@ -115,7 +115,7 @@ export class AdminValidateComponent {
         // Las reviews vienen aparte: cogemos la primera (la del usuario)
         this.adminService.getPendingReviews(id, 0, 1).subscribe({
           next: res => {
-            const r: Review | undefined = (res.reviews as Review[])[0];
+            const r: Review | undefined = res.reviews[0];
             if (r) {
               this.review.set(r);
               this.reviewForm.patchValue({

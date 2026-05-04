@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule, NonNullableFormBuilder, FormControl, FormGroupDirective, NgForm, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { DirtyOrTouchedErrorStateMatcher } from '../../../shared/error-state-matchers';
+import { DirtyOrTouchedErrorStateMatcher } from '../../../shared/error-state-matchers/dirty-or-touched.matcher';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';

@@ -58,7 +58,7 @@ export class AdminHomeComponent {
     this.errorMessage.set(null);
     this.adminService.getPending(0, 50).subscribe({
       next: res => {
-        this.pending.set(res.francesinhas as Francesinha[]);
+        this.pending.set(res.francesinhas);
         this.isLoading.set(false);
       },
       error: err => {

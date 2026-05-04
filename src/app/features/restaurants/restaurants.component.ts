@@ -100,7 +100,7 @@ export class RestaurantsComponent implements OnInit {
       pagina
     ).subscribe({
       next: (res: RestaurantsPagedResponse) => {
-        const items = res.restaurants as Restaurant[];
+        const items = res.restaurants;
         this.restaurants.update(prev => pagina === 0 ? items : [...prev, ...items]);
         this.paginaActual.set(res.pageNumber);
         this.totalPaginas.set(res.totalPages);
