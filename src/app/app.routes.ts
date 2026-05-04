@@ -53,4 +53,10 @@ export const routes: Routes = [
     path: 'auth/register',
     loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent)
   },
+  // Cualquier URL no capturada por las rutas anteriores cae aqui (404).
+  // IMPORTANTE: tiene que ser el ultimo elemento del array, si no captura todo.
+  {
+    path: '**',
+    loadComponent: () => import('./features/not-found/not-found.component').then(m => m.NotFoundComponent)
+  },
 ];
