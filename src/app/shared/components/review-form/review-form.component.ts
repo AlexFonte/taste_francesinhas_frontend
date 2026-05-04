@@ -1,8 +1,9 @@
 import { Component, computed, effect, input, signal } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { ReviewForm } from './review-form.types';
 
 @Component({
   selector: 'app-review-form',
@@ -18,7 +19,7 @@ import { MatInputModule } from '@angular/material/input';
 })
 export class ReviewFormComponent {
 
-  readonly form     = input.required<FormGroup>();
+  readonly form     = input.required<ReviewForm>();
   // Cuando es true, deshabilitamos los controles para mostrar la review
   // del usuario sin que el admin pueda editarla
   readonly readOnly = input<boolean>(false);

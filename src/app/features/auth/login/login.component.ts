@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { ReactiveFormsModule, NonNullableFormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { DirtyOrTouchedErrorStateMatcher } from '../../../shared/error-state-matchers';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,6 +8,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../../core/services/auth.service';
+import { LoginRequest } from '../../../core/models/auth.model';
+
+// FormGroup tipado a partir de LoginRequest. Asi getRawValue() devuelve { email: string; password: string }
+// sin null y nos ahorramos los non-null asserts al pasarlo al servicio.
+type LoginForm = FormGroup<{
+  email:    FormControl<string>;
+  password: FormControl<string>;
+}>;
 
 @Component({
   selector: 'app-login',
@@ -28,7 +36,7 @@ export class LoginComponent {
 
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
-  private readonly fb = inject(FormBuilder);
+  private readonly fb = inject(NonNullableFormBuilder);
 
   readonly matcher = new DirtyOrTouchedErrorStateMatcher();
 
@@ -36,7 +44,7 @@ export class LoginComponent {
   errorMessage = signal('');
   showPassword = signal(false);
 
-  form = this.fb.group({
+  form: LoginForm = this.fb.group({
     email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$')]],
     password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)]],
   });
@@ -49,8 +57,8 @@ export class LoginComponent {
     this.isLoading.set(true);
     this.errorMessage.set('');
 
-    const { email, password } = this.form.value;
-    this.authService.login({ email: email!, password: password! }).subscribe({
+    const credentials: LoginRequest = this.form.getRawValue();
+    this.authService.login(credentials).subscribe({
       next: (res) => this.router.navigate([res.role === 'ADMIN' ? '/admin' : '/francesinhas']),
       error: (err) => {
         this.errorMessage.set(err.error?.detail ?? 'Error al iniciar sesión. Inténtalo de nuevo.');

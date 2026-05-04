@@ -2,7 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { FormBuilder, ReactiveFormsModule, FormGroup } from '@angular/forms';
+import { NonNullableFormBuilder, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,7 +15,24 @@ import { Review } from '../../../core/models/review.model';
 import { AdminService } from '../../../core/services/admin.service';
 import { ToastService } from '../../../shared/toast/toast.service';
 import { ReviewFormComponent } from '../../../shared/components/review-form/review-form.component';
+import { ReviewForm } from '../../../shared/components/review-form/review-form.types';
 import { ConfirmDialogComponent, ConfirmDialogData } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+
+// Estos dos forms son solo de display (estan siempre disabled), pero los tipamos por consistencia
+// con el resto de pantallas y para que patchValue() valide los nombres de campo.
+type RestaurantInfoForm = FormGroup<{
+  search:  FormControl<string>;
+  name:    FormControl<string>;
+  city:    FormControl<string>;
+  address: FormControl<string>;
+  phone:   FormControl<string>;
+}>;
+
+type FrancesinhaInfoForm = FormGroup<{
+  name:  FormControl<string>;
+  type:  FormControl<string>;
+  price: FormControl<number | null>;
+}>;
 
 @Component({
   selector: 'app-admin-validate',
@@ -37,7 +54,7 @@ import { ConfirmDialogComponent, ConfirmDialogData } from '../../../shared/compo
 })
 export class AdminValidateComponent {
 
-  private readonly fb           = inject(FormBuilder);
+  private readonly fb           = inject(NonNullableFormBuilder);
   private readonly route        = inject(ActivatedRoute);
   private readonly router       = inject(Router);
   private readonly adminService = inject(AdminService);
@@ -62,7 +79,7 @@ export class AdminValidateComponent {
   // Forms en lectura para que se pinten igual que en la pantalla de proponer.
   // El campo 'search' se usa cuando el restaurante ya existia (modo busqueda),
   // los otros cuando es nuevo (modo formulario completo).
-  readonly restaurantForm = this.fb.group({
+  readonly restaurantForm: RestaurantInfoForm = this.fb.group({
     search:  [{ value: '', disabled: true }],
     name:    [{ value: '', disabled: true }],
     city:    [{ value: '', disabled: true }],
@@ -70,14 +87,14 @@ export class AdminValidateComponent {
     phone:   [{ value: '', disabled: true }],
   });
 
-  readonly francesinhaForm = this.fb.group({
-    name:  [{ value: '',           disabled: true }],
-    type:  [{ value: '',           disabled: true }],
-    price: [{ value: null as any,  disabled: true }],
+  readonly francesinhaForm: FrancesinhaInfoForm = this.fb.group({
+    name:  [{ value: '', disabled: true }],
+    type:  [{ value: '', disabled: true }],
+    price: this.fb.control<number | null>({ value: null, disabled: true }),
   });
 
   // El review-form recibe este FormGroup; lo pondremos en readOnly desde el template
-  readonly reviewForm: FormGroup = this.fb.group({
+  readonly reviewForm: ReviewForm = this.fb.group({
     scoreFlavor:       [3],
     scoreSauce:        [3],
     scoreBread:        [3],

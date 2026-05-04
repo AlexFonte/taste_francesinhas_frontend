@@ -2,7 +2,7 @@ import { Component, inject, signal, computed, effect } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { FormBuilder, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms';
+import { NonNullableFormBuilder, Validators, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { DirtyOrTouchedErrorStateMatcher } from '../../shared/error-state-matchers';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -21,6 +21,34 @@ import { RestaurantService, RestaurantRequest } from '../../core/services/restau
 import { ReviewService, ReviewRequest } from '../../core/services/review.service';
 import { ToastService } from '../../shared/toast/toast.service';
 import { ReviewFormComponent } from '../../shared/components/review-form/review-form.component';
+import { ReviewForm } from '../../shared/components/review-form/review-form.types';
+
+// Sub-form de "restaurante existente": el id puede ser null mientras el usuario no selecciona uno,
+// asi que NO usamos NonNullable para ese control. 'search' es solo para el autocomplete.
+type ExistingRestaurantForm = FormGroup<{
+  search:       FormControl<string>;
+  restaurantId: FormControl<number | null>;
+}>;
+
+// Sub-form de "restaurante nuevo": todos los campos son string (address y phone son opcionales en el
+// payload pero en el form siempre son string, nunca null).
+type NewRestaurantForm = FormGroup<{
+  name:    FormControl<string>;
+  city:    FormControl<string>;
+  address: FormControl<string>;
+  phone:   FormControl<string>;
+}>;
+
+// Sub-form de la francesinha. price puede ser null hasta que el usuario lo introduce.
+type FrancesinhaForm = FormGroup<{
+  name:        FormControl<string>;
+  description: FormControl<string>;
+  type:        FormControl<FrancesinhaType>;
+  price:       FormControl<number | null>;
+  hasFries:    FormControl<boolean>;
+  hasEgg:      FormControl<boolean>;
+  isSpicy:     FormControl<boolean>;
+}>;
 
 @Component({
   selector: 'app-propose',
@@ -43,7 +71,7 @@ import { ReviewFormComponent } from '../../shared/components/review-form/review-
 })
 export class ProposeComponent {
 
-  private readonly fb                 = inject(FormBuilder);
+  private readonly fb                 = inject(NonNullableFormBuilder);
   private readonly router             = inject(Router);
   private readonly route              = inject(ActivatedRoute);
   private readonly location           = inject(Location);
@@ -64,31 +92,33 @@ export class ProposeComponent {
   // se pueda cambiar la seleccion ni alternar al modo 'Nuevo restaurante'.
   readonly restaurantLocked = signal(false);
 
-  // Sub-form para restaurante existente: solo el id + texto de busqueda
-  readonly existingRestaurantForm = this.fb.group({
+  // Sub-form para restaurante existente: solo el id + texto de busqueda.
+  // restaurantId es FormControl<number | null> porque arranca null y se rellena al seleccionar.
+  readonly existingRestaurantForm: ExistingRestaurantForm = this.fb.group({
     search:       [''],
-    restaurantId: [null as number | null, [Validators.required]],
+    restaurantId: this.fb.control<number | null>(null, [Validators.required]),
   });
 
   // Sub-form para restaurante nuevo: todos los datos
-  readonly newRestaurantForm = this.fb.group({
+  readonly newRestaurantForm: NewRestaurantForm = this.fb.group({
     name:    ['', [Validators.required, Validators.maxLength(100)]],
     city:    ['', [Validators.required, Validators.maxLength(100)]],
     address: ['', [Validators.maxLength(200)]],
     phone:   ['', [Validators.maxLength(30)]],
   });
 
-  readonly francesinhaForm = this.fb.group({
+  // price arranca null hasta que el usuario introduce un valor; el resto son NonNullable.
+  readonly francesinhaForm: FrancesinhaForm = this.fb.group({
     name:        ['', [Validators.required, Validators.maxLength(100)]],
     description: ['', [Validators.maxLength(500)]],
-    type:        ['CLASICA' as FrancesinhaType, [Validators.required]],
-    price:       [null as number | null, [Validators.required, Validators.min(0.01)]],
+    type:        this.fb.control<FrancesinhaType>('CLASICA', [Validators.required]),
+    price:       this.fb.control<number | null>(null, [Validators.required, Validators.min(0.01)]),
     hasFries:    [false],
     hasEgg:      [false],
     isSpicy:     [false],
   });
 
-  readonly reviewForm: FormGroup = this.fb.group({
+  readonly reviewForm: ReviewForm = this.fb.group({
     scoreFlavor:       [3, [Validators.required, Validators.min(1), Validators.max(5)]],
     scoreSauce:        [3, [Validators.required, Validators.min(1), Validators.max(5)]],
     scoreBread:        [3, [Validators.required, Validators.min(1), Validators.max(5)]],
@@ -202,15 +232,21 @@ export class ProposeComponent {
     this.isLoading.set(true);
     this.errorMessage.set(null);
 
-    if (this.newRestaurantMode()) this.submitWithNewRestaurant();
-    else                          this.submitWithExistingRestaurant(this.existingRestaurantForm.value.restaurantId!);
+    if (this.newRestaurantMode()) {
+      this.submitWithNewRestaurant();
+    } else {
+      // Aqui ya hemos validado isFormValid() antes, asi que restaurantId no es null.
+      const restaurantId = this.existingRestaurantForm.controls.restaurantId.value;
+      if (restaurantId == null) return;
+      this.submitWithExistingRestaurant(restaurantId);
+    }
   }
 
   private submitWithNewRestaurant(): void {
     const r = this.newRestaurantForm.getRawValue();
     const payload: RestaurantRequest = {
-      name:    r.name!,
-      city:    r.city!,
+      name:    r.name,
+      city:    r.city,
       address: r.address || undefined,
       phone:   r.phone   || undefined,
     };
@@ -222,15 +258,17 @@ export class ProposeComponent {
 
   private submitWithExistingRestaurant(restaurantId: number): void {
     const f = this.francesinhaForm.getRawValue();
+    // price ya es != null porque isFormValid() exigio Validators.required.
+    if (f.price == null) return;
     const payload: FrancesinhaProposeRequest = {
       restaurantId,
-      name:        f.name!,
+      name:        f.name,
       description: f.description || undefined,
-      price:       f.price!,
-      hasEgg:      f.hasEgg!,
-      hasFries:    f.hasFries!,
-      isSpicy:     f.isSpicy!,
-      type:        f.type!,
+      price:       f.price,
+      hasEgg:      f.hasEgg,
+      hasFries:    f.hasFries,
+      isSpicy:     f.isSpicy,
+      type:        f.type,
     };
     this.francesinhaService.propose(payload).subscribe({
       next:  created => this.submitReview(created.id),
@@ -239,14 +277,9 @@ export class ProposeComponent {
   }
 
   private submitReview(francesinhaId: number): void {
-    const v = this.reviewForm.getRawValue();
     const payload: ReviewRequest = {
-      scoreFlavor:       v.scoreFlavor,
-      scoreSauce:        v.scoreSauce,
-      scoreBread:        v.scoreBread,
-      scorePresentation: v.scorePresentation,
-      comment:           v.comment,
-      propuesta:         true,
+      ...this.reviewForm.getRawValue(),
+      propuesta: true,
     };
     this.reviewService.create(francesinhaId, payload).subscribe({
       next: () => {

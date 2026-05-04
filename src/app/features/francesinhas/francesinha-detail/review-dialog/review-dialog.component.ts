@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { ReactiveFormsModule, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,6 +8,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DecimalPipe } from '@angular/common';
 import { ReviewService, ReviewRequest } from '../../../../core/services/review.service';
 import { ReviewFormComponent } from '../../../../shared/components/review-form/review-form.component';
+import { ReviewForm } from '../../../../shared/components/review-form/review-form.types';
 
 export interface ReviewDialogData {
   francesinhaId:    number;
@@ -33,7 +34,7 @@ export interface ReviewDialogData {
 })
 export class ReviewDialogComponent {
 
-  private readonly fb            = inject(FormBuilder);
+  private readonly fb            = inject(NonNullableFormBuilder);
   private readonly dialogRef     = inject(MatDialogRef<ReviewDialogComponent>);
   readonly         data          = inject<ReviewDialogData>(MAT_DIALOG_DATA);
   private readonly reviewService = inject(ReviewService);
@@ -41,7 +42,7 @@ export class ReviewDialogComponent {
   readonly isLoading    = signal(false);
   readonly errorMessage = signal<string | null>(null);
 
-  readonly form = this.fb.group({
+  readonly form: ReviewForm = this.fb.group({
     scoreFlavor:       [3, [Validators.required, Validators.min(1), Validators.max(5)]],
     scoreSauce:        [3, [Validators.required, Validators.min(1), Validators.max(5)]],
     scoreBread:        [3, [Validators.required, Validators.min(1), Validators.max(5)]],
@@ -56,14 +57,7 @@ export class ReviewDialogComponent {
       return;
     }
     this.isLoading.set(true);
-    const v = this.form.getRawValue();
-    const request: ReviewRequest = {
-      scoreFlavor:       v.scoreFlavor!,
-      scoreSauce:        v.scoreSauce!,
-      scoreBread:        v.scoreBread!,
-      scorePresentation: v.scorePresentation!,
-      comment:           v.comment ?? '',
-    };
+    const request: ReviewRequest = this.form.getRawValue();
     this.reviewService.create(this.data.francesinhaId, request).subscribe({
       next: (review) => this.dialogRef.close(review),
       error: (err: HttpErrorResponse) => {

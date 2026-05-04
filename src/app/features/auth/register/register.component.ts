@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { AbstractControl, ReactiveFormsModule, FormBuilder, FormControl, FormGroupDirective, NgForm, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, ReactiveFormsModule, NonNullableFormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { DirtyOrTouchedErrorStateMatcher } from '../../../shared/error-state-matchers';
@@ -9,6 +9,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../../core/services/auth.service';
+
+// El form tiene un campo extra 'confirmPassword' que NO se envia al backend (no esta en
+// RegisterRequest), por eso lo definimos explicito en lugar de derivarlo del modelo.
+type RegisterForm = FormGroup<{
+  name:            FormControl<string>;
+  email:           FormControl<string>;
+  password:        FormControl<string>;
+  confirmPassword: FormControl<string>;
+}>;
 
 class ConfirmPasswordStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -43,7 +52,7 @@ export class RegisterComponent {
 
   private readonly authService = inject(AuthService);
   private readonly router      = inject(Router);
-  private readonly fb          = inject(FormBuilder);
+  private readonly fb          = inject(NonNullableFormBuilder);
 
   readonly matcher        = new DirtyOrTouchedErrorStateMatcher();
   readonly confirmMatcher = new ConfirmPasswordStateMatcher();
@@ -53,7 +62,7 @@ export class RegisterComponent {
   showPassword  = signal(false);
   showConfirm   = signal(false);
 
-  form = this.fb.group({
+  form: RegisterForm = this.fb.group({
     name:            ['', [Validators.required, Validators.minLength(2)]],
     email:           ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$')]],
     password:        ['', [Validators.required, Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$')]],
@@ -68,8 +77,9 @@ export class RegisterComponent {
     this.isLoading.set(true);
     this.errorMessage.set('');
 
-    const { name, email, password } = this.form.value;
-    this.authService.register({ name: name!, email: email!, password: password! }).subscribe({
+    // confirmPassword es solo del form, no del modelo: lo descartamos antes de enviar.
+    const { confirmPassword, ...credentials } = this.form.getRawValue();
+    this.authService.register(credentials).subscribe({
       next: (res) => this.router.navigate([res.role === 'ADMIN' ? '/admin' : '/francesinhas']),
       error: (err) => {
         this.errorMessage.set(err.error?.detail ?? 'Error al crear la cuenta. Inténtalo de nuevo.');
