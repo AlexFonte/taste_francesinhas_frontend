@@ -23,3 +23,14 @@ export interface Francesinha {
   avgPresentation: number;
   createdAt: string;
 }
+
+export interface FrancesinhaProposeRequest {
+  restaurantId: number;
+  name:         string;
+  description?: string;
+  price:        number;
+  hasEgg:       boolean;
+  hasFries:     boolean;
+  isSpicy:      boolean;
+  type:         FrancesinhaType;
+}

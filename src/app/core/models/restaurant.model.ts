@@ -8,3 +8,10 @@ export interface Restaurant {
   totalFrancesinhas: number;
   createdAt: string;
 }
+
+export interface RestaurantRequest {
+  name:     string;
+  city:     string;
+  address?: string;
+  phone?:   string;
+}

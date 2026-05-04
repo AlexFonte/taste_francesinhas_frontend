@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { ToastService } from './toast.service';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-toast',

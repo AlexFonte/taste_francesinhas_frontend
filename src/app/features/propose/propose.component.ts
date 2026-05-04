@@ -2,7 +2,7 @@ import { Component, inject, signal, computed, effect } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { NonNullableFormBuilder, Validators, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import { NonNullableFormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { DirtyOrTouchedErrorStateMatcher } from '../../shared/error-state-matchers';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -16,39 +16,16 @@ import { debounceTime, switchMap, startWith } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FrancesinhaType } from '../../core/models/francesinha.model';
 import { Restaurant } from '../../core/models/restaurant.model';
-import { FrancesinhaService, FrancesinhaProposeRequest } from '../../core/services/francesinha.service';
-import { RestaurantService, RestaurantRequest } from '../../core/services/restaurant.service';
-import { ReviewService, ReviewRequest } from '../../core/services/review.service';
-import { ToastService } from '../../shared/toast/toast.service';
+import { FrancesinhaService } from '../../core/services/francesinha.service';
+import { RestaurantService } from '../../core/services/restaurant.service';
+import { ReviewService } from '../../core/services/review.service';
+import { FrancesinhaProposeRequest } from '../../core/models/francesinha.model';
+import { RestaurantRequest } from '../../core/models/restaurant.model';
+import { ReviewRequest } from '../../core/models/review.model';
+import { ToastService } from '../../shared/services/toast.service';
 import { ReviewFormComponent } from '../../shared/components/review-form/review-form.component';
 import { ReviewForm } from '../../shared/components/review-form/review-form.types';
-
-// Sub-form de "restaurante existente": el id puede ser null mientras el usuario no selecciona uno,
-// asi que NO usamos NonNullable para ese control. 'search' es solo para el autocomplete.
-type ExistingRestaurantForm = FormGroup<{
-  search:       FormControl<string>;
-  restaurantId: FormControl<number | null>;
-}>;
-
-// Sub-form de "restaurante nuevo": todos los campos son string (address y phone son opcionales en el
-// payload pero en el form siempre son string, nunca null).
-type NewRestaurantForm = FormGroup<{
-  name:    FormControl<string>;
-  city:    FormControl<string>;
-  address: FormControl<string>;
-  phone:   FormControl<string>;
-}>;
-
-// Sub-form de la francesinha. price puede ser null hasta que el usuario lo introduce.
-type FrancesinhaForm = FormGroup<{
-  name:        FormControl<string>;
-  description: FormControl<string>;
-  type:        FormControl<FrancesinhaType>;
-  price:       FormControl<number | null>;
-  hasFries:    FormControl<boolean>;
-  hasEgg:      FormControl<boolean>;
-  isSpicy:     FormControl<boolean>;
-}>;
+import { ExistingRestaurantForm, NewRestaurantForm, FrancesinhaForm } from './propose.types';
 
 @Component({
   selector: 'app-propose',

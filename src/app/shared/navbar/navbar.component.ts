@@ -1,7 +1,8 @@
 import { Component, inject, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
-import { NavItemComponent, NavItem } from './nav-item/nav-item.component';
+import { NavItemComponent } from './nav-item/nav-item.component';
+import { NavItem } from '../types/nav-item.model';
 import { MatIconButton } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';

@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Review } from '../models/review.model';
+import { Review, ReviewRequest } from '../models/review.model';
 import { ReviewsPagedResponse } from '../models/page.model';
 
 @Injectable({ providedIn: 'root' })
@@ -19,15 +19,4 @@ export class ReviewService {
   create(francesinhaId: number, request: ReviewRequest): Observable<Review> {
     return this.http.post<Review>(`${this.base}/${francesinhaId}/reviews`, request);
   }
-}
-
-export interface ReviewRequest {
-  scoreFlavor:       number;
-  scoreSauce:        number;
-  scoreBread:        number;
-  scorePresentation: number;
-  comment:           string;
-  // Solo se envia true cuando la review se crea junto con una propuesta de francesinha
-  // (la francesinha estara en estado PENDING). En el resto de casos se omite.
-  propuesta?:        boolean;
 }

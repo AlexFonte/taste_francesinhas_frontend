@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { ReactiveFormsModule, NonNullableFormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { ReactiveFormsModule, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { DirtyOrTouchedErrorStateMatcher } from '../../../shared/error-state-matchers';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,13 +9,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../../core/services/auth.service';
 import { LoginRequest } from '../../../core/models/auth.model';
-
-// FormGroup tipado a partir de LoginRequest. Asi getRawValue() devuelve { email: string; password: string }
-// sin null y nos ahorramos los non-null asserts al pasarlo al servicio.
-type LoginForm = FormGroup<{
-  email:    FormControl<string>;
-  password: FormControl<string>;
-}>;
+import { LoginForm } from './login.types';
 
 @Component({
   selector: 'app-login',

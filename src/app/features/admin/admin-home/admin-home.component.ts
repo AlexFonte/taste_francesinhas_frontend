@@ -6,9 +6,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Francesinha, FrancesinhaStatus } from '../../../core/models/francesinha.model';
-import { AdminService, AdminStats } from '../../../core/services/admin.service';
-import { ToastService } from '../../../shared/toast/toast.service';
-import { ConfirmDialogComponent, ConfirmDialogData } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { AdminService } from '../../../core/services/admin.service';
+import { AdminStats } from '../../../core/models/admin.model';
+import { ToastService } from '../../../shared/services/toast.service';
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogData } from '../../../shared/types/confirm-dialog.model';
 import {Router} from '@angular/router';
 
 @Component({

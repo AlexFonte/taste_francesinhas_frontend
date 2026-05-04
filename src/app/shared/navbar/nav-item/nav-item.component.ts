@@ -1,13 +1,7 @@
 import { Component, computed, input } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-
-export interface NavItem {
-  label: string;
-  icon: string;
-  route: string;
-  enabled: boolean;
-}
+import { NavItem } from '../../types/nav-item.model';
 
 @Component({
   selector: 'app-nav-item',

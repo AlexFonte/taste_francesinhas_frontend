@@ -3,8 +3,12 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "clean": "rimraf .angular/cache dist node_modules/.cache",
+    "start": "ng serve --proxy-config proxy.conf.json",
+    "dev:serve": "ng serve --host 0.0.0.0 --proxy-config proxy.conf.json",
+    "dev": "run-s clean dev:serve",
+    "build:serve": "ng build",
+    "build": "run-s clean build:serve",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -32,7 +36,9 @@
     "@angular/cli": "^21.2.7",
     "@angular/compiler-cli": "^21.2.0",
     "jsdom": "^28.0.0",
+    "npm-run-all2": "^8.0.4",
     "prettier": "^3.8.1",
+    "rimraf": "^6.1.3",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"
   }

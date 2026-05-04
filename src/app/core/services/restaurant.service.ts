@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Restaurant } from '../models/restaurant.model';
+import { Restaurant, RestaurantRequest } from '../models/restaurant.model';
 import { RestaurantsPagedResponse } from '../models/page.model';
 
 @Injectable({ providedIn: 'root' })
@@ -25,11 +25,4 @@ export class RestaurantService {
   create(payload: RestaurantRequest): Observable<Restaurant> {
     return this.http.post<Restaurant>(this.base, payload);
   }
-}
-
-export interface RestaurantRequest {
-  name:     string;
-  city:     string;
-  address?: string;
-  phone?:   string;
 }

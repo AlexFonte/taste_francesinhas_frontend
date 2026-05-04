@@ -13,7 +13,7 @@ import { FrancesinhaService } from '../../../core/services/francesinha.service';
 import { ReviewService } from '../../../core/services/review.service';
 import { FavoriteService } from '../../../core/services/favorite.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { ToastService } from '../../../shared/toast/toast.service';
+import { ToastService } from '../../../shared/services/toast.service';
 import { ReviewDialogComponent } from './review-dialog/review-dialog.component';
 
 @Component({

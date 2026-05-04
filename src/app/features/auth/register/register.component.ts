@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { AbstractControl, ReactiveFormsModule, NonNullableFormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, ReactiveFormsModule, NonNullableFormBuilder, FormControl, FormGroupDirective, NgForm, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { DirtyOrTouchedErrorStateMatcher } from '../../../shared/error-state-matchers';
@@ -9,15 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../../core/services/auth.service';
-
-// El form tiene un campo extra 'confirmPassword' que NO se envia al backend (no esta en
-// RegisterRequest), por eso lo definimos explicito en lugar de derivarlo del modelo.
-type RegisterForm = FormGroup<{
-  name:            FormControl<string>;
-  email:           FormControl<string>;
-  password:        FormControl<string>;
-  confirmPassword: FormControl<string>;
-}>;
+import { RegisterForm } from './register.types';
 
 class ConfirmPasswordStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {

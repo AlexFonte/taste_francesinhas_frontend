@@ -2,7 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { NonNullableFormBuilder, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,26 +13,12 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Francesinha, FrancesinhaStatus } from '../../../core/models/francesinha.model';
 import { Review } from '../../../core/models/review.model';
 import { AdminService } from '../../../core/services/admin.service';
-import { ToastService } from '../../../shared/toast/toast.service';
+import { ToastService } from '../../../shared/services/toast.service';
 import { ReviewFormComponent } from '../../../shared/components/review-form/review-form.component';
 import { ReviewForm } from '../../../shared/components/review-form/review-form.types';
-import { ConfirmDialogComponent, ConfirmDialogData } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
-
-// Estos dos forms son solo de display (estan siempre disabled), pero los tipamos por consistencia
-// con el resto de pantallas y para que patchValue() valide los nombres de campo.
-type RestaurantInfoForm = FormGroup<{
-  search:  FormControl<string>;
-  name:    FormControl<string>;
-  city:    FormControl<string>;
-  address: FormControl<string>;
-  phone:   FormControl<string>;
-}>;
-
-type FrancesinhaInfoForm = FormGroup<{
-  name:  FormControl<string>;
-  type:  FormControl<string>;
-  price: FormControl<number | null>;
-}>;
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { ConfirmDialogData } from '../../../shared/types/confirm-dialog.model';
+import { RestaurantInfoForm, FrancesinhaInfoForm } from './admin-validate.types';
 
 @Component({
   selector: 'app-admin-validate',

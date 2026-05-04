@@ -4,13 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Francesinha, FrancesinhaStatus } from '../models/francesinha.model';
 import { FrancesinhasPagedResponse, ReviewsPagedResponse } from '../models/page.model';
-
-export interface AdminStats {
-  pending:  number;
-  accepted: number;
-  rejected: number;
-  total:    number;
-}
+import { AdminStats } from '../models/admin.model';
 
 @Injectable({ providedIn: 'root' })
 export class AdminService {

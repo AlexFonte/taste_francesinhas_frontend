@@ -2,20 +2,9 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Francesinha, FrancesinhaType } from '../models/francesinha.model';
+import { Francesinha, FrancesinhaType, FrancesinhaProposeRequest } from '../models/francesinha.model';
 import { FrancesinhasPagedResponse } from '../models/page.model';
 import { Review } from '../models/review.model';
-
-export interface FrancesinhaProposeRequest {
-  restaurantId: number;
-  name:         string;
-  description?: string;
-  price:        number;
-  hasEgg:       boolean;
-  hasFries:     boolean;
-  isSpicy:      boolean;
-  type:         FrancesinhaType;
-}
 
 @Injectable({ providedIn: 'root' })
 export class FrancesinhaService {

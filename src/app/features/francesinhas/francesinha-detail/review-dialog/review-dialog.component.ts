@@ -6,16 +6,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DecimalPipe } from '@angular/common';
-import { ReviewService, ReviewRequest } from '../../../../core/services/review.service';
+import { ReviewService } from '../../../../core/services/review.service';
+import { ReviewRequest } from '../../../../core/models/review.model';
 import { ReviewFormComponent } from '../../../../shared/components/review-form/review-form.component';
 import { ReviewForm } from '../../../../shared/components/review-form/review-form.types';
-
-export interface ReviewDialogData {
-  francesinhaId:    number;
-  francesinhaName:  string;
-  restaurantName:   string;
-  restaurantCity:   string;
-}
+import { ReviewDialogData } from './review-dialog.model';
 
 @Component({
   selector: 'app-review-dialog',
