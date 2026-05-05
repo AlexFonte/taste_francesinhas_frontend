@@ -7,8 +7,8 @@
     "start": "ng serve --proxy-config proxy.conf.json",
     "dev:serve": "ng serve --host 0.0.0.0 --proxy-config proxy.conf.json",
     "dev": "run-s clean dev:serve",
-    "build:serve": "ng build",
-    "build": "run-s clean build:serve",
+    "prebuild": "npm run clean",
+    "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
