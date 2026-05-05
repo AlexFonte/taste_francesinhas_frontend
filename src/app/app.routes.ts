@@ -31,6 +31,11 @@ export const routes: Routes = [
     loadComponent: () => import('./features/propose/propose.component').then(m => m.ProposeComponent)
   },
   {
+    path: 'favorites',
+    canActivate: [userGuard],
+    loadComponent: () => import('./features/favorites/favorites.component').then(m => m.FavoritesComponent)
+  },
+  {
     path: 'admin',
     canActivate: [adminGuard],
     loadComponent: () => import('./features/admin/admin-home/admin-home.component').then(m => m.AdminHomeComponent)

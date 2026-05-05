@@ -1,8 +1,9 @@
 import { Component, inject, signal } from '@angular/core';
-import { AbstractControl, ReactiveFormsModule, NonNullableFormBuilder, FormControl, FormGroupDirective, NgForm, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { ReactiveFormsModule, NonNullableFormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { ErrorStateMatcher } from '@angular/material/core';
 import { DirtyOrTouchedErrorStateMatcher } from '../../../shared/error-state-matchers/dirty-or-touched.matcher';
+import { ConfirmPasswordStateMatcher } from '../../../shared/error-state-matchers/confirm-password.matcher';
+import { passwordMatchValidator } from '../../../shared/validators/password-match.validator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,20 +11,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../../core/services/auth.service';
 import { RegisterForm } from './register.types';
-
-class ConfirmPasswordStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const hasOwnError = !!(control?.invalid && (control.dirty || control.touched));
-    const hasMismatch = !!(form?.hasError('passwordMismatch') && (control?.dirty || control?.touched));
-    return hasOwnError || hasMismatch;
-  }
-}
-
-const passwordMatchValidator: ValidatorFn = (group: AbstractControl): ValidationErrors | null => {
-  const password = group.get('password')?.value;
-  const confirm  = group.get('confirmPassword')?.value;
-  return password === confirm ? null : { passwordMismatch: true };
-};
 
 @Component({
   selector: 'app-register',

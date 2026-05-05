@@ -52,21 +52,34 @@
     </mat-accordion>
 
     <!-- Grid de cards -->
-    @if (francesinhasList().length > 0) {
+    @if (francesinhas().length > 0) {
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        @for (f of francesinhasList(); track f.id; let i = $index) {
-          <!-- animate.enter="card-enter" [style.--i]="i % 10" - animación desactivada -->
-          <app-francesinha-card [francesinha]="f" [isFavorite]="favoriteIds().has(f.id)"/>
+        @for (f of francesinhas(); track f.id) {
+          <app-francesinha-card [francesinha]="f" [isFavorite]="true">
+            <button card-actions
+                    mat-stroked-button
+                    type="button"
+                    color="warn"
+                    class="w-full transition-colors !border-secondary !text-secondary hover:!bg-secondary hover:!text-white"
+                    (click)="onRemove(f.id)">
+              <mat-icon>heart_minus</mat-icon>
+              Eliminar de favoritos
+            </button>
+          </app-francesinha-card>
         }
       </div>
     }
 
-    <!-- Estado vacío -->
-    @if (francesinhasList().length === 0 && !isLoading()) {
+    <!-- Estado vacio -->
+    @if (francesinhas().length === 0 && !isLoading()) {
       <div class="text-center py-16 text-gray-400">
-        <mat-icon class="text-5xl! w-auto! h-auto! opacity-30">lunch_dining</mat-icon>
-        <p class="text-lg mt-2">No se encontraron francesinhas</p>
-        <p class="text-sm mt-1">Prueba con otros filtros</p>
+        <mat-icon class="text-5xl! w-auto! h-auto! opacity-30">favorite_border</mat-icon>
+        <p class="text-lg mt-2">Aún no tienes favoritos</p>
+        <p class="text-sm mt-1 mb-4">Explora francesinhas y guarda las que te gusten</p>
+        <a mat-flat-button color="primary" routerLink="/francesinhas">
+          <mat-icon>lunch_dining</mat-icon>
+          Ir a francesinhas
+        </a>
       </div>
     }
 
@@ -74,20 +87,9 @@
     @if (isLoading()) {
       <div class="flex flex-col items-center justify-center gap-3 py-16">
         <mat-spinner diameter="48" color="primary"/>
-        <p class="text-sm text-gray-400 animate-pulse">Cargando francesinhas...</p>
+        <p class="text-sm text-gray-400 animate-pulse">Cargando favoritos...</p>
       </div>
     }
-
-    <!-- Cargar más (botón manual, sustituido por scroll infinito)
-    @if (hayMas() && !isLoading()) {
-      <div class="flex justify-center mt-6">
-        <button mat-flat-button color="primary" (click)="loadMore()" style="min-width: 200px;">
-          <mat-icon>add</mat-icon>
-          Cargar más
-        </button>
-      </div>
-    }
-    -->
 
     <!-- Centinela para scroll infinito -->
     <div #sentinel class="h-4"></div>

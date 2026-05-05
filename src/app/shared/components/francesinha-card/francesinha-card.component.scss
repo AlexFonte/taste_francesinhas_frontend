@@ -1,0 +1,13 @@
+h2, h3 {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+::ng-deep .cutom-header-chip {
+
+  .mdc-evolution-chip__text-label {
+    color: var(--color-white) !important;
+    padding: 0px 2px !important;
+  }
+}

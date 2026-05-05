@@ -1,56 +1,52 @@
 import { Component, inject, signal, computed, OnInit, effect, viewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { FrancesinhaService } from '../../core/services/francesinha.service';
 import { FavoriteService } from '../../core/services/favorite.service';
-import { AuthService } from '../../core/services/auth.service';
+import { ToastService } from '../../shared/services/toast.service';
 import { Francesinha, FrancesinhaType } from '../../core/models/francesinha.model';
 import { FrancesinhaCardComponent } from '../../shared/components/francesinha-card/francesinha-card.component';
-import { FrancesinhasPagedResponse } from '../../core/models/page.model';
+import { FavoritesPagedResponse } from '../../core/models/page.model';
 import { FRANCESINHA_TYPE_OPTIONS } from '../../core/constants/francesinha-types.const';
 
 @Component({
-  selector: 'app-francesinhas',
+  selector: 'app-favorites',
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    RouterLink,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
-    MatCardModule,
     MatProgressSpinnerModule,
     MatIconModule,
     MatExpansionModule,
     FrancesinhaCardComponent,
   ],
-  templateUrl: './francesinhas.component.html',
-  styleUrl: './francesinhas.component.scss',
-
+  templateUrl: './favorites.component.html',
+  styleUrl: './favorites.component.scss',
 })
-export class FrancesinhasComponent implements OnInit {
+export class FavoritesComponent implements OnInit {
 
   private readonly sentinel = viewChild.required<ElementRef>('sentinel');
-  private readonly francesinhaService = inject(FrancesinhaService);
-  private readonly favoriteService    = inject(FavoriteService);
-  private readonly authService        = inject(AuthService);
+  private readonly favoriteService = inject(FavoriteService);
+  private readonly toast           = inject(ToastService);
   private readonly fb = inject(FormBuilder);
 
-  francesinhasList = signal<Francesinha[]>([]);
-  favoriteIds      = signal<Set<number>>(new Set());
-  isLoading = signal(false);
+  francesinhas = signal<Francesinha[]>([]);
+  isLoading    = signal(false);
   paginaActual = signal(0);
   totalPaginas = signal(0);
-  hayMas = computed(() => this.paginaActual() < this.totalPaginas() - 1);
+  hayMas       = computed(() => this.paginaActual() < this.totalPaginas() - 1);
 
   readonly tiposFrancesinhas = FRANCESINHA_TYPE_OPTIONS;
 
@@ -75,21 +71,16 @@ export class FrancesinhasComponent implements OnInit {
 
   ngOnInit() {
     this.load(0);
-    if (this.authService.isLoggedIn()) {
-      this.favoriteService.getFavoriteIds().subscribe({
-        next: ids => this.favoriteIds.set(ids),
-      });
-    }
   }
 
   search() {
-    this.francesinhasList.set([]);
+    this.francesinhas.set([]);
     this.load(0);
   }
 
   reset() {
     this.filterForm.reset({ name: '', city: '', type: '' });
-    this.francesinhasList.set([]);
+    this.francesinhas.set([]);
     this.load(0);
   }
 
@@ -97,16 +88,41 @@ export class FrancesinhasComponent implements OnInit {
     this.load(this.paginaActual() + 1);
   }
 
+  // Toggle optimista: quitamos la card de la lista al momento. Si el backend falla, la
+  // restauramos en su sitio. Asi la UI se siente instantanea sin esperar a la red.
+  onRemove(francesinhaId: number): void {
+    const previo = this.francesinhas();
+    const indice = previo.findIndex(f => f.id === francesinhaId);
+    if (indice === -1) return;
+
+    const removida = previo[indice];
+    this.francesinhas.update(list => list.filter(f => f.id !== francesinhaId));
+
+    this.favoriteService.toggle(francesinhaId).subscribe({
+      next: () => this.toast.success('Eliminado de favoritos'),
+      error: () => {
+        this.francesinhas.update(list => {
+          const restaurada = [...list];
+          restaurada.splice(indice, 0, removida);
+          return restaurada;
+        });
+        this.toast.error('No se pudo eliminar de favoritos');
+      },
+    });
+  }
+
   private load(pagina: number) {
     this.isLoading.set(true);
     const { name, city, type } = this.filterForm.value;
-    this.francesinhaService.getAllFrancesinhas(
+    this.favoriteService.getFavorites(
       { name: name || undefined, city: city || undefined, type: (type as FrancesinhaType) || undefined },
       pagina
     ).subscribe({
-      next: (res: FrancesinhasPagedResponse) => {
-        const items = res.francesinhas;
-        this.francesinhasList.update(prev => pagina === 0 ? items : [...prev, ...items]);
+      next: (res: FavoritesPagedResponse) => {
+        // El backend devuelve favoritos con la francesinha poblada gracias al @EntityGraph;
+        // aqui extraemos solo la francesinha porque la pantalla pinta una FrancesinhaCard.
+        const items = res.favorites.map(fav => fav.francesinha);
+        this.francesinhas.update(prev => pagina === 0 ? items : [...prev, ...items]);
         this.paginaActual.set(res.pageNumber);
         this.totalPaginas.set(res.totalPages);
         this.isLoading.set(false);

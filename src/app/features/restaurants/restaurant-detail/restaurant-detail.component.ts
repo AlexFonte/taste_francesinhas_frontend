@@ -11,7 +11,7 @@ import { RestaurantService } from '../../../core/services/restaurant.service';
 import { FrancesinhaService } from '../../../core/services/francesinha.service';
 import { FavoriteService } from '../../../core/services/favorite.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { FrancesinhaCardComponent } from '../../francesinhas/francesinha-card/francesinha-card.component';
+import { FrancesinhaCardComponent } from '../../../shared/components/francesinha-card/francesinha-card.component';
 
 @Component({
   selector: 'app-restaurant-detail',

@@ -15,6 +15,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { debounceTime, switchMap, startWith } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FrancesinhaType } from '../../core/models/francesinha.model';
+import { FRANCESINHA_TYPE_OPTIONS } from '../../core/constants/francesinha-types.const';
 import { Restaurant } from '../../core/models/restaurant.model';
 import { FrancesinhaService } from '../../core/services/francesinha.service';
 import { RestaurantService } from '../../core/services/restaurant.service';
@@ -61,7 +62,7 @@ export class ProposeComponent {
   readonly errorMessage = signal<string | null>(null);
   readonly matcher      = new DirtyOrTouchedErrorStateMatcher();
 
-  readonly types: FrancesinhaType[] = ['CLASICA', 'ESPECIAL', 'VEGANA', 'KEBAB', 'MARISCO'];
+  readonly tiposFrancesinhas = FRANCESINHA_TYPE_OPTIONS;
 
   // Toggle: false = restaurante existente, true = nuevo restaurante
   readonly newRestaurantMode = signal(false);

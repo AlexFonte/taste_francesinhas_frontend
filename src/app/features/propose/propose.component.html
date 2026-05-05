@@ -97,8 +97,8 @@
 					<mat-form-field appearance="fill" class="w-full">
 						<mat-label>Tipo</mat-label>
 						<mat-select formControlName="type" [errorStateMatcher]="matcher">
-							@for (t of types; track t) {
-								<mat-option [value]="t">{{ t }}</mat-option>
+							@for (t of tiposFrancesinhas; track t.value) {
+								<mat-option [value]="t.value">{{ t.label }}</mat-option>
 							}
 						</mat-select>
 					</mat-form-field>

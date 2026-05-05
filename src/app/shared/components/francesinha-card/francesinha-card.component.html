@@ -73,6 +73,12 @@
       </span>
 
     </div>
+
+    <!-- Slot opcional para acciones contextuales (p.ej. eliminar de favoritos).
+         Se proyecta lo que el padre pase con el atributo card-actions. -->
+    <div class="mt-4" (click)="$event.stopPropagation()">
+      <ng-content select="[card-actions]"/>
+    </div>
   </mat-card-content>
 
 </mat-card>
