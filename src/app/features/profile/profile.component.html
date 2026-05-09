@@ -1,0 +1,125 @@
+<div class="flex-1 bg-neutral pb-24 lg:pb-10">
+
+	<div class="max-w-2xl mx-auto px-4 py-8 flex flex-col gap-6">
+
+		<!-- cabecera -->
+		<div>
+			<h1 class="text-3xl font-bold text-primary">Mi perfil</h1>
+			<p class="text-sm text-text-muted mt-1">Consulta tus datos y cambia tu contraseña</p>
+		</div>
+
+		<!-- cards de estadisticas -->
+		<div class="grid grid-cols-2 gap-4">
+			<div class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4">
+				<div class="bg-accent border border-primary-400 rounded-full p-3 flex items-center justify-center">
+					<mat-icon class="!text-2xl !w-6 !h-6 !leading-6 text-secondary">rate_review</mat-icon>
+				</div>
+				<div class="flex flex-col">
+					<span class="text-2xl font-bold text-text-main">{{ stats()?.reviewsCount ?? 0 }}</span>
+					<span class="text-sm text-gray-500">Reviews</span>
+				</div>
+			</div>
+			<div class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4">
+				<div class="bg-accent border border-	primary-400 rounded-full p-3 flex items-center justify-center">
+					<mat-icon class="!text-2xl !w-6 !h-6 !leading-6 text-secondary">lunch_dining</mat-icon>
+				</div>
+				<div class="flex flex-col">
+					<span class="text-2xl font-bold text-text-main">{{ stats()?.proposalsCount ?? 0 }}</span>
+					<span class="text-sm text-gray-500">Propuestas</span>
+				</div>
+			</div>
+		</div>
+
+		<!-- card 1: datos personales (read-only) -->
+		<div class="bg-white rounded-2xl border border-gray-200 p-6">
+			<h2 class="text-lg font-bold text-text-main mb-4">Datos personales</h2>
+			<dl class="flex flex-col gap-3">
+				<div class="flex justify-evenly gap-4">
+					<dt class="text-base font-medium text-gray-500">Nombre:</dt>
+					<dd class="text-base font-semibold text-text-main">{{ name() }}</dd>
+				</div>
+				<div class="flex justify-start gap-4">
+					<dt class="text-base font-medium text-gray-500">Email:</dt>
+					<dd class="text-base font-semibold text-text-main break-all">{{ email() }}</dd>
+				</div>
+			</dl>
+		</div>
+
+		<!-- card 2: cambio de contraseña -->
+		<div class="bg-white rounded-2xl border border-gray-200 p-6">
+			<div class="flex items-center justify-between mb-4">
+				<h2 class="text-lg font-bold text-text-main">Cambiar contraseña</h2>
+				<mat-slide-toggle [checked]="showPasswordForm()"
+				                  (change)="onTogglePasswordForm($event.checked)">
+				</mat-slide-toggle>
+			</div>
+
+			@if (showPasswordForm()) {
+			<form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-2">
+
+				<mat-form-field appearance="fill" class="w-full">
+					<mat-label>Contraseña actual</mat-label>
+					<input matInput [type]="showCurrent() ? 'text' : 'password'" formControlName="currentPassword"
+					       [errorStateMatcher]="matcher" autocomplete="current-password" required/>
+					<button mat-icon-button matSuffix type="button" (click)="showCurrent.set(!showCurrent())"
+					        [attr.aria-label]="showCurrent() ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+						<mat-icon class="text-gray-400">{{ showCurrent() ? 'visibility_off' : 'visibility' }}</mat-icon>
+					</button>
+					@if (form.get('currentPassword')?.hasError('required')) {
+						<mat-error>La contraseña actual es obligatoria</mat-error>
+					}
+				</mat-form-field>
+
+				<mat-form-field appearance="fill" class="w-full">
+					<mat-label>Nueva contraseña</mat-label>
+					<input matInput [type]="showNew() ? 'text' : 'password'" formControlName="newPassword"
+					       [errorStateMatcher]="matcher" autocomplete="new-password" required/>
+					<button mat-icon-button matSuffix type="button" (click)="showNew.set(!showNew())"
+					        [attr.aria-label]="showNew() ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+						<mat-icon class="text-gray-400">{{ showNew() ? 'visibility_off' : 'visibility' }}</mat-icon>
+					</button>
+					@if (form.get('newPassword')?.hasError('required')) {
+						<mat-error>La nueva contraseña es obligatoria</mat-error>
+					} @else if (form.get('newPassword')?.hasError('pattern')) {
+						<mat-error>Mínimo 8 caracteres, una mayúscula y un número</mat-error>
+					}
+				</mat-form-field>
+
+				<mat-form-field appearance="fill" class="w-full">
+					<mat-label>Confirmar nueva contraseña</mat-label>
+					<input matInput [type]="showConfirm() ? 'text' : 'password'" formControlName="confirmPassword"
+					       [errorStateMatcher]="confirmMatcher" autocomplete="new-password" required/>
+					<button mat-icon-button matSuffix type="button" (click)="showConfirm.set(!showConfirm())"
+					        [attr.aria-label]="showConfirm() ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+						<mat-icon class="text-gray-400">{{ showConfirm() ? 'visibility_off' : 'visibility' }}</mat-icon>
+					</button>
+					@if (form.get('confirmPassword')?.hasError('required')) {
+						<mat-error>Confirma la nueva contraseña</mat-error>
+					} @else if (form.hasError('passwordMismatch')) {
+						<mat-error>Las contraseñas no coinciden</mat-error>
+					}
+				</mat-form-field>
+
+				@if (errorMessage()) {
+					<p class="text-sm text-white bg-[#e11d48] text-center px-4 py-2 rounded-full">{{ errorMessage() }}</p>
+				}
+
+				<button mat-flat-button color="primary" type="submit"
+				        class="w-full !h-12 !text-base !mt-2"
+				        [disabled]="isLoading()">
+					@if (isLoading()) {
+						<mat-spinner diameter="22" class="!text-white"/>
+					} @else {
+						<span class="flex items-center justify-center gap-2">
+							<mat-icon>lock_reset</mat-icon>
+							Actualizar contraseña
+						</span>
+					}
+				</button>
+
+			</form>
+			}
+		</div>
+
+	</div>
+</div>

@@ -3,26 +3,42 @@
 	<!-- Estadisticas (mockeadas) -->
 	<section class="mb-6">
 		<h2 class="text-base font-bold text-text-main mb-3">Estadísticas</h2>
-		<div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
-			<div class="border border-gray-200 rounded-2xl p-4 bg-white text-center">
-				<p class="text-xs font-medium text-gray-500 uppercase">Pendientes</p>
-				<p class="text-3xl font-bold text-primary mt-1">{{ stats().pending }}</p>
-				<p class="text-xs text-gray-400">por revisar</p>
+		<div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+			<div class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4">
+				<div class="bg-orange-100 border border-orange-300 rounded-full p-3 flex items-center justify-center">
+					<mat-icon class="!text-2xl !w-6 !h-6 !leading-6 text-orange-800!">hourglass_empty</mat-icon>
+				</div>
+				<div class="flex flex-col">
+					<span class="text-2xl font-bold text-orange-800">{{ stats().pending }}</span>
+					<span class="text-sm text-gray-500">Pendientes</span>
+				</div>
 			</div>
-			<div class="border border-gray-200 rounded-2xl p-4 bg-white text-center">
-				<p class="text-xs font-medium text-gray-500 uppercase">Total</p>
-				<p class="text-3xl font-bold text-text-main mt-1">{{ stats().total }}</p>
-				<p class="text-xs text-gray-400">francesinhas</p>
+			<div class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4">
+				<div class="bg-accent border border-primary-400 rounded-full p-3 flex items-center justify-center">
+					<mat-icon class="!text-2xl !w-6 !h-6 !leading-6 text-secondary">lunch_dining</mat-icon>
+				</div>
+				<div class="flex flex-col">
+					<span class="text-2xl font-bold text-text-main">{{ stats().total }}</span>
+					<span class="text-sm text-gray-500">Total</span>
+				</div>
 			</div>
-			<div class="border border-gray-200 rounded-2xl p-4 bg-white text-center">
-				<p class="text-xs font-medium text-gray-500 uppercase">Rechazadas</p>
-				<p class="text-3xl font-bold text-danger mt-1">{{ stats().rejected }}</p>
-				<p class="text-xs text-gray-400">francesinhas</p>
+			<div class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4">
+				<div class="bg-red-100 border border-red-300 rounded-full p-3 flex items-center justify-center">
+					<mat-icon class="!text-2xl !w-6 !h-6 !leading-6 text-red-800!">cancel</mat-icon>
+				</div>
+				<div class="flex flex-col">
+					<span class="text-2xl font-bold text-red-800">{{ stats().rejected }}</span>
+					<span class="text-sm text-gray-500">Rechazadas</span>
+				</div>
 			</div>
-			<div class="border border-gray-200 rounded-2xl p-4 bg-white text-center">
-				<p class="text-xs font-medium text-gray-500 uppercase">Aprobadas</p>
-				<p class="text-3xl font-bold text-success mt-1">{{ stats().accepted }}</p>
-				<p class="text-xs text-gray-400">francesinhas</p>
+			<div class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4">
+				<div class="bg-green-100 border border-green-300 rounded-full p-3 flex items-center justify-center">
+					<mat-icon class="!text-2xl !w-6 !h-6 !leading-6 text-green-800!">check_circle</mat-icon>
+				</div>
+				<div class="flex flex-col">
+					<span class="text-2xl font-bold text-green-800">{{ stats().accepted }}</span>
+					<span class="text-sm text-gray-500">Aprobadas</span>
+				</div>
 			</div>
 		</div>
 	</section>

@@ -46,8 +46,8 @@ export class NavbarComponent {
     return [
       { label: 'Francesinhas', icon: 'lunch_dining', route: '/francesinhas',  enabled: true  },
       { label: 'Restaurantes', icon: 'restaurant',   route: '/restaurants',   enabled: true  },
-      { label: 'Registrarse',  icon: 'person_add',   route: '/auth/register', enabled: true  },
-      { label: 'Login',        icon: 'login',        route: '/auth/login',    enabled: true  },
+      { label: 'Registrarse',  icon: 'person_add',   route: '/register', enabled: true  },
+      { label: 'Login',        icon: 'login',        route: '/login',    enabled: true  },
     ];
   });
 }

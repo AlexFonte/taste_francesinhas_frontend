@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './core/guards/auth.guard';
 import { userGuard } from './core/guards/user.guard';
 import { adminGuard } from './core/guards/admin.guard';
 import { notAdminGuard } from './core/guards/not-admin.guard';
@@ -46,16 +47,16 @@ export const routes: Routes = [
     loadComponent: () => import('./features/admin/admin-validate/admin-validate.component').then(m => m.AdminValidateComponent)
   },
   {
-    path: 'auth',
-    redirectTo: 'auth/login',
-    pathMatch: 'full'
+    path: 'profile',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/profile/profile.component').then(m => m.ProfileComponent)
   },
   {
-    path: 'auth/login',
+    path: 'login',
     loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent)
   },
   {
-    path: 'auth/register',
+    path: 'register',
     loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent)
   },
   // Cualquier URL no capturada por las rutas anteriores cae aqui (404).

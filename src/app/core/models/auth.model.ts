@@ -16,3 +16,13 @@ export interface LoginResponse {
   email:        string;
   role:         'ADMIN' | 'USER';
 }
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword:     string;
+}
+
+export interface UserStats {
+  reviewsCount:   number;
+  proposalsCount: number;
+}
