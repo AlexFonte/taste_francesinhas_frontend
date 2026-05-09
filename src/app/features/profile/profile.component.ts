@@ -67,7 +67,7 @@ export class ProfileComponent implements OnInit {
     currentPassword: ['', [Validators.required]],
     newPassword:     ['', [Validators.required, Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{8,}$')]],
     confirmPassword: ['', [Validators.required]],
-  }, { validators: passwordMatchValidator });
+  }, { validators: passwordMatchValidator('newPassword', 'confirmPassword') });
 
   // Al cerrar el toggle reseteamos el form y limpiamos el mensaje de error
   // para que al reabrirlo no aparezcan datos viejos ni rojos por validacion previa.
