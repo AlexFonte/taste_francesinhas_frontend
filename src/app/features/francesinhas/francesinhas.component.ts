@@ -12,6 +12,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { FrancesinhaService } from '../../core/services/francesinha.service';
 import { FavoriteService } from '../../core/services/favorite.service';
 import { AuthService } from '../../core/services/auth.service';
+import { ToastService } from '../../shared/services/toast.service';
 import { Francesinha, FrancesinhaType } from '../../core/models/francesinha.model';
 import { FrancesinhaCardComponent } from '../../shared/components/francesinha-card/francesinha-card.component';
 import { FrancesinhasPagedResponse } from '../../core/models/page.model';
@@ -43,6 +44,7 @@ export class FrancesinhasComponent implements OnInit {
   private readonly francesinhaService = inject(FrancesinhaService);
   private readonly favoriteService    = inject(FavoriteService);
   private readonly authService        = inject(AuthService);
+  private readonly toast              = inject(ToastService);
   private readonly fb = inject(FormBuilder);
 
   francesinhasList = signal<Francesinha[]>([]);
@@ -95,6 +97,30 @@ export class FrancesinhasComponent implements OnInit {
 
   loadMore() {
     this.load(this.paginaActual() + 1);
+  }
+
+  // Cambiamos el valor al instante, y enviamos la peticion al backend
+  // Si la peticion falla, rollback y mostramos un toast.
+  onFavoriteToggle(francesinhaId: number): void {
+    const wasFavorite = this.favoriteIds().has(francesinhaId);
+
+    this.favoriteIds.update(ids => {
+      const next = new Set(ids);
+      wasFavorite ? next.delete(francesinhaId) : next.add(francesinhaId);
+      return next;
+    });
+
+    this.favoriteService.toggle(francesinhaId).subscribe({
+      next: () => this.toast.success(wasFavorite ? 'Eliminada de favoritos' : 'Añadida a favoritos'),
+      error: () => {
+        this.favoriteIds.update(ids => {
+          const next = new Set(ids);
+          wasFavorite ? next.add(francesinhaId) : next.delete(francesinhaId);
+          return next;
+        });
+        this.toast.error('No se pudo actualizar el favorito');
+      },
+    });
   }
 
   private load(pagina: number) {

@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -19,5 +19,16 @@ export class FrancesinhaCardComponent {
   francesinha = input.required<Francesinha>();
   isFavorite  = input<boolean>(false);
 
+  // Si nadie escucha el output, el icono sigue siendo decorativo (no rompe nada).
+	// El padre decide que hacer:
+  favoriteToggled = output<void>();
+
   readonly isLoggedIn = inject(AuthService).isLoggedIn;
+
+  // El click en el corazon no debe propagarse a la card, que tiene routerLink al detalle.
+  onFavoriteClick(event: MouseEvent): void {
+    event.stopPropagation();
+    event.preventDefault();
+    this.favoriteToggled.emit();
+  }
 }

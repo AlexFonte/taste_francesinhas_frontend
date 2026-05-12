@@ -1,11 +1,17 @@
 {
   "name": "Taste Francesinhas",
   "short_name": "Francesinhas",
+  "description": "Descubre, valora y guarda las mejores francesinhas. Comunidad gastronómica dedicada al icónico plato de Oporto.",
+  "lang": "es",
+  "dir": "ltr",
   "display": "standalone",
+  "orientation": "portrait",
   "scope": "./",
   "start_url": "./",
-   "theme_color": "#C45C2A",
-   "background_color": "#F1EFE8",
+  "id": "/",
+  "categories": ["food", "lifestyle", "social"],
+  "theme_color": "#C45C2A",
+  "background_color": "#F1EFE8",
   "icons": [
     {
       "src": "icons/icon-72x72.png",
