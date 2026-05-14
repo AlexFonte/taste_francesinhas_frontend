@@ -6,44 +6,49 @@
 		<div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
 
 			<div class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4">
-				<div class="bg-accent border border-primary-400 rounded-full p-3 flex items-center justify-center">
-					<mat-icon class="!text-2xl !w-6 !h-6 !leading-6 text-secondary">lunch_dining</mat-icon>
+				<div class="bg-accent border border-primary-400 rounded-full p-2 md:p-3 flex items-center justify-center">
+					<mat-icon class="!text-xl !w-5 !h-5 !leading-5 md:!text-2xl md:!w-6 md:!h-6 md:!leading-6 text-secondary">lunch_dining</mat-icon>
 				</div>
 				<div class="flex flex-col">
 					<span class="text-2xl font-bold text-text-main">{{ stats().total }}</span>
-					<span class="text-sm text-gray-500">Total</span>
+					<span class="text-sm text-gray-600">Total</span>
 				</div>
 			</div>
 
 			<div class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4">
-				<div class="bg-orange-100 border border-orange-300 rounded-full p-3 flex items-center justify-center">
-					<mat-icon class="!text-2xl !w-6 !h-6 !leading-6 text-orange-800!">hourglass_empty</mat-icon>
+				<div class="bg-orange-100 border border-orange-300 rounded-full p-2 md:p-3 flex items-center justify-center">
+					<mat-icon class="!text-xl !w-5 !h-5 !leading-5 md:!text-2xl md:!w-6 md:!h-6 md:!leading-6 text-orange-800!">hourglass_empty</mat-icon>
 				</div>
 				<div class="flex flex-col">
 					<span class="text-2xl font-bold text-orange-800">{{ stats().pending }}</span>
-					<span class="text-sm text-gray-500">Pendientes</span>
+					<span class="text-sm text-gray-600">Pendientes</span>
 				</div>
 			</div>
 
-			<div class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4">
-				<div class="bg-green-100 border border-green-300 rounded-full p-3 flex items-center justify-center">
-					<mat-icon class="!text-2xl !w-6 !h-6 !leading-6 text-green-800!">check_circle</mat-icon>
+			<!-- Aprobadas y Rechazadas son clicables: llevan al listado filtrado por ese estado -->
+			<a routerLink="/admin/proposals" [queryParams]="{ status: 'ACCEPTED' }"
+			   class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4 cursor-pointer hover:shadow-md hover:border-primary transition-all">
+				<div class="bg-green-100 border border-green-300 rounded-full p-2 md:p-3 flex items-center justify-center">
+					<mat-icon class="!text-xl !w-5 !h-5 !leading-5 md:!text-2xl md:!w-6 md:!h-6 md:!leading-6 text-green-800!">check_circle</mat-icon>
 				</div>
-				<div class="flex flex-col">
+				<div class="flex flex-col flex-1">
 					<span class="text-2xl font-bold text-green-800">{{ stats().accepted }}</span>
-					<span class="text-sm text-gray-500">Aprobadas</span>
+					<span class="text-sm text-gray-600">Aprobadas</span>
 				</div>
-			</div>
+				<mat-icon class="text-gray-400">chevron_right</mat-icon>
+			</a>
 
-			<div class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4">
-				<div class="bg-red-100 border border-red-300 rounded-full p-3 flex items-center justify-center">
-					<mat-icon class="!text-2xl !w-6 !h-6 !leading-6 text-red-800!">cancel</mat-icon>
+			<a routerLink="/admin/proposals" [queryParams]="{ status: 'REJECTED' }"
+			   class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4 cursor-pointer hover:shadow-md hover:border-primary transition-all">
+				<div class="bg-red-100 border border-red-300 rounded-full p-2 md:p-3 flex items-center justify-center">
+					<mat-icon class="!text-xl !w-5 !h-5 !leading-5 md:!text-2xl md:!w-6 md:!h-6 md:!leading-6 text-red-800!">cancel</mat-icon>
 				</div>
-				<div class="flex flex-col">
+				<div class="flex flex-col flex-1">
 					<span class="text-2xl font-bold text-red-800">{{ stats().rejected }}</span>
-					<span class="text-sm text-gray-500">Rechazadas</span>
+					<span class="text-sm text-gray-600">Rechazadas</span>
 				</div>
-			</div>
+				<mat-icon class="text-gray-400">chevron_right</mat-icon>
+			</a>
 
 		</div>
 	</section>

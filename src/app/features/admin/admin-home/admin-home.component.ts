@@ -11,13 +11,14 @@ import { AdminStats } from '../../../core/models/admin.model';
 import { ToastService } from '../../../shared/services/toast.service';
 import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { ConfirmDialogData } from '../../../shared/types/confirm-dialog.model';
-import {Router} from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-admin-home',
   standalone: true,
   imports: [
     CommonModule,
+    RouterLink,
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,

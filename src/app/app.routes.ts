@@ -42,6 +42,11 @@ export const routes: Routes = [
     loadComponent: () => import('./features/admin/admin-home/admin-home.component').then(m => m.AdminHomeComponent)
   },
   {
+    path: 'admin/proposals',
+    canActivate: [adminGuard],
+    loadComponent: () => import('./features/admin/admin-proposals/admin-proposals.component').then(m => m.AdminProposalsComponent)
+  },
+  {
     path: 'admin/pending/:id',
     canActivate: [adminGuard],
     loadComponent: () => import('./features/admin/admin-validate/admin-validate.component').then(m => m.AdminValidateComponent)

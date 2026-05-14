@@ -21,6 +21,12 @@ export class AdminService {
     return this.http.get<FrancesinhasPagedResponse>(`${this.base}/pending`, { params });
   }
 
+  // Listado de francesinhas ya revisadas (aprobadas o rechazadas), solo para el admin.
+  getProposals(status: Extract<FrancesinhaStatus, 'ACCEPTED' | 'REJECTED'>, page = 0, size = 10): Observable<FrancesinhasPagedResponse> {
+    const params = new HttpParams().set('status', status).set('page', page).set('size', size);
+    return this.http.get<FrancesinhasPagedResponse>(`${this.base}/admin`, { params });
+  }
+
   getPendingById(id: number): Observable<Francesinha> {
     return this.http.get<Francesinha>(`${this.base}/pending/${id}`);
   }

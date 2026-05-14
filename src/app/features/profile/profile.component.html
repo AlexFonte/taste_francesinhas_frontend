@@ -5,30 +5,30 @@
 		<!-- cabecera -->
 		<div>
 			<h1 class="text-3xl font-bold text-primary">Mi perfil</h1>
-			<p class="text-sm text-text-muted mt-1">Consulta tus datos y cambia tu contraseña</p>
+			<p class="text-sm text-secondary mt-1">Consulta tus datos y cambia tu contraseña</p>
 		</div>
 
 		<!-- cards de estadisticas, clicables: navegan al listado correspondiente -->
 		<div class="grid grid-cols-2 gap-4">
 			<a routerLink="/profile/reviews"
 			   class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4 cursor-pointer hover:shadow-md hover:border-primary transition-all">
-				<div class="bg-accent border border-primary-400 rounded-full p-3 flex items-center justify-center">
-					<mat-icon class="!text-2xl !w-6 !h-6 !leading-6 text-secondary">rate_review</mat-icon>
+				<div class="bg-accent border border-primary-400 rounded-full p-2 md:p-3 flex items-center justify-center">
+					<mat-icon class="!text-xl !w-5 !h-5 !leading-5 md:!text-2xl md:!w-6 md:!h-6 md:!leading-6 text-secondary">rate_review</mat-icon>
 				</div>
 				<div class="flex flex-col flex-1">
 					<span class="text-2xl font-bold text-text-main">{{ stats()?.reviewsCount ?? 0 }}</span>
-					<span class="text-sm text-gray-500">Reviews</span>
+					<span class="text-sm text-gray-600">Reviews</span>
 				</div>
 				<mat-icon class="text-gray-400">chevron_right</mat-icon>
 			</a>
 			<a routerLink="/profile/proposals"
 			   class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4 cursor-pointer hover:shadow-md hover:border-primary transition-all">
-				<div class="bg-accent border border-primary-400 rounded-full p-3 flex items-center justify-center">
-					<mat-icon class="!text-2xl !w-6 !h-6 !leading-6 text-secondary">lunch_dining</mat-icon>
+				<div class="bg-accent border border-primary-400 rounded-full p-2 md:p-3 flex items-center justify-center">
+					<mat-icon class="!text-xl !w-5 !h-5 !leading-5 md:!text-2xl md:!w-6 md:!h-6 md:!leading-6 text-secondary">lunch_dining</mat-icon>
 				</div>
 				<div class="flex flex-col flex-1">
 					<span class="text-2xl font-bold text-text-main">{{ stats()?.proposalsCount ?? 0 }}</span>
-					<span class="text-sm text-gray-500">Propuestas</span>
+					<span class="text-sm text-gray-600">Propuestas</span>
 				</div>
 				<mat-icon class="text-gray-400">chevron_right</mat-icon>
 			</a>
