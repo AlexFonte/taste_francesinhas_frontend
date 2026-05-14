@@ -52,6 +52,16 @@ export const routes: Routes = [
     loadComponent: () => import('./features/profile/profile.component').then(m => m.ProfileComponent)
   },
   {
+    path: 'profile/reviews',
+    canActivate: [userGuard],
+    loadComponent: () => import('./features/profile/my-reviews/my-reviews.component').then(m => m.MyReviewsComponent)
+  },
+  {
+    path: 'profile/proposals',
+    canActivate: [userGuard],
+    loadComponent: () => import('./features/profile/my-proposals/my-proposals.component').then(m => m.MyProposalsComponent)
+  },
+  {
     path: 'login',
     loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent)
   },

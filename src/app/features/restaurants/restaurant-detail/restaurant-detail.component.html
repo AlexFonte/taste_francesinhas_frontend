@@ -64,7 +64,9 @@
 				@if (francesinhas().length > 0) {
 					<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 						@for (f of francesinhas(); track f.id) {
-							<app-francesinha-card [francesinha]="f" [isFavorite]="favoriteIds().has(f.id)"/>
+							<app-francesinha-card [francesinha]="f"
+							                      [isFavorite]="favoriteIds().has(f.id)"
+							                      (favoriteToggled)="onFavoriteToggle(f.id)"/>
 						}
 					</div>
 				} @else {

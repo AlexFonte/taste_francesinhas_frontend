@@ -109,10 +109,10 @@
             <p class="text-sm font-medium text-gray-600 mb-4">Valoración por criterios</p>
             <div class="flex flex-col gap-3">
               @for (criterio of [
-                { label: 'Sabor',         valor: avgFlavor() },
-                { label: 'Salsa',         valor: avgSauce() },
-                { label: 'Pan',           valor: avgBread() },
-                { label: 'Presentación',  valor: avgPresentation() }
+                { label: 'Sabor:',         valor: avgFlavor() },
+                { label: 'Salsa:',         valor: avgSauce() },
+                { label: 'Pan:',           valor: avgBread() },
+                { label: 'Presentación:pu',  valor: avgPresentation() }
               ]; track criterio.label) {
                 <div class="flex items-center justify-between">
                   <span class="text-sm text-gray-600">{{ criterio.label }}</span>
@@ -141,16 +141,17 @@
     @if (reviews().length > 0) {
       <div class="max-w-6xl mx-auto px-4">
         <h2 class="text-lg font-semibold text-text-main mb-4">Opiniones ({{ reviews().length }})</h2>
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
           @for (review of reviews(); track review.id) {
-            <div class="bg-white border border-gray-200 rounded-2xl p-4 flex flex-col gap-2">
+            <div (click)="toggleReview(review.id)"
+                 class="bg-white border border-gray-200 rounded-2xl p-4 flex flex-col gap-2 cursor-pointer hover:border-primary transition-all">
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
                   <mat-icon class="!text-gray-400 !text-3xl !w-8 !h-8">account_circle</mat-icon>
                   <span class="text-sm font-medium text-gray-700">{{ review.userName }}</span>
                 </div>
                 <div class="flex items-center gap-1">
-                  <mat-icon class="!text-yellow-400 !text-lg !w-5 !h-5 !leading-5">star</mat-icon>
+                  <mat-icon class="icon-filled !text-yellow-400 !text-lg !w-5 !h-5 !leading-5">star</mat-icon>
                   <span class="text-sm font-semibold text-gray-700">{{ review.avgScore | number:'1.2-2' }}</span>
                 </div>
               </div>
@@ -158,6 +159,31 @@
                 <p class="text-sm text-gray-600 leading-relaxed">{{ review.comment }}</p>
               }
               <p class="text-xs text-gray-400">{{ review.createdAt | date:'dd MMM yyyy' }}</p>
+
+              <!-- Indicador del panel expandible -->
+              <div class="flex items-center justify-between text-sm text-primary font-semibold pt-2 border-t border-gray-100">
+                <span>{{ expandedReviews().has(review.id) ? 'Ocultar valoración' : 'Ver valoración' }}</span>
+                <mat-icon class="!text-base !w-4 !h-4 !leading-4 transition-transform"
+                          [class.rotate-180]="expandedReviews().has(review.id)">expand_more</mat-icon>
+              </div>
+
+              <!-- Detalle por criterio -->
+              @if (expandedReviews().has(review.id)) {
+                <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+                  @for (criterio of [
+                    { label: 'Sabor:',        valor: review.scoreFlavor },
+                    { label: 'Salsa:',        valor: review.scoreSauce },
+                    { label: 'Pan:',          valor: review.scoreBread },
+                    { label: 'Presentación:', valor: review.scorePresentation }
+                  ]; track criterio.label) {
+                    <div class="flex items-center gap-1">
+                      <span class="text-text-main font-bold">{{ criterio.label }}</span>
+                      <span class="text-primary font-semibold">{{ criterio.valor | number:'1.2-2' }}</span>
+                      <mat-icon class="icon-filled !text-yellow-400 !text-base !w-4 !h-4 !leading-4">star</mat-icon>
+                    </div>
+                  }
+                </div>
+              }
             </div>
           }
         </div>

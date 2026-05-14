@@ -7,18 +7,21 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { ProfileService } from '../../core/services/profile.service';
 import { ToastService } from '../../shared/services/toast.service';
 import { DirtyOrTouchedErrorStateMatcher } from '../../shared/error-state-matchers/dirty-or-touched.matcher';
 import { ConfirmPasswordStateMatcher } from '../../shared/error-state-matchers/confirm-password.matcher';
 import { passwordMatchValidator } from '../../shared/validators/password-match.validator';
-import { UserStats } from '../../core/models/auth.model';
+import { UserStats } from '../../core/models/profile.model';
 import { ChangePasswordForm } from './profile.types';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
   imports: [
+    RouterLink,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -32,9 +35,10 @@ import { ChangePasswordForm } from './profile.types';
 })
 export class ProfileComponent implements OnInit {
 
-  private readonly auth  = inject(AuthService);
-  private readonly fb    = inject(NonNullableFormBuilder);
-  private readonly toast = inject(ToastService);
+  private readonly auth    = inject(AuthService);
+  private readonly profile = inject(ProfileService);
+  private readonly fb      = inject(NonNullableFormBuilder);
+  private readonly toast   = inject(ToastService);
 
   // Datos del usuario: tirando de los signals que expone AuthService.
   // No hace falta llamar al backend, los datos se obtienen una vez hecho el login
@@ -55,7 +59,7 @@ export class ProfileComponent implements OnInit {
   stats = signal<UserStats | null>(null);
 
   ngOnInit(): void {
-    this.auth.getStats().subscribe({
+    this.profile.getStats().subscribe({
       next: (s) => this.stats.set(s),
       error: () => this.stats.set(null),
     });

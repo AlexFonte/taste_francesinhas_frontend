@@ -40,6 +40,9 @@ export class FrancesinhaDetailComponent implements OnInit {
   isFavorite  = signal(false);
   isLoading   = signal(true);
 
+  // IDs de opiniones con su detalle por criterio expandido. Set para toggle O(1).
+  expandedReviews = signal<Set<number>>(new Set());
+
   readonly isUser = computed(() => this.authService.role() === 'USER');
 
   readonly restaurantInfo = computed(() => {
@@ -101,6 +104,16 @@ export class FrancesinhaDetailComponent implements OnInit {
         next: updated => this.francesinha.set(updated),
       });
       this.toastService.success('¡Valoración publicada!');
+    });
+  }
+
+  // Toggle del panel de detalle por criterio de una opinion.
+  toggleReview(id: number): void {
+    this.expandedReviews.update(ids => {
+      const next = new Set(ids);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
     });
   }
 

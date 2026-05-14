@@ -21,8 +21,3 @@ export interface ChangePasswordRequest {
   currentPassword: string;
   newPassword:     string;
 }
-
-export interface UserStats {
-  reviewsCount:   number;
-  proposalsCount: number;
-}

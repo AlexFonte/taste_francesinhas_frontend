@@ -8,33 +8,37 @@
 			<p class="text-sm text-text-muted mt-1">Consulta tus datos y cambia tu contraseña</p>
 		</div>
 
-		<!-- cards de estadisticas -->
+		<!-- cards de estadisticas, clicables: navegan al listado correspondiente -->
 		<div class="grid grid-cols-2 gap-4">
-			<div class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4">
+			<a routerLink="/profile/reviews"
+			   class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4 cursor-pointer hover:shadow-md hover:border-primary transition-all">
 				<div class="bg-accent border border-primary-400 rounded-full p-3 flex items-center justify-center">
 					<mat-icon class="!text-2xl !w-6 !h-6 !leading-6 text-secondary">rate_review</mat-icon>
 				</div>
-				<div class="flex flex-col">
+				<div class="flex flex-col flex-1">
 					<span class="text-2xl font-bold text-text-main">{{ stats()?.reviewsCount ?? 0 }}</span>
 					<span class="text-sm text-gray-500">Reviews</span>
 				</div>
-			</div>
-			<div class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4">
-				<div class="bg-accent border border-primary-400	primary-400 rounded-full p-3 flex items-center justify-center">
+				<mat-icon class="text-gray-400">chevron_right</mat-icon>
+			</a>
+			<a routerLink="/profile/proposals"
+			   class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4 cursor-pointer hover:shadow-md hover:border-primary transition-all">
+				<div class="bg-accent border border-primary-400 rounded-full p-3 flex items-center justify-center">
 					<mat-icon class="!text-2xl !w-6 !h-6 !leading-6 text-secondary">lunch_dining</mat-icon>
 				</div>
-				<div class="flex flex-col">
+				<div class="flex flex-col flex-1">
 					<span class="text-2xl font-bold text-text-main">{{ stats()?.proposalsCount ?? 0 }}</span>
 					<span class="text-sm text-gray-500">Propuestas</span>
 				</div>
-			</div>
+				<mat-icon class="text-gray-400">chevron_right</mat-icon>
+			</a>
 		</div>
 
 		<!-- card 1: datos personales (read-only) -->
 		<div class="bg-white rounded-2xl border border-gray-200 p-6">
 			<h2 class="text-lg font-bold text-text-main mb-4">Datos personales</h2>
 			<dl class="flex flex-col gap-3">
-				<div class="flex justify-evenly gap-4">
+				<div class="flex justify-start gap-4">
 					<dt class="text-base font-medium text-gray-500">Nombre:</dt>
 					<dd class="text-base font-semibold text-text-main">{{ name() }}</dd>
 				</div>

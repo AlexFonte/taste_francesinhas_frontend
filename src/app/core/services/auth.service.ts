@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { ChangePasswordRequest, LoginRequest, LoginResponse, RegisterRequest, UserStats } from '../models/auth.model';
+import { ChangePasswordRequest, LoginRequest, LoginResponse, RegisterRequest } from '../models/auth.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -54,11 +54,6 @@ export class AuthService {
 
   changePassword(request: ChangePasswordRequest): Observable<void> {
     return this.http.patch<void>(`${this.base}/password`, request);
-  }
-
-  // Stats del usuario autenticado (reviews + propuestas).
-	getStats(): Observable<UserStats> {
-    return this.http.get<UserStats>(`${this.base}/me/stats`);
   }
 
   logout(): void {

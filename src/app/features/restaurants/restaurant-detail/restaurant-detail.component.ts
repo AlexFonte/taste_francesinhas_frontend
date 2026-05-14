@@ -11,6 +11,7 @@ import { RestaurantService } from '../../../core/services/restaurant.service';
 import { FrancesinhaService } from '../../../core/services/francesinha.service';
 import { FavoriteService } from '../../../core/services/favorite.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { ToastService } from '../../../shared/services/toast.service';
 import { FrancesinhaCardComponent } from '../../../shared/components/francesinha-card/francesinha-card.component';
 
 @Component({
@@ -35,6 +36,7 @@ export class RestaurantDetailComponent {
   private readonly francesinhaService = inject(FrancesinhaService);
   private readonly favoriteService    = inject(FavoriteService);
   private readonly authService        = inject(AuthService);
+  private readonly toast              = inject(ToastService);
 
   readonly restaurant   = signal<Restaurant | null>(null);
   readonly francesinhas = signal<Francesinha[]>([]);
@@ -75,6 +77,30 @@ export class RestaurantDetailComponent {
       error: (err: HttpErrorResponse) => {
         this.errorMessage.set(err.error?.detail ?? 'No se pudo cargar el restaurante');
         this.isLoading.set(false);
+      },
+    });
+  }
+
+	// Cambiamos el valor al instante, y enviamos la peticion al backend
+	// Si la peticion falla, rollback y mostramos un toast.
+  onFavoriteToggle(francesinhaId: number): void {
+    const wasFavorite = this.favoriteIds().has(francesinhaId);
+
+    this.favoriteIds.update(ids => {
+      const next = new Set(ids);
+      wasFavorite ? next.delete(francesinhaId) : next.add(francesinhaId);
+      return next;
+    });
+
+    this.favoriteService.toggle(francesinhaId).subscribe({
+      next: () => this.toast.success(wasFavorite ? 'Eliminada de favoritos' : 'Añadida a favoritos'),
+      error: () => {
+        this.favoriteIds.update(ids => {
+          const next = new Set(ids);
+          wasFavorite ? next.add(francesinhaId) : next.delete(francesinhaId);
+          return next;
+        });
+        this.toast.error('No se pudo actualizar el favorito');
       },
     });
   }
