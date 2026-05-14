@@ -49,8 +49,8 @@ export class MyProposalsComponent implements OnInit {
     },
     {
       value: 'PENDING', label: 'Pendientes', icon: 'schedule',
-      activeClass:   'bg-amber-100 text-amber-800 border-amber-300',
-      inactiveClass: 'bg-white border-amber-300 text-amber-800 hover:bg-amber-100',
+      activeClass:   'bg-orange-100 text-orange-800 border-orange-300',
+      inactiveClass: 'bg-white border-orange-300 text-orange-800 hover:bg-orange-100',
     },
     {
       value: 'ACCEPTED', label: 'Aprobadas', icon: 'check_circle',
