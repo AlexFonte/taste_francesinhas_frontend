@@ -42,8 +42,9 @@ export class ProfileComponent implements OnInit {
 
   // Datos del usuario: tirando de los signals que expone AuthService.
   // No hace falta llamar al backend, los datos se obtienen una vez hecho el login
-  readonly name  = this.auth.name;
-  readonly email = this.auth.email;
+  readonly name    = this.auth.name;
+  readonly email   = this.auth.email;
+  readonly isAdmin = this.auth.isAdmin;
 
   readonly matcher        = new DirtyOrTouchedErrorStateMatcher();
   readonly confirmMatcher = new ConfirmPasswordStateMatcher();
@@ -59,6 +60,8 @@ export class ProfileComponent implements OnInit {
   stats = signal<UserStats | null>(null);
 
   ngOnInit(): void {
+    // El admin no tiene reviews ni propuestas: nos ahorramos la llamada.
+    if (this.isAdmin()) return;
     this.profile.getStats().subscribe({
       next: (s) => this.stats.set(s),
       error: () => this.stats.set(null),
