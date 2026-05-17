@@ -15,8 +15,9 @@
 			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 items-start">
 				@for (r of reviews(); track r.id) {
 
-					<a [routerLink]="['/francesinhas', r.francesinhaId]"
-					   class="bg-white rounded-2xl border border-gray-200 p-4 hover:border-primary hover:shadow-sm transition-all cursor-pointer">
+					<!-- Card NO es link: click expande el panel. El detalle se abre con "Ver detalle" -->
+					<div (click)="toggleExpanded(r.id, $event)"
+					     class="bg-white rounded-2xl border border-gray-200 p-4 hover:border-primary hover:shadow-sm transition-all cursor-pointer">
 						<!-- Cabecera: nombre + restaurante + score global -->
 						<div class="flex items-start justify-between gap-2 mb-3">
 							<div class="flex-1 min-w-0">
@@ -30,37 +31,63 @@
 							</div>
 						</div>
 
-						<!-- Comentario, arriba del detalle (estilo igual al de las reviews del detalle) -->
+						<!-- Comentario primero -->
 						@if (r.comment) {
 							<p class="text-sm text-gray-700 leading-relaxed line-clamp-3 mb-3">{{ r.comment }}</p>
 						}
 
-						<!-- Detalle por criterio -->
-						<div class="grid grid-cols-2 gap-x-4 gap-y-1 mb-3 text-sm">
-							<div class="flex items-center gap-1">
-								<span class="text-text-main font-bold">Sabor:</span>
-								<span class="text-primary font-semibold">{{ r.scoreFlavor | number:'1.2-2' }}</span>
-								<mat-icon class="icon-filled !text-yellow-400 !text-base !w-4 !h-4 !leading-4">star</mat-icon>
-							</div>
-							<div class="flex items-center gap-1">
-								<span class="text-text-main font-bold">Salsa:</span>
-								<span class="text-primary font-semibold">{{ r.scoreSauce | number:'1.2-2' }}</span>
-								<mat-icon class="icon-filled !text-yellow-400 !text-base !w-4 !h-4 !leading-4">star</mat-icon>
-							</div>
-							<div class="flex items-center gap-1">
-								<span class="text-text-main font-bold">Pan:</span>
-								<span class="text-primary font-semibold">{{ r.scoreBread | number:'1.2-2' }}</span>
-								<mat-icon class="icon-filled !text-yellow-400 !text-base !w-4 !h-4 !leading-4">star</mat-icon>
-							</div>
-							<div class="flex items-center gap-1">
-								<span class="text-text-main font-bold">Presentación:</span>
-								<span class="text-primary font-semibold">{{ r.scorePresentation | number:'1.2-2' }}</span>
-								<mat-icon class="icon-filled !text-yellow-400 !text-base !w-4 !h-4 !leading-4">star</mat-icon>
-							</div>
+						<!-- Fecha + link al detalle (misma fila, igual que my-proposals) -->
+						<div class="flex items-center justify-between gap-2">
+							<p class="text-xs text-gray-600">{{ r.createdAt | date:'mediumDate' }}</p>
+							<a [routerLink]="['/francesinhas', r.francesinhaId]"
+							   (click)="$event.stopPropagation()"
+							   class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-secondary text-secondary text-xs font-medium transition-colors hover:bg-secondary hover:text-white">
+								<span>Ver detalle</span>
+								<mat-icon class="!text-sm !w-4 !h-4 !leading-4">arrow_forward</mat-icon>
+							</a>
 						</div>
 
-						<p class="text-xs text-gray-600">{{ r.createdAt | date:'mediumDate' }}</p>
-					</a>
+						<!-- Toggle visual del panel expandible -->
+						<div class="flex items-center justify-between text-sm text-primary font-semibold pt-3 mt-3 border-t border-gray-100">
+							<span>{{ expandedIds().has(r.id) ? 'Ocultar valoración' : 'Ver valoración' }}</span>
+							<mat-icon class="!text-base !w-4 !h-4 !leading-4 transition-transform"
+							          [class.rotate-180]="expandedIds().has(r.id)">expand_more</mat-icon>
+						</div>
+
+						<!-- Panel expandible: en movil foto izquierda + criterios derecha; en lg apilado
+						     (mismo patron que el detalle de francesinha) -->
+						@if (expandedIds().has(r.id)) {
+						<div class="flex flex-row lg:flex-col gap-3 items-start mt-3">
+							@if (r.photoUrl) {
+								<img [src]="r.photoUrl"
+								     [alt]="r.francesinhaName"
+								     class="w-32 h-32 lg:w-full lg:h-40 object-cover rounded-xl border-2 border-primary flex-shrink-0"/>
+							}
+							<div class="flex-1 w-full grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-1 text-sm">
+								<div class="flex items-center gap-1">
+									<span class="text-text-main font-bold">Sabor:</span>
+									<span class="text-primary font-semibold">{{ r.scoreFlavor | number:'1.2-2' }}</span>
+									<mat-icon class="icon-filled !text-yellow-400 !text-base !w-4 !h-4 !leading-4">star</mat-icon>
+								</div>
+								<div class="flex items-center gap-1">
+									<span class="text-text-main font-bold">Salsa:</span>
+									<span class="text-primary font-semibold">{{ r.scoreSauce | number:'1.2-2' }}</span>
+									<mat-icon class="icon-filled !text-yellow-400 !text-base !w-4 !h-4 !leading-4">star</mat-icon>
+								</div>
+								<div class="flex items-center gap-1">
+									<span class="text-text-main font-bold">Pan:</span>
+									<span class="text-primary font-semibold">{{ r.scoreBread | number:'1.2-2' }}</span>
+									<mat-icon class="icon-filled !text-yellow-400 !text-base !w-4 !h-4 !leading-4">star</mat-icon>
+								</div>
+								<div class="flex items-center gap-1">
+									<span class="text-text-main font-bold">Presentación:</span>
+									<span class="text-primary font-semibold">{{ r.scorePresentation | number:'1.2-2' }}</span>
+									<mat-icon class="icon-filled !text-yellow-400 !text-base !w-4 !h-4 !leading-4">star</mat-icon>
+								</div>
+							</div>
+						</div>
+						}
+					</div>
 
 				}
 			</div>

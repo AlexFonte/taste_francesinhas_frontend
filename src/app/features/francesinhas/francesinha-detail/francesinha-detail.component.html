@@ -21,13 +21,41 @@
       <!-- columna izquierda -->
       <mat-card class="!rounded-2xl overflow-hidden !shadow-sm">
 
-        <!-- imagen -->
-        <div class="relative aspect-video bg-tertiary/50 flex items-center justify-center border-b border-b-primary">
-          <div class="bg-white/60 border border-primary rounded-full p-6 shadow-xl">
-            <img src="icons/francesinha.svg" class="w-20 h-20 opacity-70" alt="Imagen francesinha"/>
-          </div>
+        <!-- Imagen: carrusel con todas las fotos de las reviews, o placeholder si no hay -->
+        <div class="relative aspect-video bg-tertiary/50 border-b border-b-primary overflow-hidden">
+          @if (reviewPhotos().length > 0) {
+            <div #carousel
+                 (scroll)="onCarouselScroll()"
+                 class="flex h-full overflow-x-auto snap-x snap-mandatory [&::-webkit-scrollbar]:hidden">
+              @for (url of reviewPhotos(); track url) {
+                <img [src]="url"
+                     [alt]="francesinha()!.name"
+                     class="w-full h-full object-cover snap-start flex-shrink-0"/>
+              }
+            </div>
 
-          <!-- chip tipo - top left -->
+            <!-- Indicadores del carrusel: solo si hay mas de 1 foto. Punto relleno = foto activa -->
+            @if (reviewPhotos().length > 1) {
+              <div class="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-1.5 bg-black/40 px-2.5 py-1.5 rounded-full">
+                @for (url of reviewPhotos(); track url; let i = $index) {
+                  <button type="button"
+                          (click)="scrollToPhoto(i)"
+                          [attr.aria-label]="'Ir a la foto ' + (i + 1)"
+                          class="w-2 h-2 rounded-full transition-all"
+                          [ngClass]="activePhotoIndex() === i ? 'bg-white scale-125' : 'bg-white/50 hover:bg-white/80'">
+                  </button>
+                }
+              </div>
+            }
+          } @else {
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="bg-white/60 border border-primary rounded-full p-6 shadow-xl">
+                <img src="icons/francesinha.svg" class="w-20 h-20 opacity-70" alt="Imagen francesinha"/>
+              </div>
+            </div>
+          }
+
+          <!-- chip tipo - top left, siempre por encima del carrusel/placeholder -->
           <mat-chip class="!absolute !top-2 !left-2 !text-sm !h-8 bg-secondary cutom-header-chip !shadow-xl">
             <i>{{ francesinha()!.type }}</i>
           </mat-chip>
@@ -112,7 +140,7 @@
                 { label: 'Sabor:',         valor: avgFlavor() },
                 { label: 'Salsa:',         valor: avgSauce() },
                 { label: 'Pan:',           valor: avgBread() },
-                { label: 'Presentación:pu',  valor: avgPresentation() }
+                { label: 'Presentación:',  valor: avgPresentation() }
               ]; track criterio.label) {
                 <div class="flex items-center justify-between">
                   <span class="text-sm text-gray-600">{{ criterio.label }}</span>
@@ -167,21 +195,29 @@
                           [class.rotate-180]="expandedReviews().has(review.id)">expand_more</mat-icon>
               </div>
 
-              <!-- Detalle por criterio -->
+              <!-- Detalle expandible: en movil foto a la izquierda + criterios a la derecha;
+                   en lg apilado porque las cards van a 3 columnas y se quedan estrechas -->
               @if (expandedReviews().has(review.id)) {
-                <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
-                  @for (criterio of [
-                    { label: 'Sabor:',        valor: review.scoreFlavor },
-                    { label: 'Salsa:',        valor: review.scoreSauce },
-                    { label: 'Pan:',          valor: review.scoreBread },
-                    { label: 'Presentación:', valor: review.scorePresentation }
-                  ]; track criterio.label) {
-                    <div class="flex items-center gap-1">
-                      <span class="text-text-main font-bold">{{ criterio.label }}</span>
-                      <span class="text-primary font-semibold">{{ criterio.valor | number:'1.2-2' }}</span>
-                      <mat-icon class="icon-filled !text-yellow-400 !text-base !w-4 !h-4 !leading-4">star</mat-icon>
-                    </div>
+                <div class="flex flex-row lg:flex-col gap-3 items-start">
+                  @if (review.photoUrl) {
+                    <img [src]="review.photoUrl"
+                         [alt]="'Foto de la review de ' + review.userName"
+                         class="w-32 h-32 lg:w-full lg:h-40 object-cover rounded-xl border-2 border-primary flex-shrink-0"/>
                   }
+                  <div class="flex-1 w-full grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-1 text-sm">
+                    @for (criterio of [
+                      { label: 'Sabor:',        valor: review.scoreFlavor },
+                      { label: 'Salsa:',        valor: review.scoreSauce },
+                      { label: 'Pan:',          valor: review.scoreBread },
+                      { label: 'Presentación:', valor: review.scorePresentation }
+                    ]; track criterio.label) {
+                      <div class="flex items-center gap-1">
+                        <span class="text-text-main font-bold">{{ criterio.label }}</span>
+                        <span class="text-primary font-semibold">{{ criterio.valor | number:'1.2-2' }}</span>
+                        <mat-icon class="icon-filled !text-yellow-400 !text-base !w-4 !h-4 !leading-4">star</mat-icon>
+                      </div>
+                    }
+                  </div>
                 </div>
               }
             </div>

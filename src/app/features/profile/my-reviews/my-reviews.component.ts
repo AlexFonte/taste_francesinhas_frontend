@@ -34,6 +34,9 @@ export class MyReviewsComponent implements OnInit {
   totalPaginas = signal(0);
   hayMas       = computed(() => this.paginaActual() < this.totalPaginas() - 1);
 
+  // IDs de reviews con su detalle (foto + criterios) expandido. Set para toggle O(1).
+  expandedIds = signal<Set<number>>(new Set());
+
   constructor() {
     effect((onCleanup) => {
       const observer = new IntersectionObserver(([entry]) => {
@@ -53,6 +56,18 @@ export class MyReviewsComponent implements OnInit {
 
   loadMore() {
     this.load(this.paginaActual() + 1);
+  }
+
+  // Toggle del panel expandible. event opcional para que se pueda llamar desde un click en la
+  // card; si llega lo paramos para no interferir con clicks anidados (p.ej. "Ver detalle").
+  toggleExpanded(id: number, event?: Event): void {
+    event?.stopPropagation();
+    this.expandedIds.update(ids => {
+      const next = new Set(ids);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
   }
 
   private load(pagina: number) {

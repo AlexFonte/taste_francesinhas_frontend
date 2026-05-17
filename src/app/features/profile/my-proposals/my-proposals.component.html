@@ -141,6 +141,13 @@
 
       @if (expandedIds().has(p.id)) {
         <div class="mt-3">
+          <!-- Foto de la review que el usuario subio al proponer (si la hay) -->
+          @if (p.userReview.photoUrl) {
+            <img [src]="p.userReview.photoUrl"
+                 [alt]="p.name"
+                 class="w-full h-40 object-cover rounded-xl mb-3"/>
+          }
+
           <!-- Comentario, arriba del detalle (estilo igual al de las reviews del detalle) -->
           @if (p.userReview.comment) {
             <p class="text-sm text-gray-700 leading-relaxed mb-3">{{ p.userReview.comment }}</p>

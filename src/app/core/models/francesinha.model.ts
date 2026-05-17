@@ -21,6 +21,13 @@ export interface Francesinha {
   avgSauce: number;
   avgBread: number;
   avgPresentation: number;
+  // Foto de portada para la card del listado. Es la foto de la review mas reciente con foto;
+  // null si ninguna review tiene foto.
+  coverPhotoUrl?: string;
+  // TODAS las URLs de fotos de las reviews, ordenadas por fecha DESC. Solo viene en el detalle
+  // (GET /francesinhas/{id}); en los listados es undefined. Alimenta el carrusel del detalle
+  // sin depender de la paginacion del endpoint de reviews.
+  photoUrls?: string[];
   createdAt: string;
 }
 

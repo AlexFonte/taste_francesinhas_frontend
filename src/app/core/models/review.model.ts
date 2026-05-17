@@ -8,6 +8,8 @@ export interface Review {
   scorePresentation: number;
   avgScore: number;
   comment: string;
+  // URL publica de la foto subida con la review. Optional porque no todas las reviews tienen foto.
+  photoUrl?: string;
   createdAt: string;
 }
 

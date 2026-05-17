@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit, viewChild, ElementRef } from '@angular/core';
 import { CommonModule, Location, NgClass } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -43,6 +43,10 @@ export class FrancesinhaDetailComponent implements OnInit {
   // IDs de opiniones con su detalle por criterio expandido. Set para toggle O(1).
   expandedReviews = signal<Set<number>>(new Set());
 
+  // Referencia al contenedor del carrusel para leer scrollLeft y calcular la foto activa.
+  readonly carousel = viewChild<ElementRef<HTMLDivElement>>('carousel');
+  readonly activePhotoIndex = signal(0);
+
   readonly isUser = computed(() => this.authService.role() === 'USER');
 
   readonly restaurantInfo = computed(() => {
@@ -56,6 +60,10 @@ export class FrancesinhaDetailComponent implements OnInit {
   readonly avgSauce        = computed(() => this.francesinha()?.avgSauce        ?? 0);
   readonly avgBread        = computed(() => this.francesinha()?.avgBread        ?? 0);
   readonly avgPresentation = computed(() => this.francesinha()?.avgPresentation ?? 0);
+
+  // Fotos para el carrusel: TODAS las URLs vienen ya resueltas en el detalle (photoUrls del backend),
+  // independientemente de la paginacion del endpoint de reviews. Orden: la mas reciente primero.
+  readonly reviewPhotos = computed(() => this.francesinha()?.photoUrls ?? []);
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -115,6 +123,23 @@ export class FrancesinhaDetailComponent implements OnInit {
       else next.add(id);
       return next;
     });
+  }
+
+  // Handler de scroll del carrusel: redondeamos scrollLeft/clientWidth para saber que foto se ve.
+  onCarouselScroll(): void {
+    const el = this.carousel()?.nativeElement;
+    if (!el) return;
+    const idx = Math.round(el.scrollLeft / el.clientWidth);
+    if (idx !== this.activePhotoIndex()) {
+      this.activePhotoIndex.set(idx);
+    }
+  }
+
+  // Salta a la foto i con scroll suave (tap en los puntitos del carrusel).
+  scrollToPhoto(i: number): void {
+    const el = this.carousel()?.nativeElement;
+    if (!el) return;
+    el.scrollTo({ left: i * el.clientWidth, behavior: 'smooth' });
   }
 
   // Volvemos a la pagina anterior real (puede ser /francesinhas o /restaurants/:id)

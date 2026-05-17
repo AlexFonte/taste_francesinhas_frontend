@@ -1,0 +1,40 @@
+<div class="flex flex-col gap-2">
+
+	<!-- input file oculto, lo activamos con el boton de abajo -->
+	<input #fileInput
+	       type="file"
+	       accept="image/jpeg,image/png,image/webp"
+	       class="hidden"
+	       (change)="onFileChange($event)"/>
+
+	@if (!selectedFile()) {
+		<!-- Sin foto: zona drop-style clicable que abre el selector -->
+		<button type="button"
+		        (click)="triggerFilePicker()"
+		        class="flex items-center justify-center gap-2 border-2 border-dashed border-gray-300 rounded-2xl py-6 px-4 text-gray-500 hover:border-primary hover:text-primary transition-colors cursor-pointer">
+			<mat-icon>add_a_photo</mat-icon>
+			<span class="text-sm font-medium">Añadir foto</span>
+		</button>
+	} @else {
+		<!-- Con foto: preview + nombre + tamaño + boton de quitar -->
+		<div class="flex items-center gap-3 border border-gray-300 rounded-2xl p-3 bg-white">
+			<img [src]="previewUrl()"
+			     alt="Preview de la foto seleccionada"
+			     class="w-16 h-16 object-cover rounded-lg flex-shrink-0"/>
+			<div class="flex-1 min-w-0">
+				<p class="text-sm font-medium text-text-main truncate">{{ selectedFile()!.name }}</p>
+				<p class="text-xs text-gray-500">{{ (selectedFile()!.size / 1024 / 1024) | number:'1.1-2' }} MB</p>
+			</div>
+			<button type="button"
+			        (click)="removeFile()"
+			        class="text-gray-400 hover:text-red-600 transition-colors cursor-pointer"
+			        aria-label="Quitar foto">
+				<mat-icon>close</mat-icon>
+			</button>
+		</div>
+	}
+
+	@if (errorMessage()) {
+		<p class="text-sm text-red-600">{{ errorMessage() }}</p>
+	}
+</div>

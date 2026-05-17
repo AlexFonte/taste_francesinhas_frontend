@@ -26,6 +26,7 @@ import { ReviewRequest } from '../../core/models/review.model';
 import { ToastService } from '../../shared/services/toast.service';
 import { ReviewFormComponent } from '../../shared/components/review-form/review-form.component';
 import { ReviewForm } from '../../shared/components/review-form/review-form.types';
+import { PhotoUploaderComponent } from '../../shared/components/photo-uploader/photo-uploader.component';
 import { ExistingRestaurantForm, NewRestaurantForm, FrancesinhaForm } from './propose.types';
 
 @Component({
@@ -43,6 +44,7 @@ import { ExistingRestaurantForm, NewRestaurantForm, FrancesinhaForm } from './pr
     MatAutocompleteModule,
     MatProgressSpinnerModule,
     ReviewFormComponent,
+    PhotoUploaderComponent,
   ],
   templateUrl: './propose.component.html',
   styleUrl:    './propose.component.scss',
@@ -61,6 +63,8 @@ export class ProposeComponent {
   readonly isLoading    = signal(false);
   readonly errorMessage = signal<string | null>(null);
   readonly matcher      = new DirtyOrTouchedErrorStateMatcher();
+  // Foto opcional que se sube junto con la review de la propuesta.
+  readonly photo        = signal<File | null>(null);
 
   readonly tiposFrancesinhas = FRANCESINHA_TYPE_OPTIONS;
 
@@ -259,7 +263,7 @@ export class ProposeComponent {
       ...this.reviewForm.getRawValue(),
       propuesta: true,
     };
-    this.reviewService.create(francesinhaId, payload).subscribe({
+    this.reviewService.create(francesinhaId, payload, this.photo()).subscribe({
       next: () => {
         this.isLoading.set(false);
         this.toastService.success('¡Propuesta enviada! Pendiente de aprobación.');
@@ -267,6 +271,10 @@ export class ProposeComponent {
       },
       error: err => this.handleError(err, 'La propuesta se creó pero no se pudo publicar tu valoración'),
     });
+  }
+
+  onPhotoSelected(file: File | null): void {
+    this.photo.set(file);
   }
 
   private handleError(err: HttpErrorResponse, fallback: string): void {

@@ -16,7 +16,16 @@ export class ReviewService {
     return this.http.get<ReviewsPagedResponse>(`${this.base}/${francesinhaId}/reviews`, { params });
   }
 
-  create(francesinhaId: number, request: ReviewRequest): Observable<Review> {
-    return this.http.post<Review>(`${this.base}/${francesinhaId}/reviews`, request);
+  // El backend espera multipart/form-data con dos partes:
+  //   - "review": JSON con los scores y comentario (Content-Type application/json via Blob).
+  //   - "file": binario de la foto, opcional. Si llega null se omite y la review queda sin foto.
+  // No fijamos Content-Type manualmente: el navegador anade el boundary del multipart automaticamente.
+  create(francesinhaId: number, request: ReviewRequest, image?: File | null): Observable<Review> {
+    const formData = new FormData();
+    formData.append('review', new Blob([JSON.stringify(request)], { type: 'application/json' }));
+    if (image) {
+      formData.append('file', image);
+    }
+    return this.http.post<Review>(`${this.base}/${francesinhaId}/reviews`, formData);
   }
 }

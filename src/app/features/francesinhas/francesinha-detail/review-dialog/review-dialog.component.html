@@ -12,6 +12,11 @@
 
 <mat-dialog-content>
 	<app-review-form #reviewFormRef [form]="form"/>
+
+	<div class="mt-4">
+		<p class="text-sm font-medium text-gray-500 mb-2">Foto (opcional)</p>
+		<app-photo-uploader (fileSelected)="onPhotoSelected($event)"/>
+	</div>
 </mat-dialog-content>
 
 @if (errorMessage()) {

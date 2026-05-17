@@ -10,6 +10,7 @@ import { ReviewService } from '../../../../core/services/review.service';
 import { ReviewRequest } from '../../../../core/models/review.model';
 import { ReviewFormComponent } from '../../../../shared/components/review-form/review-form.component';
 import { ReviewForm } from '../../../../shared/components/review-form/review-form.types';
+import { PhotoUploaderComponent } from '../../../../shared/components/photo-uploader/photo-uploader.component';
 import { ReviewDialogData } from './review-dialog.model';
 
 @Component({
@@ -23,6 +24,7 @@ import { ReviewDialogData } from './review-dialog.model';
     MatProgressSpinnerModule,
     DecimalPipe,
     ReviewFormComponent,
+    PhotoUploaderComponent,
   ],
   templateUrl: './review-dialog.component.html',
   styleUrl:    './review-dialog.component.scss',
@@ -36,6 +38,8 @@ export class ReviewDialogComponent {
 
   readonly isLoading    = signal(false);
   readonly errorMessage = signal<string | null>(null);
+  // Foto opcional. El uploader emite null si el usuario la quita o no la selecciona.
+  readonly photo        = signal<File | null>(null);
 
   readonly form: ReviewForm = this.fb.group({
     scoreFlavor:       [3, [Validators.required, Validators.min(1), Validators.max(5)]],
@@ -45,6 +49,10 @@ export class ReviewDialogComponent {
     comment:           ['', Validators.required],
   });
 
+  onPhotoSelected(file: File | null): void {
+    this.photo.set(file);
+  }
+
   submit(): void {
     if (this.isLoading()) return;
     if (this.form.invalid) {
@@ -53,7 +61,7 @@ export class ReviewDialogComponent {
     }
     this.isLoading.set(true);
     const request: ReviewRequest = this.form.getRawValue();
-    this.reviewService.create(this.data.francesinhaId, request).subscribe({
+    this.reviewService.create(this.data.francesinhaId, request, this.photo()).subscribe({
       next: (review) => this.dialogRef.close(review),
       error: (err: HttpErrorResponse) => {
         this.isLoading.set(false);

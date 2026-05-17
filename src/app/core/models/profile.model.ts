@@ -14,6 +14,7 @@ export interface MyReview {
   scorePresentation:  number;
   avgScore:           number;
   comment:            string;
+  photoUrl?:          string;
   createdAt:          string;
   francesinhaId:      number;
   francesinhaName:    string;
@@ -31,6 +32,7 @@ export interface ProposalReview {
   scorePresentation: number;
   avgScore:          number;
   comment:           string;
+  photoUrl?:         string;
   createdAt:         string;
 }
 
