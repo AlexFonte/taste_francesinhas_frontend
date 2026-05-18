@@ -1,4 +1,4 @@
-import { Francesinha, FrancesinhaStatus } from './francesinha.model';
+import { Francesinha, FrancesinhaStatus, FrancesinhaType } from './francesinha.model';
 
 export interface UserStats {
   reviewsCount:   number;
@@ -18,6 +18,7 @@ export interface MyReview {
   createdAt:          string;
   francesinhaId:      number;
   francesinhaName:    string;
+  francesinhaType:    FrancesinhaType;
   francesinhaStatus:  FrancesinhaStatus;
   restaurantName:     string;
   restaurantCity:     string;

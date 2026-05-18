@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { UserStats } from '../models/profile.model';
 import { MyReviewsPagedResponse, ProposalsPagedResponse } from '../models/page.model';
-import { FrancesinhaStatus } from '../models/francesinha.model';
+import { FrancesinhaStatus, FrancesinhaType } from '../models/francesinha.model';
 
 @Injectable({ providedIn: 'root' })
 export class ProfileService {
@@ -16,8 +16,11 @@ export class ProfileService {
     return this.http.get<UserStats>(`${this.base}/stats`);
   }
 
-  getMyReviews(page: number, size: number = 10): Observable<MyReviewsPagedResponse> {
-    const params = new HttpParams().set('page', page).set('size', size);
+  getMyReviews(filters: { name?: string; city?: string; type?: FrancesinhaType }, page: number, size: number = 10): Observable<MyReviewsPagedResponse> {
+    let params = new HttpParams().set('page', page).set('size', size);
+    if (filters.name) params = params.set('name', filters.name);
+    if (filters.city) params = params.set('city', filters.city);
+    if (filters.type) params = params.set('type', filters.type);
     return this.http.get<MyReviewsPagedResponse>(`${this.base}/reviews`, { params });
   }
 

@@ -10,6 +10,55 @@
 			<h1 class="text-2xl font-bold text-primary">Mis reviews</h1>
 		</div>
 
+		<!-- Filtros colapsables (mismo patron que /francesinhas) -->
+		<mat-accordion class="block mb-4">
+			<mat-expansion-panel>
+				<mat-expansion-panel-header>
+					<mat-panel-title>
+						<mat-icon>filter_alt</mat-icon>
+						Filtros
+					</mat-panel-title>
+				</mat-expansion-panel-header>
+
+				<form [formGroup]="filterForm" (ngSubmit)="search()">
+
+					<div class="flex flex-col gap-3 md:flex-row md:flex-wrap pt-2">
+						<mat-form-field appearance="outline" class="flex-1">
+							<mat-label>Nombre</mat-label>
+							<input matInput formControlName="name" placeholder="Buscar..."/>
+						</mat-form-field>
+
+						<mat-form-field appearance="outline" class="flex-1">
+							<mat-label>Ciudad</mat-label>
+							<input matInput formControlName="city" placeholder="Ciudad..."/>
+						</mat-form-field>
+
+						<mat-form-field appearance="outline" class="flex-1">
+							<mat-label>Tipo</mat-label>
+							<mat-select formControlName="type">
+								<mat-option value="">Todos los tipos</mat-option>
+								@for (tipo of tiposFrancesinhas; track tipo.value) {
+									<mat-option [value]="tipo.value">{{ tipo.label }}</mat-option>
+								}
+							</mat-select>
+						</mat-form-field>
+					</div>
+
+					<mat-action-row>
+						<button mat-stroked-button type="button" (click)="reset()" class="!border !border-primary !text-primary">
+							<mat-icon>restart_alt</mat-icon>
+							Reset
+						</button>
+						<button mat-flat-button type="submit" color="primary">
+							<mat-icon>search</mat-icon>
+							Buscar
+						</button>
+					</mat-action-row>
+
+				</form>
+			</mat-expansion-panel>
+		</mat-accordion>
+
 		<!-- Lista: solo reviews de francesinhas aprobadas (el backend ya filtra por ACCEPTED) -->
 		@if (reviews().length > 0) {
 			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 items-start">
