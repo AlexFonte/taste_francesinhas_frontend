@@ -1,15 +1,15 @@
 <form [formGroup]="form()" class="flex flex-col gap-5">
 
-	<p class="text-base font-medium text-gray-700">Criterios de valoración</p>
+	<h3 class="text-base font-bold text-text-main">Criterios de valoración</h3>
 
 	@for (criterio of criterios; track criterio.key) {
 		<div class="flex items-center gap-3">
 			<span class="text-base font-medium text-gray-700 w-28 shrink-0">{{ criterio.label }}</span>
-			<span class="text-sm text-gray-700 shrink-0 whitespace-nowrap">: 1</span>
+			<span class="text-sm text-bold text-text-main whitespace-nowrap">: 1</span>
 			<mat-slider min="1" max="5" step="1" discrete class="flex-1 min-w-0!">
 				<input matSliderThumb [formControlName]="criterio.key"/>
 			</mat-slider>
-			<span class="text-sm text-gray-700 shrink-0">5</span>
+			<span class="text-sm text-bold text-text-main">5</span>
 		</div>
 	}
 
