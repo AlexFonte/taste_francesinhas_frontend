@@ -11,7 +11,7 @@
 		</div>
 
 		<!-- Filtros colapsables (mismo patron que /francesinhas) -->
-		<mat-accordion class="block mb-4">
+		<mat-accordion class="block mb-4" id="filterPanel">
 			<mat-expansion-panel>
 				<mat-expansion-panel-header>
 					<mat-panel-title>
@@ -97,44 +97,46 @@
 						</div>
 
 						<!-- Toggle visual del panel expandible -->
-						<div class="flex items-center justify-between text-sm text-primary font-semibold pt-3 mt-3 border-t border-gray-100">
+						<div
+							class="flex items-center justify-between text-sm text-primary font-semibold pt-3 mt-3 border-t border-gray-100">
 							<span>{{ expandedIds().has(r.id) ? 'Ocultar valoración' : 'Ver valoración' }}</span>
 							<mat-icon class="!text-base !w-4 !h-4 !leading-4 transition-transform"
-							          [class.rotate-180]="expandedIds().has(r.id)">expand_more</mat-icon>
+							          [class.rotate-180]="expandedIds().has(r.id)">expand_more
+							</mat-icon>
 						</div>
 
 						<!-- Panel expandible: en movil foto izquierda + criterios derecha; en lg apilado
 						     (mismo patron que el detalle de francesinha) -->
 						@if (expandedIds().has(r.id)) {
-						<div class="flex flex-row lg:flex-col gap-3 items-start mt-3">
-							@if (r.photoUrl) {
-								<img [src]="r.photoUrl"
-								     [alt]="r.francesinhaName"
-								     class="w-32 h-32 lg:w-full lg:h-40 object-cover rounded-xl border-2 border-primary flex-shrink-0"/>
-							}
-							<div class="flex-1 w-full grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-1 text-sm">
-								<div class="flex items-center gap-1">
-									<span class="text-text-main font-bold">Sabor:</span>
-									<span class="text-primary font-semibold">{{ r.scoreFlavor | number:'1.2-2' }}</span>
-									<mat-icon class="icon-filled !text-yellow-400 !text-base !w-4 !h-4 !leading-4">star</mat-icon>
-								</div>
-								<div class="flex items-center gap-1">
-									<span class="text-text-main font-bold">Salsa:</span>
-									<span class="text-primary font-semibold">{{ r.scoreSauce | number:'1.2-2' }}</span>
-									<mat-icon class="icon-filled !text-yellow-400 !text-base !w-4 !h-4 !leading-4">star</mat-icon>
-								</div>
-								<div class="flex items-center gap-1">
-									<span class="text-text-main font-bold">Pan:</span>
-									<span class="text-primary font-semibold">{{ r.scoreBread | number:'1.2-2' }}</span>
-									<mat-icon class="icon-filled !text-yellow-400 !text-base !w-4 !h-4 !leading-4">star</mat-icon>
-								</div>
-								<div class="flex items-center gap-1">
-									<span class="text-text-main font-bold">Presentación:</span>
-									<span class="text-primary font-semibold">{{ r.scorePresentation | number:'1.2-2' }}</span>
-									<mat-icon class="icon-filled !text-yellow-400 !text-base !w-4 !h-4 !leading-4">star</mat-icon>
+							<div class="flex flex-row lg:flex-col gap-3 items-start mt-3">
+								@if (r.photoUrl) {
+									<img [src]="r.photoUrl"
+									     [alt]="r.francesinhaName"
+									     class="w-32 h-32 lg:w-full lg:h-40 object-cover rounded-xl border-2 border-primary flex-shrink-0"/>
+								}
+								<div class="flex-1 w-full grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-1 text-sm">
+									<div class="flex items-center gap-1">
+										<span class="text-text-main font-bold">Sabor:</span>
+										<span class="text-primary font-semibold">{{ r.scoreFlavor | number:'1.2-2' }}</span>
+										<mat-icon class="icon-filled !text-yellow-400 !text-base !w-4 !h-4 !leading-4">star</mat-icon>
+									</div>
+									<div class="flex items-center gap-1">
+										<span class="text-text-main font-bold">Salsa:</span>
+										<span class="text-primary font-semibold">{{ r.scoreSauce | number:'1.2-2' }}</span>
+										<mat-icon class="icon-filled !text-yellow-400 !text-base !w-4 !h-4 !leading-4">star</mat-icon>
+									</div>
+									<div class="flex items-center gap-1">
+										<span class="text-text-main font-bold">Pan:</span>
+										<span class="text-primary font-semibold">{{ r.scoreBread | number:'1.2-2' }}</span>
+										<mat-icon class="icon-filled !text-yellow-400 !text-base !w-4 !h-4 !leading-4">star</mat-icon>
+									</div>
+									<div class="flex items-center gap-1">
+										<span class="text-text-main font-bold">Presentación:</span>
+										<span class="text-primary font-semibold">{{ r.scorePresentation | number:'1.2-2' }}</span>
+										<mat-icon class="icon-filled !text-yellow-400 !text-base !w-4 !h-4 !leading-4">star</mat-icon>
+									</div>
 								</div>
 							</div>
-						</div>
 						}
 					</div>
 
