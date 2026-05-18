@@ -99,6 +99,7 @@ export class FrancesinhaDetailComponent implements OnInit {
     const dialogRef = this.dialog.open(ReviewDialogComponent, {
       width:      '480px',
       maxWidth:   '95vw',
+      maxHeight:  '90vh',
       panelClass: 'review-dialog',
       data:       { francesinhaId: f.id, francesinhaName: f.name, restaurantName: f.restaurant.name, restaurantCity: f.restaurant.city },
     });
