@@ -39,7 +39,7 @@ export class LoginComponent {
   showPassword = signal(false);
 
   form: LoginForm = this.fb.group({
-    email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$')]],
+    email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(16)]],
   });
 

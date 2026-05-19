@@ -13,7 +13,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { debounceTime, switchMap, startWith } from 'rxjs';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { toSignal, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FrancesinhaType } from '../../core/models/francesinha.model';
 import { FRANCESINHA_TYPE_OPTIONS } from '../../core/constants/francesinha-types.const';
 import { Restaurant } from '../../core/models/restaurant.model';
@@ -127,11 +127,15 @@ export class ProposeComponent {
       }
     });
 
-    // Busqueda reactiva de restaurantes existentes
+    // Busqueda reactiva de restaurantes existentes.
+    // valueChanges es un Subject quesobreviviria al componente y
+		// seguiria disparando HTTP requests -> Puede provocar errores por eso el takeUntilDestryoed
+		//esto hara que solo funcione hasta salir del componente
     this.existingRestaurantForm.controls.search.valueChanges
       .pipe(
         debounceTime(250),
         switchMap(term => this.restaurantService.getAll({ name: term ?? '' }, 0, 10)),
+        takeUntilDestroyed(),
       )
       .subscribe(res => this.restaurantOptions.set(res.restaurants));
 
