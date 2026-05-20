@@ -103,8 +103,15 @@
 			<div class="mt-5 lg:mt-0">
 				<div class="border border-gray-200 rounded-2xl p-5 bg-white">
 					<h3 class="text-base font-bold text-text-main mb-4">Criterios de valoración</h3>
-					@if (review()) {
+					@if (review(); as r) {
 						<app-review-form #reviewFormRef [form]="reviewForm" [readOnly]="true"/>
+						@if (r.photoUrl; as photoUrl) {
+							<div>
+								<p class="text-base font-medium text-gray-700 mb-2">Foto de la propuesta:</p>
+								<img [src]="photoUrl" alt="Foto de la francesinha propuesta"
+								     class="w-full max-h-64 object-cover rounded-xl border-2 border-primary"/>
+							</div>
+						}
 					} @else {
 						<p class="text-sm text-gray-500">El usuario no dejó valoración con la propuesta.</p>
 					}

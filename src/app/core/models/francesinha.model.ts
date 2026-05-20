@@ -1,4 +1,5 @@
-import { Restaurant } from './restaurant.model';
+import {Restaurant} from './restaurant.model';
+import {Review} from './review.model';
 
 export type FrancesinhaStatus = 'PENDING' | 'REJECTED' | 'ACCEPTED';
 export type FrancesinhaType = 'CLASICA' | 'ESPECIAL' | 'VEGANA' | 'KEBAB' | 'MARISCO';
@@ -29,6 +30,14 @@ export interface Francesinha {
   // sin depender de la paginacion del endpoint de reviews.
   photoUrls?: string[];
   createdAt: string;
+}
+
+// Detalle de una francesinha pendiente para la pantalla de validaicion del admin:
+// la francesinha y la review que que se hicienron en la propuesta, toda la info en una sola DTO.
+// review puede ser null, en el caso que pase algo raro, pero por defecto siempre deberia llegar != null
+export interface PendingFrancesinha {
+	francesinha: Francesinha;
+	review: Review | null;
 }
 
 export interface FrancesinhaProposeRequest {

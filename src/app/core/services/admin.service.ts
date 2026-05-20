@@ -1,10 +1,10 @@
-import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { Francesinha, FrancesinhaStatus } from '../models/francesinha.model';
-import { FrancesinhasPagedResponse, ReviewsPagedResponse } from '../models/page.model';
-import { AdminStats } from '../models/admin.model';
+import {inject, Injectable} from '@angular/core';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {environment} from '../../../environments/environment';
+import {Francesinha, FrancesinhaStatus, PendingFrancesinha} from '../models/francesinha.model';
+import {FrancesinhasPagedResponse} from '../models/page.model';
+import {AdminStats} from '../models/admin.model';
 
 @Injectable({ providedIn: 'root' })
 export class AdminService {
@@ -27,13 +27,9 @@ export class AdminService {
     return this.http.get<FrancesinhasPagedResponse>(`${this.base}/admin`, { params });
   }
 
-  getPendingById(id: number): Observable<Francesinha> {
-    return this.http.get<Francesinha>(`${this.base}/pending/${id}`);
-  }
-
-  getPendingReviews(id: number, page = 0, size = 10): Observable<ReviewsPagedResponse> {
-    const params = new HttpParams().set('page', page).set('size', size);
-    return this.http.get<ReviewsPagedResponse>(`${this.base}/pending/${id}/reviews`, { params });
+	// Detalle de la propuesta: la francesinha pendiente + la review de la propuesta, en un solo DTO.
+	getPendingById(id: number): Observable<PendingFrancesinha> {
+		return this.http.get<PendingFrancesinha>(`${this.base}/pending/${id}`);
   }
 
   // PATCH /francesinhas/pending/{id}/status con body { status: 'ACCEPTED' | 'REJECTED' }
