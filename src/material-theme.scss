@@ -7,62 +7,62 @@
 
 // Paleta personalizada - naranja francesinha
 $taste-primary: (
-  0:   #000000,
-  10:  #2D0D00,
-  20:  #4A1B0C,  // 900
-  25:  #5E2000,
-  30:  #6F2700,
-  35:  #802E00,
-  40:  #8B3820,  // secondary
-  50:  #A84820,
-  60:  #C45C2A,  // primary
-  70:  #D85A30,  // 400
-  80:  #F0997B,  // 200
-  90:  #F5C4B3,  // 100 / accent
-  95:  #FAEEDA,  // 50
-  98:  #FDF3EE,
-  99:  #FFFBF8,
-  100: #FFFFFF,
+	0: #000000,
+	10: #2D0D00,
+	20: #4A1B0C, // 900
+	25: #5E2000,
+	30: #6F2700,
+	35: #802E00,
+	40: #8B3820, // secondary
+	50: #A84820,
+	60: #C45C2A, // primary
+	70: #D85A30, // 400
+	80: #F0997B, // 200
+	90: #F5C4B3, // 100 / accent
+	95: #FAEEDA, // 50
+	98: #FDF3EE,
+	99: #FFFBF8,
+	100: #FFFFFF,
 );
 
 html {
-  height: 100%;
-  @include mat.theme(
-    (
-      color: (
-        primary: $taste-primary,
-      ),
-      typography: Inter,
-      density: 0,
-    )
-  );
-  @include mat.theme-overrides((
-    primary:                #C45C2A,
-    on-primary:             #ffffff,
-    surface:                #ffffff,
-    on-surface:             #8B3820,
-    on-surface-variant:     #8B3820,
-    surface-container:      #ffffff,
-    surface-container-low:  #ffffff,
-    surface-container-high: #ffffff,
-    outline:                #C45C2A,
-  ));
+	height: 100%;
+	@include mat.theme(
+		(
+			color: (
+				primary: $taste-primary,
+			),
+			typography: Inter,
+			density: 0,
+		)
+	);
+	@include mat.theme-overrides((
+		primary: #C45C2A,
+		on-primary: #ffffff,
+		surface: #ffffff,
+		on-surface: #8B3820,
+		on-surface-variant: #8B3820,
+		surface-container: #ffffff,
+		surface-container-low: #ffffff,
+		surface-container-high: #ffffff,
+		outline: #C45C2A,
+	));
 }
 
 body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
-  color-scheme: light;
+	// Default the application to a light color theme. This can be changed to
+	// `dark` to enable the dark color theme, or to `light dark` to defer to the
+	// user's system settings.
+	color-scheme: light;
 
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
-  background-color: #F1EFE8;
-  color: var(--mat-sys-on-surface);
-  font: var(--mat-sys-body-medium);
+	// Set a default background, font and text colors for the application using
+	// Angular Material's system-level CSS variables. Learn more about these
+	// variables at https://material.angular.dev/guide/system-variables
+	background-color: #F1EFE8;
+	color: var(--mat-sys-on-surface);
+	font: var(--mat-sys-body-medium);
 
-  // Reset the user agent margin.
-  margin: 0;
-  height: 100%;
+	// Reset the user agent margin.
+	margin: 0;
+	height: 100%;
 }

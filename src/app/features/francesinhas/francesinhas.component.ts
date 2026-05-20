@@ -1,143 +1,140 @@
-import { Component, inject, signal, computed, OnInit, effect, viewChild, ElementRef } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatIconModule } from '@angular/material/icon';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { FrancesinhaService } from '../../core/services/francesinha.service';
-import { FavoriteService } from '../../core/services/favorite.service';
-import { AuthService } from '../../core/services/auth.service';
-import { ToastService } from '../../shared/services/toast.service';
-import { Francesinha, FrancesinhaType } from '../../core/models/francesinha.model';
-import { FrancesinhaCardComponent } from '../../shared/components/francesinha-card/francesinha-card.component';
-import { FrancesinhasPagedResponse } from '../../core/models/page.model';
-import { FRANCESINHA_TYPE_OPTIONS } from '../../core/constants/francesinha-types.const';
+import {Component, computed, effect, ElementRef, inject, OnInit, signal, viewChild} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatIconModule} from '@angular/material/icon';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {FrancesinhaService} from '../../core/services/francesinha.service';
+import {FavoriteService} from '../../core/services/favorite.service';
+import {AuthService} from '../../core/services/auth.service';
+import {ToastService} from '../../shared/services/toast.service';
+import {Francesinha, FrancesinhaType} from '../../core/models/francesinha.model';
+import {FrancesinhaCardComponent} from '../../shared/components/francesinha-card/francesinha-card.component';
+import {FrancesinhasPagedResponse} from '../../core/models/page.model';
+import {FRANCESINHA_TYPE_OPTIONS} from '../../core/constants/francesinha-types.const';
 
 @Component({
-  selector: 'app-francesinhas',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatButtonModule,
-    MatCardModule,
-    MatProgressSpinnerModule,
-    MatIconModule,
-    MatExpansionModule,
-    FrancesinhaCardComponent,
-  ],
-  templateUrl: './francesinhas.component.html',
-  styleUrl: './francesinhas.component.scss',
+	selector: 'app-francesinhas',
+	standalone: true,
+	imports: [
+		CommonModule,
+		ReactiveFormsModule,
+		MatFormFieldModule,
+		MatInputModule,
+		MatSelectModule,
+		MatButtonModule,
+		MatCardModule,
+		MatProgressSpinnerModule,
+		MatIconModule,
+		MatExpansionModule,
+		FrancesinhaCardComponent,
+	],
+	templateUrl: './francesinhas.component.html',
+	styleUrl: './francesinhas.component.scss',
 
 })
 export class FrancesinhasComponent implements OnInit {
 
-  private readonly sentinel = viewChild.required<ElementRef>('sentinel');
-  private readonly francesinhaService = inject(FrancesinhaService);
-  private readonly favoriteService    = inject(FavoriteService);
-  private readonly authService        = inject(AuthService);
-  private readonly toast              = inject(ToastService);
-  private readonly fb = inject(FormBuilder);
+	francesinhasList = signal<Francesinha[]>([]);
+	favoriteIds = signal<Set<number>>(new Set());
+	isLoading = signal(false);
+	paginaActual = signal(0);
+	totalPaginas = signal(0);
+	hayMas = computed(() => this.paginaActual() < this.totalPaginas() - 1);
+	readonly tiposFrancesinhas = FRANCESINHA_TYPE_OPTIONS;
+	private readonly sentinel = viewChild.required<ElementRef>('sentinel');
+	private readonly francesinhaService = inject(FrancesinhaService);
+	private readonly favoriteService = inject(FavoriteService);
+	private readonly authService = inject(AuthService);
+	private readonly toast = inject(ToastService);
+	private readonly fb = inject(FormBuilder);
+	filterForm = this.fb.group({
+		name: [''],
+		city: [''],
+		type: [''],
+	});
 
-  francesinhasList = signal<Francesinha[]>([]);
-  favoriteIds      = signal<Set<number>>(new Set());
-  isLoading = signal(false);
-  paginaActual = signal(0);
-  totalPaginas = signal(0);
-  hayMas = computed(() => this.paginaActual() < this.totalPaginas() - 1);
+	constructor() {
+		effect((onCleanup) => {
+			const observer = new IntersectionObserver(([entry]) => {
+				if (entry.isIntersecting && this.hayMas() && !this.isLoading()) {
+					this.loadMore();
+				}
+			}, {threshold: 0.1});
 
-  readonly tiposFrancesinhas = FRANCESINHA_TYPE_OPTIONS;
+			observer.observe(this.sentinel().nativeElement);
+			onCleanup(() => observer.disconnect());
+		});
+	}
 
-  filterForm = this.fb.group({
-    name: [''],
-    city: [''],
-    type: [''],
-  });
+	ngOnInit() {
+		this.load(0);
+		if (this.authService.isLoggedIn()) {
+			this.favoriteService.getFavoriteIds().subscribe({
+				next: ids => this.favoriteIds.set(ids),
+			});
+		}
+	}
 
-  constructor() {
-    effect((onCleanup) => {
-      const observer = new IntersectionObserver(([entry]) => {
-        if (entry.isIntersecting && this.hayMas() && !this.isLoading()) {
-          this.loadMore();
-        }
-      }, { threshold: 0.1 });
+	search() {
+		this.francesinhasList.set([]);
+		this.load(0);
+	}
 
-      observer.observe(this.sentinel().nativeElement);
-      onCleanup(() => observer.disconnect());
-    });
-  }
+	reset() {
+		this.filterForm.reset({name: '', city: '', type: ''});
+		this.francesinhasList.set([]);
+		this.load(0);
+	}
 
-  ngOnInit() {
-    this.load(0);
-    if (this.authService.isLoggedIn()) {
-      this.favoriteService.getFavoriteIds().subscribe({
-        next: ids => this.favoriteIds.set(ids),
-      });
-    }
-  }
+	loadMore() {
+		this.load(this.paginaActual() + 1);
+	}
 
-  search() {
-    this.francesinhasList.set([]);
-    this.load(0);
-  }
+	// Cambiamos el valor al instante, y enviamos la peticion al backend
+	// Si la peticion falla, rollback y mostramos un toast.
+	onFavoriteToggle(francesinhaId: number): void {
+		const wasFavorite = this.favoriteIds().has(francesinhaId);
 
-  reset() {
-    this.filterForm.reset({ name: '', city: '', type: '' });
-    this.francesinhasList.set([]);
-    this.load(0);
-  }
+		this.favoriteIds.update(ids => {
+			const next = new Set(ids);
+			wasFavorite ? next.delete(francesinhaId) : next.add(francesinhaId);
+			return next;
+		});
 
-  loadMore() {
-    this.load(this.paginaActual() + 1);
-  }
+		this.favoriteService.toggle(francesinhaId).subscribe({
+			next: () => this.toast.success(wasFavorite ? 'Eliminada de favoritos' : 'Añadida a favoritos'),
+			error: () => {
+				this.favoriteIds.update(ids => {
+					const next = new Set(ids);
+					wasFavorite ? next.add(francesinhaId) : next.delete(francesinhaId);
+					return next;
+				});
+				this.toast.error('No se pudo actualizar el favorito');
+			},
+		});
+	}
 
-  // Cambiamos el valor al instante, y enviamos la peticion al backend
-  // Si la peticion falla, rollback y mostramos un toast.
-  onFavoriteToggle(francesinhaId: number): void {
-    const wasFavorite = this.favoriteIds().has(francesinhaId);
-
-    this.favoriteIds.update(ids => {
-      const next = new Set(ids);
-      wasFavorite ? next.delete(francesinhaId) : next.add(francesinhaId);
-      return next;
-    });
-
-    this.favoriteService.toggle(francesinhaId).subscribe({
-      next: () => this.toast.success(wasFavorite ? 'Eliminada de favoritos' : 'Añadida a favoritos'),
-      error: () => {
-        this.favoriteIds.update(ids => {
-          const next = new Set(ids);
-          wasFavorite ? next.add(francesinhaId) : next.delete(francesinhaId);
-          return next;
-        });
-        this.toast.error('No se pudo actualizar el favorito');
-      },
-    });
-  }
-
-  private load(pagina: number) {
-    this.isLoading.set(true);
-    const { name, city, type } = this.filterForm.value;
-    this.francesinhaService.getAllFrancesinhas(
-      { name: name || undefined, city: city || undefined, type: (type as FrancesinhaType) || undefined },
-      pagina
-    ).subscribe({
-      next: (res: FrancesinhasPagedResponse) => {
-        const items = res.francesinhas;
-        this.francesinhasList.update(prev => pagina === 0 ? items : [...prev, ...items]);
-        this.paginaActual.set(res.pageNumber);
-        this.totalPaginas.set(res.totalPages);
-        this.isLoading.set(false);
-      },
-      error: () => this.isLoading.set(false),
-    });
-  }
+	private load(pagina: number) {
+		this.isLoading.set(true);
+		const {name, city, type} = this.filterForm.value;
+		this.francesinhaService.getAllFrancesinhas(
+			{name: name || undefined, city: city || undefined, type: (type as FrancesinhaType) || undefined},
+			pagina
+		).subscribe({
+			next: (res: FrancesinhasPagedResponse) => {
+				const items = res.francesinhas;
+				this.francesinhasList.update(prev => pagina === 0 ? items : [...prev, ...items]);
+				this.paginaActual.set(res.pageNumber);
+				this.totalPaginas.set(res.totalPages);
+				this.isLoading.set(false);
+			},
+			error: () => this.isLoading.set(false),
+		});
+	}
 }

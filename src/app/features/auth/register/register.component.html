@@ -5,7 +5,7 @@
 		<!-- panel izquierdo, solo visible en desktop -->
 		<div class="hidden md:flex md:w-1/2 bg-primary flex-col items-center justify-center gap-5 p-12">
 			<div class="bg-white/85 border rounded-full p-4 shadow-xl">
-				<img src="fran_huevo-sinfondo.png" class="w-28 h-28 opacity-90" alt="Logo Taste Francesinhas"/>
+				<img alt="Logo Taste Francesinhas" class="w-28 h-28 opacity-90" src="fran_huevo-sinfondo.png"/>
 			</div>
 
 			<h1 class="text-3xl font-bold tracking-widest text-white text-center uppercase">
@@ -17,11 +17,12 @@
 		</div>
 
 		<!-- Panel del formulario -->
-		<div class="w-full md:w-1/2 bg-white rounded-2xl shadow-sm md:rounded-none md:shadow-none px-6 py-10 md:px-12 md:py-16 flex flex-col justify-center">
+		<div
+			class="w-full md:w-1/2 bg-white rounded-2xl shadow-sm md:rounded-none md:shadow-none px-6 py-10 md:px-12 md:py-16 flex flex-col justify-center">
 
 			<!-- Logo móvil -->
 			<div class="flex flex-col items-center mb-8 md:hidden">
-				<img src="fran_huevo-sinfondo.png" class="w-20 h-20 mb-3 opacity-95" alt="Logo Taste Francesinha"/>
+				<img alt="Logo Taste Francesinha" class="w-20 h-20 mb-3 opacity-95" src="fran_huevo-sinfondo.png"/>
 				<h1 class="text-2xl font-bold text-primary tracking-widest uppercase text-center">Taste<br>Francesinhas</h1>
 			</div>
 
@@ -32,13 +33,13 @@
 				Únete para valorar y proponer francesinhas
 			</p>
 
-			<form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-2">
+			<form (ngSubmit)="submit()" [formGroup]="form" class="flex flex-col gap-2">
 
 				<mat-form-field appearance="fill" class="w-full">
 					<mat-label>Nombre</mat-label>
-					<input matInput type="text" formControlName="name" [errorStateMatcher]="matcher"
-					       placeholder="Tu nombre" autocomplete="name" required/>
-					<mat-icon matSuffix class="text-gray-400">person</mat-icon>
+					<input [errorStateMatcher]="matcher" autocomplete="name" formControlName="name" matInput
+					       placeholder="Tu nombre" required type="text"/>
+					<mat-icon class="text-gray-400" matSuffix>person</mat-icon>
 					@if (form.get('name')?.hasError('required')) {
 						<mat-error>El nombre es obligatorio</mat-error>
 					} @else if (form.get('name')?.hasError('minlength')) {
@@ -48,9 +49,9 @@
 
 				<mat-form-field appearance="fill" class="w-full">
 					<mat-label>Email</mat-label>
-					<input matInput type="email" formControlName="email" [errorStateMatcher]="matcher"
-					       placeholder="tu@email.com" autocomplete="email" required/>
-					<mat-icon matSuffix class="text-gray-400">alternate_email</mat-icon>
+					<input [errorStateMatcher]="matcher" autocomplete="email" formControlName="email" matInput
+					       placeholder="tu@email.com" required type="email"/>
+					<mat-icon class="text-gray-400" matSuffix>alternate_email</mat-icon>
 					@if (form.get('email')?.hasError('required')) {
 						<mat-error>El email es obligatorio</mat-error>
 					} @else if (form.get('email')?.hasError('pattern')) {
@@ -60,10 +61,12 @@
 
 				<mat-form-field appearance="fill" class="w-full">
 					<mat-label>Contraseña</mat-label>
-					<input matInput [type]="showPassword() ? 'text' : 'password'" formControlName="password"
-					       [errorStateMatcher]="matcher" autocomplete="new-password" required/>
-					<button mat-icon-button matSuffix type="button" (click)="showPassword.set(!showPassword())"
-					        [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+					<input [errorStateMatcher]="matcher" [type]="showPassword() ? 'text' : 'password'" autocomplete="new-password"
+					       formControlName="password" matInput required/>
+					<button (click)="showPassword.set(!showPassword())"
+					        [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'" mat-icon-button
+					        matSuffix
+					        type="button">
 						<mat-icon class="text-gray-400">{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
 					</button>
 					@if (form.get('password')?.hasError('required')) {
@@ -75,10 +78,13 @@
 
 				<mat-form-field appearance="fill" class="w-full">
 					<mat-label>Confirmar contraseña</mat-label>
-					<input matInput [type]="showConfirm() ? 'text' : 'password'" formControlName="confirmPassword"
-					       [errorStateMatcher]="confirmMatcher" autocomplete="new-password" required/>
-					<button mat-icon-button matSuffix type="button" (click)="showConfirm.set(!showConfirm())"
-					        [attr.aria-label]="showConfirm() ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+					<input [errorStateMatcher]="confirmMatcher" [type]="showConfirm() ? 'text' : 'password'"
+					       autocomplete="new-password"
+					       formControlName="confirmPassword" matInput required/>
+					<button (click)="showConfirm.set(!showConfirm())"
+					        [attr.aria-label]="showConfirm() ? 'Ocultar contraseña' : 'Mostrar contraseña'" mat-icon-button
+					        matSuffix
+					        type="button">
 						<mat-icon class="text-gray-400">{{ showConfirm() ? 'visibility_off' : 'visibility' }}</mat-icon>
 					</button>
 					@if (form.get('confirmPassword')?.hasError('required')) {
@@ -93,13 +99,13 @@
 				}
 
 				<button
-					mat-flat-button
-					color="primary"
-					type="submit"
+					[disabled]="isLoading()"
 					class="w-full !h-12 !text-base !mt-2"
-					[disabled]="isLoading()">
+					color="primary"
+					mat-flat-button
+					type="submit">
 					@if (isLoading()) {
-						<mat-spinner diameter="22" class="!text-white"/>
+						<mat-spinner class="!text-white" diameter="22"/>
 					} @else {
 						<span class="flex items-center justify-center gap-2">
 							<mat-icon>person_add</mat-icon>
@@ -112,7 +118,7 @@
 
 			<p class="text-sm text-center text-gray-500 mt-6">
 				¿Ya tienes cuenta?
-				<a routerLink="/login" class="text-base text-primary font-semibold hover:underline ml-1">
+				<a class="text-base text-primary font-semibold hover:underline ml-1" routerLink="/login">
 					Iniciar sesión
 				</a>
 			</p>

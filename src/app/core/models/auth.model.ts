@@ -1,23 +1,23 @@
 export interface LoginRequest {
-  email: string;
-  password: string;
+	email: string;
+	password: string;
 }
 
 export interface RegisterRequest {
-  name:     string;
-  email:    string;
-  password: string;
+	name: string;
+	email: string;
+	password: string;
 }
 
 export interface LoginResponse {
-  accessToken:  string;
-  refreshToken: string;
-  name:         string;
-  email:        string;
-  role:         'ADMIN' | 'USER';
+	accessToken: string;
+	refreshToken: string;
+	name: string;
+	email: string;
+	role: 'ADMIN' | 'USER';
 }
 
 export interface ChangePasswordRequest {
-  currentPassword: string;
-  newPassword:     string;
+	currentPassword: string;
+	newPassword: string;
 }

@@ -11,30 +11,42 @@
 		<!-- cards de estadisticas, clicables: navegan al listado correspondiente.
 		     El admin no puede dejar reviews ni proponer francesinhas, asi que escondemos el bloque. -->
 		@if (!isAdmin()) {
-		<div class="grid grid-cols-2 gap-4">
-			<a routerLink="/profile/reviews"
-			   class="bg-white rounded-2xl border border-gray-200 p-3 md:p-5 flex items-center gap-2 md:gap-4 cursor-pointer hover:shadow-md hover:border-primary transition-all">
-				<div class="bg-accent border border-primary-400 rounded-full p-2 md:p-3 flex items-center justify-center">
-					<mat-icon class="!text-xl !w-5 !h-5 !leading-5 md:!text-2xl md:!w-6 md:!h-6 md:!leading-6 text-secondary">rate_review</mat-icon>
-				</div>
-				<div class="flex flex-col flex-1">
-					<span class="text-2xl font-bold text-text-main">{{ stats()?.reviewsCount ?? 0 }}</span>
-					<span class="text-sm text-gray-600">Reviews</span>
-				</div>
-				<mat-icon class="text-bold text-gray-400 shrink-0 !text-lg !w-5 !h-5 !leading-5 md:!text-2xl md:!w-6 md:!h-6 md:!leading-6">chevron_right</mat-icon>
-			</a>
-			<a routerLink="/profile/proposals"
-			   class="bg-white rounded-2xl border border-gray-200 p-3 md:p-5 flex items-center gap-2 md:gap-4 cursor-pointer hover:shadow-md hover:border-primary transition-all">
-				<div class="bg-accent border border-primary-400 rounded-full p-2 md:p-3 flex items-center justify-center">
-					<mat-icon class="!text-xl !w-5 !h-5 !leading-5 md:!text-2xl md:!w-6 md:!h-6 md:!leading-6 text-secondary">lunch_dining</mat-icon>
-				</div>
-				<div class="flex flex-col flex-1">
-					<span class="text-2xl font-bold text-text-main">{{ stats()?.proposalsCount ?? 0 }}</span>
-					<span class="text-sm text-gray-600">Propuestas</span>
-				</div>
-				<mat-icon class="text-bold text-gray-400 shrink-0 !text-lg !w-5 !h-5 !leading-5 md:!text-2xl md:!w-6 md:!h-6 md:!leading-6">chevron_right</mat-icon>
-			</a>
-		</div>
+			<div class="grid grid-cols-2 gap-4">
+				<a
+					class="bg-white rounded-2xl border border-gray-200 p-3 md:p-5 flex items-center gap-2 md:gap-4 cursor-pointer hover:shadow-md hover:border-primary transition-all"
+					routerLink="/profile/reviews">
+					<div class="bg-accent border border-primary-400 rounded-full p-2 md:p-3 flex items-center justify-center">
+						<mat-icon class="!text-xl !w-5 !h-5 !leading-5 md:!text-2xl md:!w-6 md:!h-6 md:!leading-6 text-secondary">
+							rate_review
+						</mat-icon>
+					</div>
+					<div class="flex flex-col flex-1">
+						<span class="text-2xl font-bold text-text-main">{{ stats()?.reviewsCount ?? 0 }}</span>
+						<span class="text-sm text-gray-600">Reviews</span>
+					</div>
+					<mat-icon
+						class="text-bold text-gray-400 shrink-0 !text-lg !w-5 !h-5 !leading-5 md:!text-2xl md:!w-6 md:!h-6 md:!leading-6">
+						chevron_right
+					</mat-icon>
+				</a>
+				<a
+					class="bg-white rounded-2xl border border-gray-200 p-3 md:p-5 flex items-center gap-2 md:gap-4 cursor-pointer hover:shadow-md hover:border-primary transition-all"
+					routerLink="/profile/proposals">
+					<div class="bg-accent border border-primary-400 rounded-full p-2 md:p-3 flex items-center justify-center">
+						<mat-icon class="!text-xl !w-5 !h-5 !leading-5 md:!text-2xl md:!w-6 md:!h-6 md:!leading-6 text-secondary">
+							lunch_dining
+						</mat-icon>
+					</div>
+					<div class="flex flex-col flex-1">
+						<span class="text-2xl font-bold text-text-main">{{ stats()?.proposalsCount ?? 0 }}</span>
+						<span class="text-sm text-gray-600">Propuestas</span>
+					</div>
+					<mat-icon
+						class="text-bold text-gray-400 shrink-0 !text-lg !w-5 !h-5 !leading-5 md:!text-2xl md:!w-6 md:!h-6 md:!leading-6">
+						chevron_right
+					</mat-icon>
+				</a>
+			</div>
 		}
 
 		<!-- card 1: datos personales (read-only) -->
@@ -56,75 +68,83 @@
 		<div class="bg-white rounded-2xl border border-gray-200 p-6">
 			<div class="flex items-center justify-between mb-4">
 				<h2 class="text-lg font-bold text-text-main">Cambiar contraseña</h2>
-				<mat-slide-toggle [checked]="showPasswordForm()"
-				                  (change)="onTogglePasswordForm($event.checked)">
+				<mat-slide-toggle (change)="onTogglePasswordForm($event.checked)"
+				                  [checked]="showPasswordForm()">
 				</mat-slide-toggle>
 			</div>
 
 			@if (showPasswordForm()) {
-			<form [formGroup]="form" (ngSubmit)="submit()" class="flex flex-col gap-2">
+				<form (ngSubmit)="submit()" [formGroup]="form" class="flex flex-col gap-2">
 
-				<mat-form-field appearance="fill" class="w-full">
-					<mat-label>Contraseña actual</mat-label>
-					<input matInput [type]="showCurrent() ? 'text' : 'password'" formControlName="currentPassword"
-					       [errorStateMatcher]="matcher" autocomplete="current-password" required/>
-					<button mat-icon-button matSuffix type="button" (click)="showCurrent.set(!showCurrent())"
-					        [attr.aria-label]="showCurrent() ? 'Ocultar contraseña' : 'Mostrar contraseña'">
-						<mat-icon class="text-gray-400">{{ showCurrent() ? 'visibility_off' : 'visibility' }}</mat-icon>
-					</button>
-					@if (form.get('currentPassword')?.hasError('required')) {
-						<mat-error>La contraseña actual es obligatoria</mat-error>
+					<mat-form-field appearance="fill" class="w-full">
+						<mat-label>Contraseña actual</mat-label>
+						<input [errorStateMatcher]="matcher" [type]="showCurrent() ? 'text' : 'password'"
+						       autocomplete="current-password"
+						       formControlName="currentPassword" matInput required/>
+						<button (click)="showCurrent.set(!showCurrent())"
+						        [attr.aria-label]="showCurrent() ? 'Ocultar contraseña' : 'Mostrar contraseña'" mat-icon-button
+						        matSuffix
+						        type="button">
+							<mat-icon class="text-gray-400">{{ showCurrent() ? 'visibility_off' : 'visibility' }}</mat-icon>
+						</button>
+						@if (form.get('currentPassword')?.hasError('required')) {
+							<mat-error>La contraseña actual es obligatoria</mat-error>
+						}
+					</mat-form-field>
+
+					<mat-form-field appearance="fill" class="w-full">
+						<mat-label>Nueva contraseña</mat-label>
+						<input [errorStateMatcher]="matcher" [type]="showNew() ? 'text' : 'password'" autocomplete="new-password"
+						       formControlName="newPassword" matInput required/>
+						<button (click)="showNew.set(!showNew())"
+						        [attr.aria-label]="showNew() ? 'Ocultar contraseña' : 'Mostrar contraseña'" mat-icon-button
+						        matSuffix
+						        type="button">
+							<mat-icon class="text-gray-400">{{ showNew() ? 'visibility_off' : 'visibility' }}</mat-icon>
+						</button>
+						@if (form.get('newPassword')?.hasError('required')) {
+							<mat-error>La nueva contraseña es obligatoria</mat-error>
+						} @else if (form.get('newPassword')?.hasError('pattern')) {
+							<mat-error>Mínimo 8 caracteres, una mayúscula y un número</mat-error>
+						}
+					</mat-form-field>
+
+					<mat-form-field appearance="fill" class="w-full">
+						<mat-label>Confirmar nueva contraseña</mat-label>
+						<input [errorStateMatcher]="confirmMatcher" [type]="showConfirm() ? 'text' : 'password'"
+						       autocomplete="new-password"
+						       formControlName="confirmPassword" matInput required/>
+						<button (click)="showConfirm.set(!showConfirm())"
+						        [attr.aria-label]="showConfirm() ? 'Ocultar contraseña' : 'Mostrar contraseña'" mat-icon-button
+						        matSuffix
+						        type="button">
+							<mat-icon class="text-gray-400">{{ showConfirm() ? 'visibility_off' : 'visibility' }}</mat-icon>
+						</button>
+						@if (form.get('confirmPassword')?.hasError('required')) {
+							<mat-error>Confirma la nueva contraseña</mat-error>
+						} @else if (form.hasError('passwordMismatch')) {
+							<mat-error>Las contraseñas no coinciden</mat-error>
+						}
+					</mat-form-field>
+
+					@if (errorMessage()) {
+						<p class="text-sm text-white bg-[#e11d48] text-center px-4 py-2 rounded-full">{{ errorMessage() }}</p>
 					}
-				</mat-form-field>
 
-				<mat-form-field appearance="fill" class="w-full">
-					<mat-label>Nueva contraseña</mat-label>
-					<input matInput [type]="showNew() ? 'text' : 'password'" formControlName="newPassword"
-					       [errorStateMatcher]="matcher" autocomplete="new-password" required/>
-					<button mat-icon-button matSuffix type="button" (click)="showNew.set(!showNew())"
-					        [attr.aria-label]="showNew() ? 'Ocultar contraseña' : 'Mostrar contraseña'">
-						<mat-icon class="text-gray-400">{{ showNew() ? 'visibility_off' : 'visibility' }}</mat-icon>
-					</button>
-					@if (form.get('newPassword')?.hasError('required')) {
-						<mat-error>La nueva contraseña es obligatoria</mat-error>
-					} @else if (form.get('newPassword')?.hasError('pattern')) {
-						<mat-error>Mínimo 8 caracteres, una mayúscula y un número</mat-error>
-					}
-				</mat-form-field>
-
-				<mat-form-field appearance="fill" class="w-full">
-					<mat-label>Confirmar nueva contraseña</mat-label>
-					<input matInput [type]="showConfirm() ? 'text' : 'password'" formControlName="confirmPassword"
-					       [errorStateMatcher]="confirmMatcher" autocomplete="new-password" required/>
-					<button mat-icon-button matSuffix type="button" (click)="showConfirm.set(!showConfirm())"
-					        [attr.aria-label]="showConfirm() ? 'Ocultar contraseña' : 'Mostrar contraseña'">
-						<mat-icon class="text-gray-400">{{ showConfirm() ? 'visibility_off' : 'visibility' }}</mat-icon>
-					</button>
-					@if (form.get('confirmPassword')?.hasError('required')) {
-						<mat-error>Confirma la nueva contraseña</mat-error>
-					} @else if (form.hasError('passwordMismatch')) {
-						<mat-error>Las contraseñas no coinciden</mat-error>
-					}
-				</mat-form-field>
-
-				@if (errorMessage()) {
-					<p class="text-sm text-white bg-[#e11d48] text-center px-4 py-2 rounded-full">{{ errorMessage() }}</p>
-				}
-
-				<button mat-flat-button color="primary" type="submit"
-				        class="w-full !h-12 !text-base !mt-2"
-				        [disabled]="isLoading()">
-					@if (isLoading()) {
-						<mat-spinner diameter="22" class="!text-white"/>
-					} @else {
-						<span class="flex items-center justify-center gap-2">
+					<button [disabled]="isLoading()" class="w-full !h-12 !text-base !mt-2" color="primary"
+					        mat-flat-button
+					        type="submit">
+						@if (isLoading()) {
+							<mat-spinner class="!text-white" diameter="22"/>
+						} @else {
+							<span class="flex items-center justify-center gap-2">
 							<mat-icon>lock_reset</mat-icon>
 							Actualizar contraseña
 						</span>
-					}
-				</button>
+						}
+					</button>
 
-			</form>
+				</form>
 			}
 		</div>
 

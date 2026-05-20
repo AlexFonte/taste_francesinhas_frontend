@@ -87,6 +87,10 @@ export class AdminValidateComponent {
 
 	constructor() {
 		const id = Number(this.route.snapshot.paramMap.get('id'));
+		if (Number.isNaN(id)) {
+			this.router.navigate(['/admin']);
+			return;
+		}
 		this.load(id);
 	}
 

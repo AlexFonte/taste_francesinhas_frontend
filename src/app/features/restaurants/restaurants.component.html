@@ -12,26 +12,26 @@
 					</mat-panel-title>
 				</mat-expansion-panel-header>
 
-				<form [formGroup]="filterForm" (ngSubmit)="search()">
+				<form (ngSubmit)="search()" [formGroup]="filterForm">
 
 					<div class="flex flex-col gap-3 md:flex-row md:flex-wrap pt-2">
 						<mat-form-field appearance="outline" class="flex-1">
 							<mat-label>Nombre</mat-label>
-							<input matInput formControlName="name" placeholder="Buscar..."/>
+							<input formControlName="name" matInput placeholder="Buscar..."/>
 						</mat-form-field>
 
 						<mat-form-field appearance="outline" class="flex-1">
 							<mat-label>Ciudad</mat-label>
-							<input matInput formControlName="city" placeholder="Ciudad..."/>
+							<input formControlName="city" matInput placeholder="Ciudad..."/>
 						</mat-form-field>
 					</div>
 
 					<mat-action-row>
-						<button mat-stroked-button type="button" (click)="reset()" class="!border !border-primary !text-primary">
+						<button (click)="reset()" class="!border !border-primary !text-primary" mat-stroked-button type="button">
 							<mat-icon>restart_alt</mat-icon>
 							Reset
 						</button>
-						<button mat-flat-button type="submit" color="primary">
+						<button color="primary" mat-flat-button type="submit">
 							<mat-icon>search</mat-icon>
 							Buscar
 						</button>
@@ -68,8 +68,8 @@
 							</p>
 						}
 						@if (isUser()) {
-							<button mat-flat-button color="primary" class="!mt-2 !self-center"
-							        (click)="$event.stopPropagation(); proponer(r)">
+							<button (click)="$event.stopPropagation(); proponer(r)" class="!mt-2 !self-center" color="primary"
+							        mat-flat-button>
 								<span class="flex items-center justify-center gap-1">
 									<mat-icon>add</mat-icon>
 									Proponer francesinha
@@ -93,7 +93,7 @@
 		<!-- Loading -->
 		@if (isLoading()) {
 			<div class="flex flex-col items-center justify-center gap-3 py-16">
-				<mat-spinner diameter="48" color="primary"/>
+				<mat-spinner color="primary" diameter="48"/>
 				<p class="text-sm text-gray-400 animate-pulse">Cargando restaurantes...</p>
 			</div>
 		}

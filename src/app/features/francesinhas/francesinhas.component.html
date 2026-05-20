@@ -1,98 +1,98 @@
 <div class="min-h-screen">
 
-  <main class="px-4 py-4 pb-24 md:pb-6 md:px-6 md:py-6 max-w-7xl mx-auto">
+	<main class="px-4 py-4 pb-24 md:pb-6 md:px-6 md:py-6 max-w-7xl mx-auto">
 
-    <!-- Filtros colapsables -->
-    <mat-accordion class="block mb-4" id="filterPanel">
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            <mat-icon>filter_alt</mat-icon>
-            Filtros
-          </mat-panel-title>
-        </mat-expansion-panel-header>
+		<!-- Filtros colapsables -->
+		<mat-accordion class="block mb-4" id="filterPanel">
+			<mat-expansion-panel>
+				<mat-expansion-panel-header>
+					<mat-panel-title>
+						<mat-icon>filter_alt</mat-icon>
+						Filtros
+					</mat-panel-title>
+				</mat-expansion-panel-header>
 
-        <form [formGroup]="filterForm" (ngSubmit)="search()">
+				<form (ngSubmit)="search()" [formGroup]="filterForm">
 
-          <div class="flex flex-col gap-3 md:flex-row md:flex-wrap pt-2">
-            <mat-form-field appearance="outline" class="flex-1">
-              <mat-label>Nombre</mat-label>
-              <input matInput formControlName="name" placeholder="Buscar..."/>
-            </mat-form-field>
+					<div class="flex flex-col gap-3 md:flex-row md:flex-wrap pt-2">
+						<mat-form-field appearance="outline" class="flex-1">
+							<mat-label>Nombre</mat-label>
+							<input formControlName="name" matInput placeholder="Buscar..."/>
+						</mat-form-field>
 
-            <mat-form-field appearance="outline" class="flex-1">
-              <mat-label>Ciudad</mat-label>
-              <input matInput formControlName="city" placeholder="Ciudad..."/>
-            </mat-form-field>
+						<mat-form-field appearance="outline" class="flex-1">
+							<mat-label>Ciudad</mat-label>
+							<input formControlName="city" matInput placeholder="Ciudad..."/>
+						</mat-form-field>
 
-            <mat-form-field appearance="outline" class="flex-1">
-              <mat-label>Tipo</mat-label>
-              <mat-select formControlName="type">
-                <mat-option value="">Todos los tipos</mat-option>
-                @for (tipo of tiposFrancesinhas; track tipo.value) {
-                  <mat-option [value]="tipo.value">{{ tipo.label }}</mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-          </div>
+						<mat-form-field appearance="outline" class="flex-1">
+							<mat-label>Tipo</mat-label>
+							<mat-select formControlName="type">
+								<mat-option value="">Todos los tipos</mat-option>
+								@for (tipo of tiposFrancesinhas; track tipo.value) {
+									<mat-option [value]="tipo.value">{{ tipo.label }}</mat-option>
+								}
+							</mat-select>
+						</mat-form-field>
+					</div>
 
-          <mat-action-row>
-            <button mat-stroked-button type="button" (click)="reset()" class="!border !border-primary !text-primary">
-              <mat-icon>restart_alt</mat-icon>
-              Reset
-            </button>
-            <button mat-flat-button type="submit" color="primary">
-              <mat-icon>search</mat-icon>
-              Buscar
-            </button>
-          </mat-action-row>
+					<mat-action-row>
+						<button (click)="reset()" class="!border !border-primary !text-primary" mat-stroked-button type="button">
+							<mat-icon>restart_alt</mat-icon>
+							Reset
+						</button>
+						<button color="primary" mat-flat-button type="submit">
+							<mat-icon>search</mat-icon>
+							Buscar
+						</button>
+					</mat-action-row>
 
-        </form>
-      </mat-expansion-panel>
-    </mat-accordion>
+				</form>
+			</mat-expansion-panel>
+		</mat-accordion>
 
-    <!-- Grid de cards -->
-    @if (francesinhasList().length > 0) {
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        @for (f of francesinhasList(); track f.id; let i = $index) {
-          <!-- animate.enter="card-enter" [style.--i]="i % 10" - animación desactivada -->
-          <app-francesinha-card [francesinha]="f"
-                                [isFavorite]="favoriteIds().has(f.id)"
-                                (favoriteToggled)="onFavoriteToggle(f.id)"/>
-        }
-      </div>
-    }
+		<!-- Grid de cards -->
+		@if (francesinhasList().length > 0) {
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+				@for (f of francesinhasList(); track f.id; let i = $index) {
+					<!-- animate.enter="card-enter" [style.--i]="i % 10" - animación desactivada -->
+					<app-francesinha-card (favoriteToggled)="onFavoriteToggle(f.id)"
+					                      [francesinha]="f"
+					                      [isFavorite]="favoriteIds().has(f.id)"/>
+				}
+			</div>
+		}
 
-    <!-- Estado vacío -->
-    @if (francesinhasList().length === 0 && !isLoading()) {
-      <div class="text-center py-16 text-gray-400">
-        <mat-icon class="text-5xl! w-auto! h-auto! opacity-30">lunch_dining</mat-icon>
-        <p class="text-lg mt-2">No se encontraron francesinhas</p>
-        <p class="text-sm mt-1">Prueba con otros filtros</p>
-      </div>
-    }
+		<!-- Estado vacío -->
+		@if (francesinhasList().length === 0 && !isLoading()) {
+			<div class="text-center py-16 text-gray-400">
+				<mat-icon class="text-5xl! w-auto! h-auto! opacity-30">lunch_dining</mat-icon>
+				<p class="text-lg mt-2">No se encontraron francesinhas</p>
+				<p class="text-sm mt-1">Prueba con otros filtros</p>
+			</div>
+		}
 
-    <!-- Loading -->
-    @if (isLoading()) {
-      <div class="flex flex-col items-center justify-center gap-3 py-16">
-        <mat-spinner diameter="48" color="primary"/>
-        <p class="text-sm text-gray-400 animate-pulse">Cargando francesinhas...</p>
-      </div>
-    }
+		<!-- Loading -->
+		@if (isLoading()) {
+			<div class="flex flex-col items-center justify-center gap-3 py-16">
+				<mat-spinner color="primary" diameter="48"/>
+				<p class="text-sm text-gray-400 animate-pulse">Cargando francesinhas...</p>
+			</div>
+		}
 
-    <!-- Cargar más (botón manual, sustituido por scroll infinito)
-    @if (hayMas() && !isLoading()) {
-      <div class="flex justify-center mt-6">
-        <button mat-flat-button color="primary" (click)="loadMore()" style="min-width: 200px;">
-          <mat-icon>add</mat-icon>
-          Cargar más
-        </button>
-      </div>
-    }
-    -->
+		<!-- Cargar más (botón manual, sustituido por scroll infinito)
+		@if (hayMas() && !isLoading()) {
+			<div class="flex justify-center mt-6">
+				<button mat-flat-button color="primary" (click)="loadMore()" style="min-width: 200px;">
+					<mat-icon>add</mat-icon>
+					Cargar más
+				</button>
+			</div>
+		}
+		-->
 
-    <!-- Centinela para scroll infinito -->
-    <div #sentinel class="h-4"></div>
+		<!-- Centinela para scroll infinito -->
+		<div #sentinel class="h-4"></div>
 
-  </main>
+	</main>
 </div>

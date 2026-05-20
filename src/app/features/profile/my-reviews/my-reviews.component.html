@@ -4,7 +4,7 @@
 
 		<!-- Cabecera -->
 		<div class="flex items-center gap-2 mb-6">
-			<a mat-icon-button routerLink="/profile" matTooltip="Volver al perfil" aria-label="Volver al perfil">
+			<a aria-label="Volver al perfil" mat-icon-button matTooltip="Volver al perfil" routerLink="/profile">
 				<mat-icon>arrow_back</mat-icon>
 			</a>
 			<h1 class="text-2xl font-bold text-primary">Mis reviews</h1>
@@ -20,17 +20,17 @@
 					</mat-panel-title>
 				</mat-expansion-panel-header>
 
-				<form [formGroup]="filterForm" (ngSubmit)="search()">
+				<form (ngSubmit)="search()" [formGroup]="filterForm">
 
 					<div class="flex flex-col gap-3 md:flex-row md:flex-wrap pt-2">
 						<mat-form-field appearance="outline" class="flex-1">
 							<mat-label>Nombre</mat-label>
-							<input matInput formControlName="name" placeholder="Buscar..."/>
+							<input formControlName="name" matInput placeholder="Buscar..."/>
 						</mat-form-field>
 
 						<mat-form-field appearance="outline" class="flex-1">
 							<mat-label>Ciudad</mat-label>
-							<input matInput formControlName="city" placeholder="Ciudad..."/>
+							<input formControlName="city" matInput placeholder="Ciudad..."/>
 						</mat-form-field>
 
 						<mat-form-field appearance="outline" class="flex-1">
@@ -45,11 +45,11 @@
 					</div>
 
 					<mat-action-row>
-						<button mat-stroked-button type="button" (click)="reset()" class="!border !border-primary !text-primary">
+						<button (click)="reset()" class="!border !border-primary !text-primary" mat-stroked-button type="button">
 							<mat-icon>restart_alt</mat-icon>
 							Reset
 						</button>
-						<button mat-flat-button type="submit" color="primary">
+						<button color="primary" mat-flat-button type="submit">
 							<mat-icon>search</mat-icon>
 							Buscar
 						</button>
@@ -88,8 +88,8 @@
 						<!-- Fecha + link al detalle (misma fila, igual que my-proposals) -->
 						<div class="flex items-center justify-between gap-2">
 							<p class="text-xs text-gray-600">{{ r.createdAt | date:'mediumDate' }}</p>
-							<a [routerLink]="['/francesinhas', r.francesinhaId]"
-							   (click)="$event.stopPropagation()"
+							<a (click)="$event.stopPropagation()"
+							   [routerLink]="['/francesinhas', r.francesinhaId]"
 							   class="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-secondary text-secondary text-xs font-medium transition-colors hover:bg-secondary hover:text-white">
 								<span>Ver detalle</span>
 								<mat-icon class="!text-base !w-5 !h-5 !leading-5">arrow_forward</mat-icon>
@@ -100,8 +100,8 @@
 						<div
 							class="flex items-center justify-between text-sm text-primary font-semibold pt-3 mt-3 border-t border-gray-100">
 							<span>{{ expandedIds().has(r.id) ? 'Ocultar valoración' : 'Ver valoración' }}</span>
-							<mat-icon class="!text-base !w-4 !h-4 !leading-4 transition-transform"
-							          [class.rotate-180]="expandedIds().has(r.id)">expand_more
+							<mat-icon [class.rotate-180]="expandedIds().has(r.id)"
+							          class="!text-base !w-4 !h-4 !leading-4 transition-transform">expand_more
 							</mat-icon>
 						</div>
 
@@ -110,8 +110,8 @@
 						@if (expandedIds().has(r.id)) {
 							<div class="flex flex-row lg:flex-col gap-3 items-start mt-3">
 								@if (r.photoUrl) {
-									<img [src]="r.photoUrl"
-									     [alt]="r.francesinhaName"
+									<img [alt]="r.francesinhaName"
+									     [src]="r.photoUrl"
 									     class="w-32 h-32 lg:w-full lg:h-40 object-cover rounded-xl border-2 border-primary flex-shrink-0"/>
 								}
 								<div class="flex-1 w-full grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-1 text-sm">
@@ -150,7 +150,7 @@
 				<mat-icon class="text-5xl! w-auto! h-auto! opacity-30">rate_review</mat-icon>
 				<p class="text-lg mt-2">Aún no has hecho ninguna review</p>
 				<p class="text-sm mt-1 mb-4">Explora francesinhas y comparte tu opinión</p>
-				<a mat-flat-button color="primary" routerLink="/francesinhas">
+				<a color="primary" mat-flat-button routerLink="/francesinhas">
 					<mat-icon>lunch_dining</mat-icon>
 					Ir a francesinhas
 				</a>
@@ -160,7 +160,7 @@
 		<!-- Loading -->
 		@if (isLoading()) {
 			<div class="flex flex-col items-center justify-center gap-3 py-16">
-				<mat-spinner diameter="48" color="primary"/>
+				<mat-spinner color="primary" diameter="48"/>
 				<p class="text-sm text-gray-400 animate-pulse">Cargando reviews...</p>
 			</div>
 		}

@@ -7,7 +7,9 @@
 
 			<div class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4">
 				<div class="bg-accent border border-primary-400 rounded-full p-2 md:p-3 flex items-center justify-center">
-					<mat-icon class="!text-xl !w-5 !h-5 !leading-5 md:!text-2xl md:!w-6 md:!h-6 md:!leading-6 text-secondary">lunch_dining</mat-icon>
+					<mat-icon class="!text-xl !w-5 !h-5 !leading-5 md:!text-2xl md:!w-6 md:!h-6 md:!leading-6 text-secondary">
+						lunch_dining
+					</mat-icon>
 				</div>
 				<div class="flex flex-col">
 					<span class="text-2xl font-bold text-text-main">{{ stats().total }}</span>
@@ -17,7 +19,9 @@
 
 			<div class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4">
 				<div class="bg-orange-100 border border-orange-300 rounded-full p-2 md:p-3 flex items-center justify-center">
-					<mat-icon class="!text-xl !w-5 !h-5 !leading-5 md:!text-2xl md:!w-6 md:!h-6 md:!leading-6 text-orange-800!">hourglass_empty</mat-icon>
+					<mat-icon class="!text-xl !w-5 !h-5 !leading-5 md:!text-2xl md:!w-6 md:!h-6 md:!leading-6 text-orange-800!">
+						hourglass_empty
+					</mat-icon>
 				</div>
 				<div class="flex flex-col">
 					<span class="text-2xl font-bold text-orange-800">{{ stats().pending }}</span>
@@ -26,10 +30,13 @@
 			</div>
 
 			<!-- Aprobadas y Rechazadas son clicables: llevan al listado filtrado por ese estado -->
-			<a routerLink="/admin/proposals" [queryParams]="{ status: 'ACCEPTED' }"
-			   class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4 cursor-pointer hover:shadow-md hover:border-primary transition-all">
+			<a [queryParams]="{ status: 'ACCEPTED' }"
+			   class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4 cursor-pointer hover:shadow-md hover:border-primary transition-all"
+			   routerLink="/admin/proposals">
 				<div class="bg-green-100 border border-green-300 rounded-full p-2 md:p-3 flex items-center justify-center">
-					<mat-icon class="!text-xl !w-5 !h-5 !leading-5 md:!text-2xl md:!w-6 md:!h-6 md:!leading-6 text-green-800!">check_circle</mat-icon>
+					<mat-icon class="!text-xl !w-5 !h-5 !leading-5 md:!text-2xl md:!w-6 md:!h-6 md:!leading-6 text-green-800!">
+						check_circle
+					</mat-icon>
 				</div>
 				<div class="flex flex-col flex-1">
 					<span class="text-2xl font-bold text-green-800">{{ stats().accepted }}</span>
@@ -38,10 +45,13 @@
 				<mat-icon class="text-gray-400">chevron_right</mat-icon>
 			</a>
 
-			<a routerLink="/admin/proposals" [queryParams]="{ status: 'REJECTED' }"
-			   class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4 cursor-pointer hover:shadow-md hover:border-primary transition-all">
+			<a [queryParams]="{ status: 'REJECTED' }"
+			   class="bg-white rounded-2xl border border-gray-200 p-5 flex items-center gap-4 cursor-pointer hover:shadow-md hover:border-primary transition-all"
+			   routerLink="/admin/proposals">
 				<div class="bg-red-100 border border-red-300 rounded-full p-2 md:p-3 flex items-center justify-center">
-					<mat-icon class="!text-xl !w-5 !h-5 !leading-5 md:!text-2xl md:!w-6 md:!h-6 md:!leading-6 text-red-800!">cancel</mat-icon>
+					<mat-icon class="!text-xl !w-5 !h-5 !leading-5 md:!text-2xl md:!w-6 md:!h-6 md:!leading-6 text-red-800!">
+						cancel
+					</mat-icon>
 				</div>
 				<div class="flex flex-col flex-1">
 					<span class="text-2xl font-bold text-red-800">{{ stats().rejected }}</span>
@@ -82,17 +92,17 @@
 							</p>
 						</div>
 						<div class="flex gap-2">
-							<button type="button"
-							        class="flex-1 text-xs font-medium border border-red-300 text-red-800 bg-red-100 hover:bg-red-200 rounded-2xl py-1.5 flex items-center justify-center gap-1 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+							<button (click)="$event.stopPropagation(); reject(f)"
 							        [disabled]="processingId() === f.id"
-							        (click)="$event.stopPropagation(); reject(f)">
+							        class="flex-1 text-xs font-medium border border-red-300 text-red-800 bg-red-100 hover:bg-red-200 rounded-2xl py-1.5 flex items-center justify-center gap-1 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+							        type="button">
 								<mat-icon class="!text-base !w-4 !h-4 !leading-4">close</mat-icon>
 								RECHAZAR
 							</button>
-							<button type="button"
-							        class="flex-1 text-xs font-medium border border-green-300 text-green-800 bg-green-100 hover:bg-green-200 rounded-2xl py-1.5 flex items-center justify-center gap-1 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+							<button (click)="$event.stopPropagation(); approve(f)"
 							        [disabled]="processingId() === f.id"
-							        (click)="$event.stopPropagation(); approve(f)">
+							        class="flex-1 text-xs font-medium border border-green-300 text-green-800 bg-green-100 hover:bg-green-200 rounded-2xl py-1.5 flex items-center justify-center gap-1 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+							        type="button">
 								<mat-icon class="!text-base !w-4 !h-4 !leading-4">check</mat-icon>
 								APROBAR
 							</button>

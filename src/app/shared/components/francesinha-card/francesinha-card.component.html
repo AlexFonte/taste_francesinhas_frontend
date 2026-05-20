@@ -1,93 +1,98 @@
-<mat-card class="!rounded-2xl overflow-hidden h-full !shadow-sm cursor-pointer"
-          [routerLink]="['/francesinhas', francesinha().id]">
+<mat-card [routerLink]="['/francesinhas', francesinha().id]"
+          class="!rounded-2xl overflow-hidden h-full !shadow-sm cursor-pointer">
 
-  <!-- Imagen: cover de la review mas reciente con foto, o placeholder con icono si no hay ninguna -->
-  <div class="relative bg-tertiary/50 aspect-video flex items-center justify-center border-b border-b-primary overflow-hidden">
-    @if (francesinha().coverPhotoUrl) {
-      <img [src]="francesinha().coverPhotoUrl"
-           [alt]="francesinha().name"
-           class="absolute inset-0 w-full h-full object-cover"/>
-    } @else {
-      <div class="bg-white/60 border border-primary rounded-full p-4 shadow-xl">
-        <img src="icons/francesinha.svg" class="w-12 h-12 opacity-70" alt="Imagen taste francesinha"/>
-      </div>
-    }
+	<!-- Imagen: cover de la review mas reciente con foto, o placeholder con icono si no hay ninguna -->
+	<div
+		class="relative bg-tertiary/50 aspect-video flex items-center justify-center border-b border-b-primary overflow-hidden">
+		@if (francesinha().coverPhotoUrl) {
+			<img [alt]="francesinha().name"
+			     [src]="francesinha().coverPhotoUrl"
+			     class="absolute inset-0 w-full h-full object-cover"/>
+		} @else {
+			<div class="bg-white/60 border border-primary rounded-full p-4 shadow-xl">
+				<img alt="Imagen taste francesinha" class="w-12 h-12 opacity-70" src="icons/francesinha.svg"/>
+			</div>
+		}
 
-    <!-- Chip tipo - top left -->
-    <mat-chip class="!absolute !top-2 !left-2 !text-xs !h-6 bg-secondary cutom-header-chip !shadow-xl">
-      <i>{{ francesinha().type }}</i>
-    </mat-chip>
+		<!-- Chip tipo - top left -->
+		<mat-chip class="!absolute !top-2 !left-2 !text-xs !h-6 bg-secondary cutom-header-chip !shadow-xl">
+			<i>{{ francesinha().type }}</i>
+		</mat-chip>
 
-    <!-- boton favorito - solo si esta logeado -->
-    @if (isLoggedIn()) {
-      <button type="button"
-              (click)="onFavoriteClick($event)"
-              [attr.aria-label]="isFavorite() ? 'Quitar de favoritos' : 'Añadir a favoritos'"
-              class="absolute top-2 right-2 bg-white/80 rounded-full p-1.5 shadow-sm hover:bg-white hover:scale-110 transition-transform cursor-pointer flex items-center justify-center">
-        <mat-icon [class]="isFavorite() ? 'icon-filled !text-secondary' : '!text-secondary'">favorite</mat-icon>
-      </button>
-    }
-  </div>
+		<!-- boton favorito - solo si esta logeado -->
+		@if (isLoggedIn()) {
+			<button (click)="onFavoriteClick($event)"
+			        [attr.aria-label]="isFavorite() ? 'Quitar de favoritos' : 'Añadir a favoritos'"
+			        class="absolute top-2 right-2 bg-white/80 rounded-full p-1.5 shadow-sm hover:bg-white hover:scale-110 transition-transform cursor-pointer flex items-center justify-center"
+			        type="button">
+				<mat-icon [class]="isFavorite() ? 'icon-filled !text-secondary' : '!text-secondary'">favorite</mat-icon>
+			</button>
+		}
+	</div>
 
-  <mat-card-content class="!p-3 flex flex-col gap-1.5">
+	<mat-card-content class="!p-3 flex flex-col gap-1.5">
 
-    <!-- Nombre -->
-    <h2 class="font-bold text-lg line-clamp-1 !text-text-main">
-      {{ francesinha().name }}
-    </h2>
+		<!-- Nombre -->
+		<h2 class="font-bold text-lg line-clamp-1 !text-text-main">
+			{{ francesinha().name }}
+		</h2>
 
-    <!-- Restaurante -->
-    <p class="text-base text-gray-600 pt-1 line-clamp-1">
-      {{ francesinha().restaurant.name }} · {{ francesinha().restaurant.city }}
-    </p>
+		<!-- Restaurante -->
+		<p class="text-base text-gray-600 pt-1 line-clamp-1">
+			{{ francesinha().restaurant.name }} · {{ francesinha().restaurant.city }}
+		</p>
 
-    <!-- Badges -->
-    <div class="flex flex-nowrap gap-1.5 py-1.5 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+		<!-- Badges -->
+		<div class="flex flex-nowrap gap-1.5 py-1.5 overflow-x-auto [&::-webkit-scrollbar]:hidden">
 
-      @if (francesinha().hasFries) {
-        <span class="text-sm bg-amber-100 text-amber-900 border border-amber-300 px-2 py-0.5 rounded-full flex items-center gap-1">
-          <img src="icons/fries.svg" class="w-3.5 h-3.5" alt=""/> Patatas
+			@if (francesinha().hasFries) {
+				<span
+					class="text-sm bg-amber-100 text-amber-900 border border-amber-300 px-2 py-0.5 rounded-full flex items-center gap-1">
+          <img alt="" class="w-3.5 h-3.5" src="icons/fries.svg"/> Patatas
         </span>
-      }
+			}
 
-      @if (francesinha().hasEgg) {
-        <span class="text-sm bg-yellow-100 text-yellow-900 border border-yellow-300 px-2 py-0.5 rounded-full flex items-center gap-1">
-          <img src="icons/egg.svg" class="w-3.5 h-3.5" alt=""/> Huevo
+			@if (francesinha().hasEgg) {
+				<span
+					class="text-sm bg-yellow-100 text-yellow-900 border border-yellow-300 px-2 py-0.5 rounded-full flex items-center gap-1">
+          <img alt="" class="w-3.5 h-3.5" src="icons/egg.svg"/> Huevo
         </span>
-      }
+			}
 
-      @if (francesinha().isSpicy) {
-        <span class="text-sm bg-red-100 text-red-900 border border-red-300 px-2 py-0.5 rounded-full flex items-center gap-1">
-          <img src="icons/chilli.svg" class="w-3.5 h-3.5" alt=""/> Picante
+			@if (francesinha().isSpicy) {
+				<span
+					class="text-sm bg-red-100 text-red-900 border border-red-300 px-2 py-0.5 rounded-full flex items-center gap-1">
+          <img alt="" class="w-3.5 h-3.5" src="icons/chilli.svg"/> Picante
         </span>
-      }
+			}
 
-      @if (!francesinha().hasFries && !francesinha().hasEgg && !francesinha().isSpicy) {
-        <span class="invisible text-sm px-2 py-0.5 rounded-full">_</span>
-      }
-    </div>
+			@if (!francesinha().hasFries && !francesinha().hasEgg && !francesinha().isSpicy) {
+				<span class="invisible text-sm px-2 py-0.5 rounded-full">_</span>
+			}
+		</div>
 
-    <!-- Score + precio -->
-    <div class="flex items-center gap-2 mt-0.5 flex-wrap">
+		<!-- Score + precio -->
+		<div class="flex items-center gap-2 mt-0.5 flex-wrap">
 
-      <!-- Score -->
-      <div class="flex items-center gap-1">
-        <mat-icon class="icon-filled !text-yellow-400 !text-3xl !w-7 !h-7 !leading-7">star</mat-icon>
-        <span class="text-base font-semibold text-gray-700">{{ francesinha().avgScore | number:'1.2-2' }}</span>
-      </div>
+			<!-- Score -->
+			<div class="flex items-center gap-1">
+				<mat-icon class="icon-filled !text-yellow-400 !text-3xl !w-7 !h-7 !leading-7">star</mat-icon>
+				<span class="text-base font-semibold text-gray-700">{{ francesinha().avgScore | number:'1.2-2' }}</span>
+			</div>
 
-      <!-- Precio -->
-      <span class="text-base font-bold bg-primary/10 text-primary px-3 py-1 rounded-full ml-auto border border-primary/30">
+			<!-- Precio -->
+			<span
+				class="text-base font-bold bg-primary/10 text-primary px-3 py-1 rounded-full ml-auto border border-primary/30">
         {{ francesinha().price | number:'1.2-2' }} €
       </span>
 
-    </div>
+		</div>
 
-    <!-- Slot opcional para acciones contextuales (p.ej. eliminar de favoritos).
-         Se proyecta lo que el padre pase con el atributo card-actions. -->
-    <div class="mt-4" (click)="$event.stopPropagation()">
-      <ng-content select="[card-actions]"/>
-    </div>
-  </mat-card-content>
+		<!-- Slot opcional para acciones contextuales (p.ej. eliminar de favoritos).
+				 Se proyecta lo que el padre pase con el atributo card-actions. -->
+		<div (click)="$event.stopPropagation()" class="mt-4">
+			<ng-content select="[card-actions]"/>
+		</div>
+	</mat-card-content>
 
 </mat-card>

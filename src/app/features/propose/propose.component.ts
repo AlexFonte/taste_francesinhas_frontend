@@ -1,33 +1,31 @@
-import { Component, inject, signal, computed, effect } from '@angular/core';
-import { CommonModule, Location } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
-import { NonNullableFormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { DirtyOrTouchedErrorStateMatcher } from '../../shared/error-state-matchers/dirty-or-touched.matcher';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { debounceTime, switchMap, startWith } from 'rxjs';
-import { toSignal, takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FrancesinhaType } from '../../core/models/francesinha.model';
-import { FRANCESINHA_TYPE_OPTIONS } from '../../core/constants/francesinha-types.const';
-import { Restaurant } from '../../core/models/restaurant.model';
-import { FrancesinhaService } from '../../core/services/francesinha.service';
-import { RestaurantService } from '../../core/services/restaurant.service';
-import { ReviewService } from '../../core/services/review.service';
-import { FrancesinhaProposeRequest } from '../../core/models/francesinha.model';
-import { RestaurantRequest } from '../../core/models/restaurant.model';
-import { ReviewRequest } from '../../core/models/review.model';
-import { ToastService } from '../../shared/services/toast.service';
-import { ReviewFormComponent } from '../../shared/components/review-form/review-form.component';
-import { ReviewForm } from '../../shared/components/review-form/review-form.types';
-import { PhotoUploaderComponent } from '../../shared/components/photo-uploader/photo-uploader.component';
-import { ExistingRestaurantForm, NewRestaurantForm, FrancesinhaForm } from './propose.types';
+import {Component, computed, effect, inject, signal} from '@angular/core';
+import {CommonModule, Location} from '@angular/common';
+import {ActivatedRoute, Router} from '@angular/router';
+import {HttpErrorResponse} from '@angular/common/http';
+import {NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {DirtyOrTouchedErrorStateMatcher} from '../../shared/error-state-matchers/dirty-or-touched.matcher';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {debounceTime, startWith, switchMap} from 'rxjs';
+import {takeUntilDestroyed, toSignal} from '@angular/core/rxjs-interop';
+import {FrancesinhaProposeRequest, FrancesinhaType} from '../../core/models/francesinha.model';
+import {FRANCESINHA_TYPE_OPTIONS} from '../../core/constants/francesinha-types.const';
+import {Restaurant, RestaurantRequest} from '../../core/models/restaurant.model';
+import {FrancesinhaService} from '../../core/services/francesinha.service';
+import {RestaurantService} from '../../core/services/restaurant.service';
+import {ReviewService} from '../../core/services/review.service';
+import {ReviewRequest} from '../../core/models/review.model';
+import {ToastService} from '../../shared/services/toast.service';
+import {ReviewFormComponent} from '../../shared/components/review-form/review-form.component';
+import {ReviewForm} from '../../shared/components/review-form/review-form.types';
+import {PhotoUploaderComponent} from '../../shared/components/photo-uploader/photo-uploader.component';
+import {ExistingRestaurantForm, FrancesinhaForm, NewRestaurantForm} from './propose.types';
 
 @Component({
   selector: 'app-propose',
@@ -47,69 +45,93 @@ import { ExistingRestaurantForm, NewRestaurantForm, FrancesinhaForm } from './pr
     PhotoUploaderComponent,
   ],
   templateUrl: './propose.component.html',
-  styleUrl:    './propose.component.scss',
+  styleUrl: './propose.component.scss',
 })
 export class ProposeComponent {
 
-  private readonly fb                 = inject(NonNullableFormBuilder);
-  private readonly router             = inject(Router);
-  private readonly route              = inject(ActivatedRoute);
-  private readonly location           = inject(Location);
-  private readonly restaurantService  = inject(RestaurantService);
-  private readonly francesinhaService = inject(FrancesinhaService);
-  private readonly reviewService      = inject(ReviewService);
-  private readonly toastService       = inject(ToastService);
-
-  readonly isLoading    = signal(false);
+  readonly isLoading = signal(false);
   readonly errorMessage = signal<string | null>(null);
-  readonly matcher      = new DirtyOrTouchedErrorStateMatcher();
+  readonly matcher = new DirtyOrTouchedErrorStateMatcher();
   // Foto opcional que se sube junto con la review de la propuesta.
-  readonly photo        = signal<File | null>(null);
-
+  readonly photo = signal<File | null>(null);
   readonly tiposFrancesinhas = FRANCESINHA_TYPE_OPTIONS;
-
   // Toggle: false = restaurante existente, true = nuevo restaurante
   readonly newRestaurantMode = signal(false);
-  // Cuando vienen con ?restaurantId=X bloqueamos el panel de restaurante para que no
   // se pueda cambiar la seleccion ni alternar al modo 'Nuevo restaurante'.
   readonly restaurantLocked = signal(false);
-
-  // Sub-form para restaurante existente: solo el id + texto de busqueda.
-  // restaurantId es FormControl<number | null> porque arranca null y se rellena al seleccionar.
-  readonly existingRestaurantForm: ExistingRestaurantForm = this.fb.group({
-    search:       [''],
-    restaurantId: this.fb.control<number | null>(null, [Validators.required]),
-  });
-
-  // Sub-form para restaurante nuevo: todos los datos
-  readonly newRestaurantForm: NewRestaurantForm = this.fb.group({
-    name:    ['', [Validators.required, Validators.maxLength(100)]],
-    city:    ['', [Validators.required, Validators.maxLength(100)]],
-    address: ['', [Validators.maxLength(200)]],
-    phone:   ['', [Validators.maxLength(30)]],
-  });
-
-  // price arranca null hasta que el usuario introduce un valor; el resto son NonNullable.
-  readonly francesinhaForm: FrancesinhaForm = this.fb.group({
-    name:        ['', [Validators.required, Validators.maxLength(100)]],
-    description: ['', [Validators.maxLength(500)]],
-    type:        this.fb.control<FrancesinhaType>('CLASICA', [Validators.required]),
-    price:       this.fb.control<number | null>(null, [Validators.required, Validators.min(0.01)]),
-    hasFries:    [false],
-    hasEgg:      [false],
-    isSpicy:     [false],
-  });
-
-  readonly reviewForm: ReviewForm = this.fb.group({
-    scoreFlavor:       [3, [Validators.required, Validators.min(1), Validators.max(5)]],
-    scoreSauce:        [3, [Validators.required, Validators.min(1), Validators.max(5)]],
-    scoreBread:        [3, [Validators.required, Validators.min(1), Validators.max(5)]],
-    scorePresentation: [3, [Validators.required, Validators.min(1), Validators.max(5)]],
-    comment:           ['', [Validators.required]],
-  });
-
   // Autocomplete de restaurantes existentes
   readonly restaurantOptions = signal<Restaurant[]>([]);
+  private readonly fb = inject(NonNullableFormBuilder);
+  // restaurantId es FormControl<number | null> porque arranca null y se rellena al seleccionar.
+  readonly existingRestaurantForm: ExistingRestaurantForm = this.fb.group({
+    search: [''],
+    restaurantId: this.fb.control<number | null>(null, [Validators.required]),
+  });
+  // Sub-form para restaurante nuevo: todos los datos
+  readonly newRestaurantForm: NewRestaurantForm = this.fb.group({
+    name: ['', [Validators.required, Validators.maxLength(100)]],
+    city: ['', [Validators.required, Validators.maxLength(100)]],
+    address: ['', [Validators.maxLength(200)]],
+    phone: ['', [Validators.maxLength(30)]],
+  });
+  // price arranca null hasta que el usuario introduce un valor; el resto son NonNullable.
+  readonly francesinhaForm: FrancesinhaForm = this.fb.group({
+    name: ['', [Validators.required, Validators.maxLength(100)]],
+    description: ['', [Validators.maxLength(500)]],
+    type: this.fb.control<FrancesinhaType>('CLASICA', [Validators.required]),
+    price: this.fb.control<number | null>(null, [Validators.required, Validators.min(0.01)]),
+    hasFries: [false],
+    hasEgg: [false],
+    isSpicy: [false],
+  });
+  readonly reviewForm: ReviewForm = this.fb.group({
+    scoreFlavor: [3, [Validators.required, Validators.min(1), Validators.max(5)]],
+    scoreSauce: [3, [Validators.required, Validators.min(1), Validators.max(5)]],
+    scoreBread: [3, [Validators.required, Validators.min(1), Validators.max(5)]],
+    scorePresentation: [3, [Validators.required, Validators.min(1), Validators.max(5)]],
+    comment: ['', [Validators.required]],
+  });
+  private readonly router = inject(Router);
+  // Cuando vienen con ?restaurantId=X bloqueamos el panel de restaurante para que no
+  private readonly route = inject(ActivatedRoute);
+
+  // Sub-form para restaurante existente: solo el id + texto de busqueda.
+  private readonly location = inject(Location);
+  private readonly restaurantService = inject(RestaurantService);
+  private readonly francesinhaService = inject(FrancesinhaService);
+  private readonly reviewService = inject(ReviewService);
+  private readonly toastService = inject(ToastService);
+  // cambia la validacion de cualquier form, no solo cuando cambia el toggle.
+  private readonly existingStatus = toSignal(
+      this.existingRestaurantForm.statusChanges.pipe(startWith(this.existingRestaurantForm.status)),
+      {initialValue: this.existingRestaurantForm.status},
+  );
+  private readonly newStatus = toSignal(
+      this.newRestaurantForm.statusChanges.pipe(startWith(this.newRestaurantForm.status)),
+      {initialValue: this.newRestaurantForm.status},
+  );
+  private readonly francesinhaStatus = toSignal(
+      this.francesinhaForm.statusChanges.pipe(startWith(this.francesinhaForm.status)),
+      {initialValue: this.francesinhaForm.status},
+  );
+
+  // Convertimos statusChanges a signals para que isFormValid reaccione cuando
+  private readonly reviewStatus = toSignal(
+      this.reviewForm.statusChanges.pipe(startWith(this.reviewForm.status)),
+      {initialValue: this.reviewForm.status},
+  );
+  readonly isFormValid = computed(() => {
+    // Si viene bloqueado por ?restaurantId=X el form esta deshabilitado (status DISABLED),
+    // pero el restaurantId ya esta seleccionado por construccion -> lo damos por valido.
+    const restaurantOk = this.restaurantLocked()
+        ? this.existingRestaurantForm.controls.restaurantId.value != null
+        : this.newRestaurantMode()
+            ? this.newStatus() === 'VALID'
+            : this.existingStatus() === 'VALID';
+    return restaurantOk
+        && this.francesinhaStatus() === 'VALID'
+        && this.reviewStatus() === 'VALID';
+  });
 
   constructor() {
     // Activa/desactiva el sub-form segun el toggle.
@@ -132,12 +154,12 @@ export class ProposeComponent {
 		// seguiria disparando HTTP requests -> Puede provocar errores por eso el takeUntilDestryoed
 		//esto hara que solo funcione hasta salir del componente
     this.existingRestaurantForm.controls.search.valueChanges
-      .pipe(
-        debounceTime(250),
-        switchMap(term => this.restaurantService.getAll({ name: term ?? '' }, 0, 10)),
-        takeUntilDestroyed(),
-      )
-      .subscribe(res => this.restaurantOptions.set(res.restaurants));
+        .pipe(
+            debounceTime(250),
+            switchMap(term => this.restaurantService.getAll({name: term ?? ''}, 0, 10)),
+            takeUntilDestroyed(),
+        )
+        .subscribe(res => this.restaurantOptions.set(res.restaurants));
 
     // Si vienen con ?restaurantId=X (desde el listado de restaurantes), precargamos
     // el restaurante en el modo 'existente' y bloqueamos el panel para que no se pueda
@@ -148,7 +170,7 @@ export class ProposeComponent {
       this.restaurantService.getById(id).subscribe({
         next: r => {
           this.newRestaurantMode.set(false);
-          this.existingRestaurantForm.controls.search.setValue(this.displayRestaurant(r), { emitEvent: false });
+          this.existingRestaurantForm.controls.search.setValue(this.displayRestaurant(r), {emitEvent: false});
           this.existingRestaurantForm.controls.restaurantId.setValue(r.id);
           this.newRestaurantForm.disable();
           this.existingRestaurantForm.disable();
@@ -170,45 +192,6 @@ export class ProposeComponent {
     return `${r.name} · ${r.city}`;
   };
 
-  // Convertimos statusChanges a signals para que isFormValid reaccione cuando
-  // cambia la validacion de cualquier form, no solo cuando cambia el toggle.
-  private readonly existingStatus = toSignal(
-    this.existingRestaurantForm.statusChanges.pipe(startWith(this.existingRestaurantForm.status)),
-    { initialValue: this.existingRestaurantForm.status },
-  );
-  private readonly newStatus = toSignal(
-    this.newRestaurantForm.statusChanges.pipe(startWith(this.newRestaurantForm.status)),
-    { initialValue: this.newRestaurantForm.status },
-  );
-  private readonly francesinhaStatus = toSignal(
-    this.francesinhaForm.statusChanges.pipe(startWith(this.francesinhaForm.status)),
-    { initialValue: this.francesinhaForm.status },
-  );
-  private readonly reviewStatus = toSignal(
-    this.reviewForm.statusChanges.pipe(startWith(this.reviewForm.status)),
-    { initialValue: this.reviewForm.status },
-  );
-
-  readonly isFormValid = computed(() => {
-    // Si viene bloqueado por ?restaurantId=X el form esta deshabilitado (status DISABLED),
-    // pero el restaurantId ya esta seleccionado por construccion -> lo damos por valido.
-    const restaurantOk = this.restaurantLocked()
-      ? this.existingRestaurantForm.controls.restaurantId.value != null
-      : this.newRestaurantMode()
-        ? this.newStatus() === 'VALID'
-        : this.existingStatus() === 'VALID';
-    return restaurantOk
-      && this.francesinhaStatus() === 'VALID'
-      && this.reviewStatus() === 'VALID';
-  });
-
-  private markAllTouched(): void {
-    this.francesinhaForm.markAllAsTouched();
-    this.reviewForm.markAllAsTouched();
-    if (this.newRestaurantMode()) this.newRestaurantForm.markAllAsTouched();
-    else                          this.existingRestaurantForm.markAllAsTouched();
-  }
-
   submit(): void {
     if (this.isLoading()) return;
     if (!this.isFormValid()) {
@@ -228,17 +211,42 @@ export class ProposeComponent {
     }
   }
 
+  onPhotoSelected(file: File | null): void {
+    this.photo.set(file);
+  }
+
+  // El boton "Volver" usa Location.back() para regresar a la pagina previa
+  cancel(): void {
+    // Guard: si la propuesta se esta enviando no volvemos al apagina anterior.
+    if (this.isLoading()) return;
+    this.location.back();
+  }
+
+  // Redondeamos a 2 decimales cuando pierde foco.
+  formatPrice(): void {
+    const v = this.francesinhaForm.controls.price.value;
+    if (v == null || isNaN(v)) return;
+    this.francesinhaForm.controls.price.setValue(Number(v.toFixed(2)), {emitEvent: false});
+  }
+
+  private markAllTouched(): void {
+    this.francesinhaForm.markAllAsTouched();
+    this.reviewForm.markAllAsTouched();
+    if (this.newRestaurantMode()) this.newRestaurantForm.markAllAsTouched();
+    else this.existingRestaurantForm.markAllAsTouched();
+  }
+
   private submitWithNewRestaurant(): void {
     const r = this.newRestaurantForm.getRawValue();
     const payload: RestaurantRequest = {
-      name:    r.name,
-      city:    r.city,
+      name: r.name,
+      city: r.city,
       address: r.address || undefined,
-      phone:   r.phone   || undefined,
+      phone: r.phone || undefined,
     };
     this.restaurantService.create(payload).subscribe({
-      next:  created => this.submitWithExistingRestaurant(created.id),
-      error: err     => this.handleError(err, 'No se pudo crear el restaurante'),
+      next: created => this.submitWithExistingRestaurant(created.id),
+      error: err => this.handleError(err, 'No se pudo crear el restaurante'),
     });
   }
 
@@ -248,17 +256,17 @@ export class ProposeComponent {
     if (f.price == null) return;
     const payload: FrancesinhaProposeRequest = {
       restaurantId,
-      name:        f.name,
+      name: f.name,
       description: f.description || undefined,
-      price:       f.price,
-      hasEgg:      f.hasEgg,
-      hasFries:    f.hasFries,
-      isSpicy:     f.isSpicy,
-      type:        f.type,
+      price: f.price,
+      hasEgg: f.hasEgg,
+      hasFries: f.hasFries,
+      isSpicy: f.isSpicy,
+      type: f.type,
     };
     this.francesinhaService.propose(payload).subscribe({
-      next:  created => this.submitReview(created.id),
-      error: err     => this.handleError(err, 'No se pudo proponer la francesinha'),
+      next: created => this.submitReview(created.id),
+      error: err => this.handleError(err, 'No se pudo proponer la francesinha'),
     });
   }
 
@@ -277,24 +285,8 @@ export class ProposeComponent {
     });
   }
 
-  onPhotoSelected(file: File | null): void {
-    this.photo.set(file);
-  }
-
   private handleError(err: HttpErrorResponse, fallback: string): void {
     this.isLoading.set(false);
     this.errorMessage.set(err.error?.detail ?? fallback);
-  }
-
-  // El boton "Volver" usa Location.back() para regresar a la pagina previa
-  cancel(): void {
-    this.location.back();
-  }
-
-  // Redondeamos a 2 decimales cuando pierde foco.
-  formatPrice(): void {
-    const v = this.francesinhaForm.controls.price.value;
-    if (v == null || isNaN(v)) return;
-    this.francesinhaForm.controls.price.setValue(Number(v.toFixed(2)), { emitEvent: false });
   }
 }

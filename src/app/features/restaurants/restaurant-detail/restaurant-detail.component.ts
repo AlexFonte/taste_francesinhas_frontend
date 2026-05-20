@@ -1,18 +1,18 @@
-import { Component, computed, inject, signal } from '@angular/core';
-import { CommonModule, Location } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Restaurant } from '../../../core/models/restaurant.model';
-import { Francesinha } from '../../../core/models/francesinha.model';
-import { RestaurantService } from '../../../core/services/restaurant.service';
-import { FrancesinhaService } from '../../../core/services/francesinha.service';
-import { FavoriteService } from '../../../core/services/favorite.service';
-import { AuthService } from '../../../core/services/auth.service';
-import { ToastService } from '../../../shared/services/toast.service';
-import { FrancesinhaCardComponent } from '../../../shared/components/francesinha-card/francesinha-card.component';
+import {Component, computed, inject, signal} from '@angular/core';
+import {CommonModule, Location} from '@angular/common';
+import {ActivatedRoute, Router} from '@angular/router';
+import {HttpErrorResponse} from '@angular/common/http';
+import {MatButtonModule} from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {Restaurant} from '../../../core/models/restaurant.model';
+import {Francesinha} from '../../../core/models/francesinha.model';
+import {RestaurantService} from '../../../core/services/restaurant.service';
+import {FrancesinhaService} from '../../../core/services/francesinha.service';
+import {FavoriteService} from '../../../core/services/favorite.service';
+import {AuthService} from '../../../core/services/auth.service';
+import {ToastService} from '../../../shared/services/toast.service';
+import {FrancesinhaCardComponent} from '../../../shared/components/francesinha-card/francesinha-card.component';
 
 @Component({
   selector: 'app-restaurant-detail',
@@ -25,63 +25,35 @@ import { FrancesinhaCardComponent } from '../../../shared/components/francesinha
     FrancesinhaCardComponent,
   ],
   templateUrl: './restaurant-detail.component.html',
-  styleUrl:    './restaurant-detail.component.scss',
+  styleUrl: './restaurant-detail.component.scss',
 })
 export class RestaurantDetailComponent {
 
-  private readonly route              = inject(ActivatedRoute);
-  private readonly router             = inject(Router);
-  private readonly location           = inject(Location);
-  private readonly restaurantService  = inject(RestaurantService);
-  private readonly francesinhaService = inject(FrancesinhaService);
-  private readonly favoriteService    = inject(FavoriteService);
-  private readonly authService        = inject(AuthService);
-  private readonly toast              = inject(ToastService);
-
-  readonly restaurant   = signal<Restaurant | null>(null);
+  readonly restaurant = signal<Restaurant | null>(null);
   readonly francesinhas = signal<Francesinha[]>([]);
-  readonly favoriteIds  = signal<Set<number>>(new Set());
-  readonly isLoading    = signal(false);
+  readonly favoriteIds = signal<Set<number>>(new Set());
+  readonly isLoading = signal(false);
   readonly errorMessage = signal<string | null>(null);
-
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly location = inject(Location);
+  private readonly restaurantService = inject(RestaurantService);
+  private readonly francesinhaService = inject(FrancesinhaService);
+  private readonly favoriteService = inject(FavoriteService);
+  private readonly authService = inject(AuthService);
   // Solo USER ve el boton "Proponer francesinha"
   readonly isUser = computed(() => this.authService.role() === 'USER');
+  private readonly toast = inject(ToastService);
 
   constructor() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
+    if (Number.isNaN(id)) {
+      this.router.navigate(['/restaurants']);
+      return;
+    }
     this.load(id);
   }
 
-  private load(id: number): void {
-    this.isLoading.set(true);
-    this.errorMessage.set(null);
-
-    this.restaurantService.getById(id).subscribe({
-      next: r => {
-        this.restaurant.set(r);
-        // Cargamos las francesinhas del restaurante (todas, sin paginar para esta pantalla)
-        this.francesinhaService.getAllFrancesinhas({ restaurantId: id }, 0, 100).subscribe({
-          next: res => {
-            this.francesinhas.set(res.francesinhas);
-            this.isLoading.set(false);
-          },
-          error: () => this.isLoading.set(false),
-        });
-        // Si esta logueado cargamos los favoritos para pintar el corazon en cada card
-        if (this.authService.isLoggedIn()) {
-          this.favoriteService.getFavoriteIds().subscribe({
-            next: ids => this.favoriteIds.set(ids),
-          });
-        }
-      },
-      error: (err: HttpErrorResponse) => {
-        this.errorMessage.set(err.error?.detail ?? 'No se pudo cargar el restaurante');
-        this.isLoading.set(false);
-      },
-    });
-  }
-
-	// Cambiamos el valor al instante, y enviamos la peticion al backend
 	// Si la peticion falla, rollback y mostramos un toast.
   onFavoriteToggle(francesinhaId: number): void {
     const wasFavorite = this.favoriteIds().has(francesinhaId);
@@ -105,6 +77,8 @@ export class RestaurantDetailComponent {
     });
   }
 
+  // Cambiamos el valor al instante, y enviamos la peticion al backend
+
   back(): void {
     this.location.back();
   }
@@ -112,6 +86,35 @@ export class RestaurantDetailComponent {
   proponer(): void {
     const r = this.restaurant();
     if (!r) return;
-    this.router.navigate(['/propose'], { queryParams: { restaurantId: r.id } });
+    this.router.navigate(['/propose'], {queryParams: {restaurantId: r.id}});
+  }
+
+  private load(id: number): void {
+    this.isLoading.set(true);
+    this.errorMessage.set(null);
+
+    this.restaurantService.getById(id).subscribe({
+      next: r => {
+        this.restaurant.set(r);
+        // Cargamos las francesinhas del restaurante (todas, sin paginar para esta pantalla)
+        this.francesinhaService.getAllFrancesinhas({restaurantId: id}, 0, 100).subscribe({
+          next: res => {
+            this.francesinhas.set(res.francesinhas);
+            this.isLoading.set(false);
+          },
+          error: () => this.isLoading.set(false),
+        });
+        // Si esta logueado cargamos los favoritos para pintar el corazon en cada card
+        if (this.authService.isLoggedIn()) {
+          this.favoriteService.getFavoriteIds().subscribe({
+            next: ids => this.favoriteIds.set(ids),
+          });
+        }
+      },
+      error: (err: HttpErrorResponse) => {
+        this.errorMessage.set(err.error?.detail ?? 'No se pudo cargar el restaurante');
+        this.isLoading.set(false);
+      },
+    });
   }
 }

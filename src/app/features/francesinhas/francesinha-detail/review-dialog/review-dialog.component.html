@@ -1,5 +1,5 @@
 <div class="border-b! border-gray-200! leading-tight!">
-	<h2 mat-dialog-title class="!font-bold !text-text-main text-base m-0">{{ data.francesinhaName }}<br>
+	<h2 class="!font-bold !text-text-main text-base m-0" mat-dialog-title>{{ data.francesinhaName }}<br>
 		<span class="text-sm text-gray-700 font-medium mt-0.5">{{ data.restaurantName }} · {{ data.restaurantCity }}</span>
 	</h2>
 
@@ -23,13 +23,13 @@
 }
 
 <mat-dialog-actions class="flex! items-center! justify-center! px-4! pb-3! pt-2! gap-2! border-t! border-gray-200!">
-	<button mat-stroked-button (click)="cancel()">
+	<button (click)="cancel()" [disabled]="isLoading()" mat-stroked-button>
       <span class="flex items-center gap-1">
         <mat-icon>close</mat-icon>
         Cancelar
       </span>
 	</button>
-	<button mat-flat-button color="primary" (click)="submit()" [disabled]="isLoading() || form.invalid">
+	<button (click)="submit()" [disabled]="isLoading() || form.invalid" color="primary" mat-flat-button>
 		@if (isLoading()) {
 			<mat-spinner diameter="18"/>
 		} @else {

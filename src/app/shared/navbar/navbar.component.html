@@ -1,36 +1,36 @@
 <!-- HEADER -->
 <header class="bg-white shadow-sm px-4 py-3 grid grid-cols-[auto_1fr_auto] items-center gap-2">
 
-  <div class="flex items-center gap-2 cursor-pointer" routerLink="/">
-    <img src="fran_huevo-sinfondo.png" class="w-10 h-10 md:w-12 md:h-12 opacity-90" alt="Taste Francesinhas"/>
-    <h1 class="text-lg font-bold text-primary md:text-xl">Taste Francesinhas</h1>
-  </div>
+	<div class="flex items-center gap-2 cursor-pointer" routerLink="/">
+		<img alt="Taste Francesinhas" class="w-10 h-10 md:w-12 md:h-12 opacity-90" src="fran_huevo-sinfondo.png"/>
+		<h1 class="text-lg font-bold text-primary md:text-xl">Taste Francesinhas</h1>
+	</div>
 
-  <!-- nav solo visible en desktop, en movil actua de spacer -->
-  <nav class="hidden lg:flex items-center justify-center gap-1">
-    @for (item of navItems(); track item.route) {
-      <app-nav-item [item]="item" variant="desktop" />
-    }
-  </nav>
-  <div class="lg:hidden"></div>
+	<!-- nav solo visible en desktop, en movil actua de spacer -->
+	<nav class="hidden lg:flex items-center justify-center gap-1">
+		@for (item of navItems(); track item.route) {
+			<app-nav-item [item]="item" variant="desktop"/>
+		}
+	</nav>
+	<div class="lg:hidden"></div>
 
-  <!-- nombre y boton de logout -->
-  @if (isLoggedIn()) {
-    <div class="flex items-center gap-1">
-      <span class="hidden sm:block text-sm font-medium text-secondary">Bienvenido, {{ userName() }}!</span>
-      <button mat-icon-button (click)="logout()" matTooltip="Cerrar sesión" class="text-gray-500">
-        <mat-icon>logout</mat-icon>
-      </button>
-    </div>
-  } @else {
-    <div></div>
-  }
+	<!-- nombre y boton de logout -->
+	@if (isLoggedIn()) {
+		<div class="flex items-center gap-1">
+			<span class="hidden sm:block text-sm font-medium text-secondary">Bienvenido, {{ userName() }}!</span>
+			<button (click)="logout()" class="text-gray-500" mat-icon-button matTooltip="Cerrar sesión">
+				<mat-icon>logout</mat-icon>
+			</button>
+		</div>
+	} @else {
+		<div></div>
+	}
 
 </header>
 
 <!-- NAV INFERIOR - movil y tablet -->
 <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 flex">
-  @for (item of navItems(); track item.route) {
-    <app-nav-item [item]="item" variant="mobile" />
-  }
+	@for (item of navItems(); track item.route) {
+		<app-nav-item [item]="item" variant="mobile"/>
+	}
 </nav>

@@ -1,102 +1,104 @@
 <div class="min-h-screen">
 
-  <main class="px-4 py-4 pb-24 md:pb-6 md:px-6 md:py-6 max-w-6xl mx-auto">
+	<main class="px-4 py-4 pb-24 md:pb-6 md:px-6 md:py-6 max-w-6xl mx-auto">
 
-    <!-- Cabecera -->
-    <div class="flex items-center gap-2 mb-4">
-      <a mat-icon-button routerLink="/admin" matTooltip="Volver al panel" aria-label="Volver al panel">
-        <mat-icon>arrow_back</mat-icon>
-      </a>
-      <h1 class="text-2xl font-bold text-primary">Propuestas revisadas</h1>
-    </div>
+		<!-- Cabecera -->
+		<div class="flex items-center gap-2 mb-4">
+			<a aria-label="Volver al panel" mat-icon-button matTooltip="Volver al panel" routerLink="/admin">
+				<mat-icon>arrow_back</mat-icon>
+			</a>
+			<h1 class="text-2xl font-bold text-primary">Propuestas revisadas</h1>
+		</div>
 
-    <!-- Filtros de estado: aprobadas / rechazadas -->
-    <div class="flex flex-wrap justify-center gap-2 mb-4" role="group" aria-label="Filtrar por estado">
-      @for (opt of statusOptions; track opt.value) {
-        <button matRipple [matRippleColor]="'rgba(0, 0, 0, 0.12)'"
-                (click)="onStatusChange(opt.value)"
-                class="flex items-center gap-1.5 px-4 py-2 rounded-full border text-sm font-medium overflow-hidden transition-all duration-200 active:scale-95"
-                [ngClass]="statusFilter() === opt.value ? opt.activeClass : opt.inactiveClass">
-          <mat-icon class="!text-base !w-4 !h-4 !leading-4">{{ opt.icon }}</mat-icon>
-          {{ opt.label }}
-        </button>
-      }
-    </div>
+		<!-- Filtros de estado: aprobadas / rechazadas -->
+		<div aria-label="Filtrar por estado" class="flex flex-wrap justify-center gap-2 mb-4" role="group">
+			@for (opt of statusOptions; track opt.value) {
+				<button (click)="onStatusChange(opt.value)" [matRippleColor]="'rgba(0, 0, 0, 0.12)'"
+				        [ngClass]="statusFilter() === opt.value ? opt.activeClass : opt.inactiveClass"
+				        class="flex items-center gap-1.5 px-4 py-2 rounded-full border text-sm font-medium overflow-hidden transition-all duration-200 active:scale-95"
+				        matRipple>
+					<mat-icon class="!text-base !w-4 !h-4 !leading-4">{{ opt.icon }}</mat-icon>
+					{{ opt.label }}
+				</button>
+			}
+		</div>
 
-    <!-- Lista -->
-    @if (proposals().length > 0) {
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 items-start">
-        @for (f of proposals(); track f.id) {
+		<!-- Lista -->
+		@if (proposals().length > 0) {
+			<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 items-start">
+				@for (f of proposals(); track f.id) {
 
-          <!-- Cada card lleva al detalle de admin (sirve para cualquier estado) -->
-          <a [routerLink]="['/admin/pending', f.id]"
-             class="border border-gray-200 rounded-2xl p-4 bg-white flex flex-col gap-3 cursor-pointer hover:border-primary hover:shadow-md transition-all">
+					<!-- Cada card lleva al detalle de admin (sirve para cualquier estado) -->
+					<a [routerLink]="['/admin/pending', f.id]"
+					   class="border border-gray-200 rounded-2xl p-4 bg-white flex flex-col gap-3 cursor-pointer hover:border-primary hover:shadow-md transition-all">
 
-            <!-- Cabecera: nombre + badge de estado -->
-            <div class="flex items-start justify-between gap-2">
-              <div class="flex-1 min-w-0">
-                <h2 class="font-bold text-base text-text-main line-clamp-1 uppercase">{{ f.name }}</h2>
-                <p class="text-sm text-gray-500 line-clamp-1">{{ f.restaurant.name }} · {{ f.restaurant.city }}</p>
-              </div>
-              @if (f.status === 'ACCEPTED') {
-                <span class="text-xs bg-green-100 text-green-800 border border-green-300 px-2 py-0.5 rounded-full flex-shrink-0">
+						<!-- Cabecera: nombre + badge de estado -->
+						<div class="flex items-start justify-between gap-2">
+							<div class="flex-1 min-w-0">
+								<h2 class="font-bold text-base text-text-main line-clamp-1 uppercase">{{ f.name }}</h2>
+								<p class="text-sm text-gray-500 line-clamp-1">{{ f.restaurant.name }} · {{ f.restaurant.city }}</p>
+							</div>
+							@if (f.status === 'ACCEPTED') {
+								<span
+									class="text-xs bg-green-100 text-green-800 border border-green-300 px-2 py-0.5 rounded-full flex-shrink-0">
                   Aprobada
                 </span>
-              } @else if (f.status === 'REJECTED') {
-                <span class="text-xs bg-red-100 text-red-800 border border-red-300 px-2 py-0.5 rounded-full flex-shrink-0">
+							} @else if (f.status === 'REJECTED') {
+								<span
+									class="text-xs bg-red-100 text-red-800 border border-red-300 px-2 py-0.5 rounded-full flex-shrink-0">
                   Rechazada
                 </span>
-              }
-            </div>
+							}
+						</div>
 
-            <!-- Meta: propuesta por + fecha -->
-            <p class="text-xs text-gray-600">
-              Propuesta por
-              <span class="font-medium text-text-main">{{ f.proposedByEmail }}</span>
-              · {{ f.createdAt | date:'dd/MM/yyyy' }}
-            </p>
+						<!-- Meta: propuesta por + fecha -->
+						<p class="text-xs text-gray-600">
+							Propuesta por
+							<span class="font-medium text-text-main">{{ f.proposedByEmail }}</span>
+							· {{ f.createdAt | date:'dd/MM/yyyy' }}
+						</p>
 
-            <!-- Tipo + precio + media -->
-            <div class="flex items-center justify-between text-xs text-gray-600">
-              <span class="italic">{{ f.type }}</span>
-              <span class="flex items-center gap-3">
+						<!-- Tipo + precio + media -->
+						<div class="flex items-center justify-between text-xs text-gray-600">
+							<span class="italic">{{ f.type }}</span>
+							<span class="flex items-center gap-3">
                 <span class="font-semibold text-text-main">{{ f.price | number:'1.2-2' }}€</span>
                 <span class="flex items-center gap-1">
                   <mat-icon class="icon-filled !text-yellow-400 !text-base !w-4 !h-4 !leading-4">star</mat-icon>
                   <span class="font-semibold text-text-main">{{ f.avgScore | number:'1.2-2' }}</span>
                 </span>
               </span>
-            </div>
-          </a>
+						</div>
+					</a>
 
-        }
-      </div>
-    }
+				}
+			</div>
+		}
 
-    <!-- Estado vacio -->
-    @if (proposals().length === 0 && !isLoading()) {
-      <div class="text-center py-16 text-gray-400">
-        <mat-icon class="text-5xl! w-auto! h-auto! opacity-30">lunch_dining</mat-icon>
-        <p class="text-lg mt-2">
-          @if (statusFilter() === 'ACCEPTED') {
-            No hay francesinhas aprobadas
-          } @else {
-            No hay francesinhas rechazadas
-          }
-        </p>
-      </div>
-    }
+		<!-- Estado vacio -->
+		@if (proposals().length === 0 && !isLoading()) {
+			<div class="text-center py-16 text-gray-400">
+				<mat-icon class="text-5xl! w-auto! h-auto! opacity-30">lunch_dining</mat-icon>
+				<p class="text-lg mt-2">
+					@if (statusFilter() === 'ACCEPTED') {
+						No hay francesinhas aprobadas
+					} @else {
+						No hay francesinhas rechazadas
+					}
+				</p>
+			</div>
+		}
 
-    <!-- Loading -->
-    @if (isLoading()) {
-      <div class="flex flex-col items-center justify-center gap-3 py-16">
-        <mat-spinner diameter="48" color="primary"/>
-        <p class="text-sm text-gray-400 animate-pulse">Cargando propuestas...</p>
-      </div>
-    }
+		<!-- Loading -->
+		@if (isLoading()) {
+			<div class="flex flex-col items-center justify-center gap-3 py-16">
+				<mat-spinner color="primary" diameter="48"/>
+				<p class="text-sm text-gray-400 animate-pulse">Cargando propuestas...</p>
+			</div>
+		}
 
-    <!-- Centinela para scroll infinito -->
-    <div #sentinel class="h-4"></div>
+		<!-- Centinela para scroll infinito -->
+		<div #sentinel class="h-4"></div>
 
-  </main>
+	</main>
 </div>

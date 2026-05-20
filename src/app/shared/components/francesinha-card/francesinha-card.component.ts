@@ -1,34 +1,34 @@
-import { Component, inject, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatChipsModule } from '@angular/material/chips';
-import { Francesinha } from '../../../core/models/francesinha.model';
-import { AuthService } from '../../../core/services/auth.service';
+import {Component, inject, input, output} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {RouterLink} from '@angular/router';
+import {MatCardModule} from '@angular/material/card';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import {MatChipsModule} from '@angular/material/chips';
+import {Francesinha} from '../../../core/models/francesinha.model';
+import {AuthService} from '../../../core/services/auth.service';
 
 @Component({
-  selector: 'app-francesinha-card',
-  standalone: true,
-  imports: [CommonModule, RouterLink, MatCardModule, MatIconModule, MatButtonModule, MatChipsModule],
-  templateUrl: './francesinha-card.component.html',
-  styleUrl: './francesinha-card.component.scss',
+	selector: 'app-francesinha-card',
+	standalone: true,
+	imports: [CommonModule, RouterLink, MatCardModule, MatIconModule, MatButtonModule, MatChipsModule],
+	templateUrl: './francesinha-card.component.html',
+	styleUrl: './francesinha-card.component.scss',
 })
 export class FrancesinhaCardComponent {
-  francesinha = input.required<Francesinha>();
-  isFavorite  = input<boolean>(false);
+	francesinha = input.required<Francesinha>();
+	isFavorite = input<boolean>(false);
 
-  // Si nadie escucha el output, el icono sigue siendo decorativo (no rompe nada).
+	// Si nadie escucha el output, el icono sigue siendo decorativo (no rompe nada).
 	// El padre decide que hacer:
-  favoriteToggled = output<void>();
+	favoriteToggled = output<void>();
 
-  readonly isLoggedIn = inject(AuthService).isLoggedIn;
+	readonly isLoggedIn = inject(AuthService).isLoggedIn;
 
-  // El click en el corazon no debe propagarse a la card, que tiene routerLink al detalle.
-  onFavoriteClick(event: MouseEvent): void {
-    event.stopPropagation();
-    event.preventDefault();
-    this.favoriteToggled.emit();
-  }
+	// El click en el corazon no debe propagarse a la card, que tiene routerLink al detalle.
+	onFavoriteClick(event: MouseEvent): void {
+		event.stopPropagation();
+		event.preventDefault();
+		this.favoriteToggled.emit();
+	}
 }

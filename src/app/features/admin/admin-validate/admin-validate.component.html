@@ -33,24 +33,24 @@
 						@if (!isNewRestaurant()) {
 							<mat-form-field appearance="fill" class="w-full">
 								<mat-label>Buscar restaurante</mat-label>
-								<input matInput formControlName="search"/>
+								<input formControlName="search" matInput/>
 							</mat-form-field>
 						} @else {
 							<mat-form-field appearance="fill" class="w-full">
 								<mat-label>Nombre del restaurante</mat-label>
-								<input matInput formControlName="name"/>
+								<input formControlName="name" matInput/>
 							</mat-form-field>
 							<mat-form-field appearance="fill" class="w-full">
 								<mat-label>Ciudad</mat-label>
-								<input matInput formControlName="city"/>
+								<input formControlName="city" matInput/>
 							</mat-form-field>
 							<mat-form-field appearance="fill" class="w-full">
 								<mat-label>Dirección</mat-label>
-								<input matInput formControlName="address"/>
+								<input formControlName="address" matInput/>
 							</mat-form-field>
 							<mat-form-field appearance="fill" class="w-full">
 								<mat-label>Teléfono</mat-label>
-								<input matInput formControlName="phone"/>
+								<input formControlName="phone" matInput/>
 							</mat-form-field>
 						}
 					</form>
@@ -62,37 +62,37 @@
 					<form [formGroup]="francesinhaForm" class="flex flex-col gap-3">
 						<mat-form-field appearance="fill" class="w-full">
 							<mat-label>Nombre</mat-label>
-							<input matInput formControlName="name"/>
+							<input formControlName="name" matInput/>
 						</mat-form-field>
 						<mat-form-field appearance="fill" class="w-full">
 							<mat-label>Tipo</mat-label>
-							<input matInput formControlName="type"/>
+							<input formControlName="type" matInput/>
 						</mat-form-field>
 						<mat-form-field appearance="fill" class="w-full">
 							<mat-label>Precio</mat-label>
-							<input matInput formControlName="price"/>
+							<input formControlName="price" matInput/>
 							<span matTextSuffix>&nbsp;€</span>
 						</mat-form-field>
 
 						<p class="text-sm font-medium text-gray-500">Características</p>
 						<div class="flex justify-center gap-1.5">
-							<span class="flex-1 text-sm border px-2 py-1 rounded-full flex items-center justify-center gap-1"
-							      [class]="f.hasFries
+							<span [class]="f.hasFries
 							        ? 'bg-amber-100 text-amber-900 border-amber-300'
-							        : 'bg-white text-gray-400 border-gray-300 opacity-60'">
-								<img src="icons/fries.svg" class="w-3.5 h-3.5" alt=""/> Patatas
+							        : 'bg-white text-gray-400 border-gray-300 opacity-60'"
+							      class="flex-1 text-sm border px-2 py-1 rounded-full flex items-center justify-center gap-1">
+								<img alt="" class="w-3.5 h-3.5" src="icons/fries.svg"/> Patatas
 							</span>
-							<span class="flex-1 text-sm border px-2 py-1 rounded-full flex items-center justify-center gap-1"
-							      [class]="f.hasEgg
+							<span [class]="f.hasEgg
 							        ? 'bg-yellow-100 text-yellow-900 border-yellow-300'
-							        : 'bg-white text-gray-400 border-gray-300 opacity-60'">
-								<img src="icons/egg.svg" class="w-3.5 h-3.5" alt=""/> Huevo
+							        : 'bg-white text-gray-400 border-gray-300 opacity-60'"
+							      class="flex-1 text-sm border px-2 py-1 rounded-full flex items-center justify-center gap-1">
+								<img alt="" class="w-3.5 h-3.5" src="icons/egg.svg"/> Huevo
 							</span>
-							<span class="flex-1 text-sm border px-2 py-1 rounded-full flex items-center justify-center gap-1"
-							      [class]="f.isSpicy
+							<span [class]="f.isSpicy
 							        ? 'bg-red-100 text-red-900 border-red-300'
-							        : 'bg-white text-gray-400 border-gray-300 opacity-60'">
-								<img src="icons/chilli.svg" class="w-3.5 h-3.5" alt=""/> Picante
+							        : 'bg-white text-gray-400 border-gray-300 opacity-60'"
+							      class="flex-1 text-sm border px-2 py-1 rounded-full flex items-center justify-center gap-1">
+								<img alt="" class="w-3.5 h-3.5" src="icons/chilli.svg"/> Picante
 							</span>
 						</div>
 					</form>
@@ -127,17 +127,17 @@
 						<span class="text-xl font-bold text-text-main">{{ review()!.avgScore | number:'1.1-1' }}</span>
 					</div>
 				}
-				<button type="button"
-				        class="text-sm font-medium border border-red-300 text-red-800 bg-red-100 hover:bg-red-200 rounded-md py-2 flex items-center justify-center gap-1 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+				<button (click)="reject()"
 				        [disabled]="isSubmitting()"
-				        (click)="reject()">
+				        class="text-sm font-medium border border-red-300 text-red-800 bg-red-100 hover:bg-red-200 rounded-md py-2 flex items-center justify-center gap-1 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+				        type="button">
 					<mat-icon class="!text-base !w-4 !h-4 !leading-4">close</mat-icon>
 					RECHAZAR
 				</button>
-				<button type="button"
-				        class="text-sm font-medium border border-green-300 text-green-800 bg-green-100 hover:bg-green-200 rounded-md py-2 flex items-center justify-center gap-1 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+				<button (click)="approve()"
 				        [disabled]="isSubmitting()"
-				        (click)="approve()">
+				        class="text-sm font-medium border border-green-300 text-green-800 bg-green-100 hover:bg-green-200 rounded-md py-2 flex items-center justify-center gap-1 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+				        type="button">
 					@if (isSubmitting()) {
 						<mat-spinner diameter="18"/>
 					} @else {
@@ -158,17 +158,17 @@
 				</div>
 			}
 			<div class="flex gap-2">
-				<button type="button"
-				        class="flex-1 text-sm font-medium border border-red-300 text-red-800 bg-red-100 hover:bg-red-200 rounded-md py-2 flex items-center justify-center gap-1 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+				<button (click)="reject()"
 				        [disabled]="isSubmitting()"
-				        (click)="reject()">
+				        class="flex-1 text-sm font-medium border border-red-300 text-red-800 bg-red-100 hover:bg-red-200 rounded-md py-2 flex items-center justify-center gap-1 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+				        type="button">
 					<mat-icon class="!text-base !w-4 !h-4 !leading-4">close</mat-icon>
 					RECHAZAR
 				</button>
-				<button type="button"
-				        class="flex-1 text-sm font-medium border border-green-300 text-green-800 bg-green-100 hover:bg-green-200 rounded-md py-2 flex items-center justify-center gap-1 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+				<button (click)="approve()"
 				        [disabled]="isSubmitting()"
-				        (click)="approve()">
+				        class="flex-1 text-sm font-medium border border-green-300 text-green-800 bg-green-100 hover:bg-green-200 rounded-md py-2 flex items-center justify-center gap-1 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+				        type="button">
 					@if (isSubmitting()) {
 						<mat-spinner diameter="18"/>
 					} @else {

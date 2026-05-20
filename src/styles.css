@@ -5,105 +5,107 @@
 
 
 .icon-filled {
-  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+	font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
 @theme {
-  --font-sans: 'Inter', sans-serif;
-	--default-font-family:'Inter', sans-serif;
+	--font-sans: 'Inter', sans-serif;
+	--default-font-family: 'Inter', sans-serif;
 
-  /* Principales */
-  --color-primary:   #C45C2A;
-  --color-secondary: #8B3820;
-  --color-accent:    #F5C4B3;
-  --color-neutral:   #F1EFE8;
+	/* Principales */
+	--color-primary: #C45C2A;
+	--color-secondary: #8B3820;
+	--color-accent: #F5C4B3;
+	--color-neutral: #F1EFE8;
 
-  /* Escala naranja */
-  --color-primary-50:  #FAEEDA;
-  --color-primary-100: #F5C4B3;
-  --color-primary-200: #F0997B;
-  --color-primary-400: #D85A30;
-  --color-primary-900: #4A1B0C;
+	/* Escala naranja */
+	--color-primary-50: #FAEEDA;
+	--color-primary-100: #F5C4B3;
+	--color-primary-200: #F0997B;
+	--color-primary-400: #D85A30;
+	--color-primary-900: #4A1B0C;
 
-  /* Texto */
-  --color-text-main:  #2C2C2A;
-  --color-text-muted: #888780;
+	/* Texto */
+	--color-text-main: #2C2C2A;
+	--color-text-muted: #888780;
 
-  /* Estados */
-  --color-success:   #1a7a3c;
-  --color-warning:   #a16207;
-  --color-danger:    #e11d48;
+	/* Estados */
+	--color-success: #1a7a3c;
+	--color-warning: #a16207;
+	--color-danger: #e11d48;
 
-  /* Terciario */
-  --color-tertiary: #ffdfa0;
-  --color-white:  #ffffff;
+	/* Terciario */
+	--color-tertiary: #ffdfa0;
+	--color-white: #ffffff;
 }
 
 /* Sliders del formulario de valoración (dialog + pagina proponer) */
 app-review-form .mdc-slider__track--inactive {
-  background-color: #e5e7eb;
-  opacity: 1;
+	background-color: #e5e7eb;
+	opacity: 1;
 }
+
 app-review-form .mdc-slider__track--active_fill {
-  border-color: #C45C2A;
+	border-color: #C45C2A;
 }
+
 app-review-form .mdc-slider__thumb-knob {
-  background-color: #C45C2A;
-  border-color: #C45C2A;
-  width: 20px;
-  height: 20px;
+	background-color: #C45C2A;
+	border-color: #C45C2A;
+	width: 20px;
+	height: 20px;
 }
 
 .mat-mdc-form-field-error {
-  font-weight: 500;
-  color: #e11d48 !important;
+	font-weight: 500;
+	color: #e11d48 !important;
 }
 
 .mat-form-field-invalid .mdc-notched-outline__leading,
 .mat-form-field-invalid .mdc-notched-outline__notch,
 .mat-form-field-invalid .mdc-notched-outline__trailing {
-  border-color: #e11d48 !important;
+	border-color: #e11d48 !important;
 }
 
 /* Borde rojo en inputs con appearance="fill" cuando son invalidos */
 .mat-form-field-invalid .mdc-line-ripple::before,
 .mat-form-field-invalid .mdc-line-ripple::after {
-  border-bottom-color: #e11d48 !important;
+	border-bottom-color: #e11d48 !important;
 }
 
 .mat-form-field-invalid .mat-mdc-floating-label {
-  color: #e11d48 !important;
+	color: #e11d48 !important;
 }
 
 .mat-form-field-invalid .mat-icon {
-  color: #e11d48 !important;
+	color: #e11d48 !important;
 }
 
 .mat-mdc-floating-label {
-  font-weight: 500 !important;
+	font-weight: 500 !important;
 }
 
 .cutom-header-chip {
-  background-color: #8B3820 !important;
-  --mat-chip-outline-color: transparent;
+	background-color: #8B3820 !important;
+	--mat-chip-outline-color: transparent;
 }
 
 .cutom-header-chip .mdc-evolution-chip__text-label {
-  color: #ffffff !important;
+	color: #ffffff !important;
 }
 
 :root {
-  --mat-tooltip-container-color: #424242;
-  --mat-tooltip-supporting-text-color: #ffffff;
+	--mat-tooltip-container-color: #424242;
+	--mat-tooltip-supporting-text-color: #ffffff;
 
-  --mat-expansion-header-text-color: #C45C2A;
-  --mat-expansion-header-indicator-color: #C45C2A;
+	--mat-expansion-header-text-color: #C45C2A;
+	--mat-expansion-header-indicator-color: #C45C2A;
 
-  --mdc-chip-outline-color: #8B3820;
-  --mdc-chip-elevated-container-color: #8B3820;
+	--mdc-chip-outline-color: #8B3820;
+	--mdc-chip-elevated-container-color: #8B3820;
 
-  --mdc-outlined-text-field-outline-color: #C45C2A;
-  --mdc-outlined-text-field-hover-outline-color: #8B3820;
-  --mdc-outlined-text-field-input-text-color: #8B3820;
-  --mdc-outlined-text-field-input-text-placeholder-color: #888780;
+	--mdc-outlined-text-field-outline-color: #C45C2A;
+	--mdc-outlined-text-field-hover-outline-color: #8B3820;
+	--mdc-outlined-text-field-input-text-color: #8B3820;
+	--mdc-outlined-text-field-input-text-placeholder-color: #888780;
 }
