@@ -7,7 +7,7 @@
 			<span class="text-base font-medium text-gray-700 w-28 shrink-0">{{ criterio.label }}</span>
 			<span class="text-sm text-bold text-text-main whitespace-nowrap">: 1</span>
 			<mat-slider class="flex-1 min-w-0!" discrete max="5" min="1" step="1">
-				<input [formControlName]="criterio.key" matSliderThumb/>
+				<input [attr.aria-label]="criterio.label" [formControlName]="criterio.key" matSliderThumb/>
 			</mat-slider>
 			<span class="text-sm text-bold text-text-main">5</span>
 		</div>

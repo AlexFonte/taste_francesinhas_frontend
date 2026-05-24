@@ -2,8 +2,8 @@
 
 	<!-- cabecera con volver -->
 	<div class="max-w-6xl mx-auto px-4 py-6">
-        <button (click)="cancel()" [disabled]="isLoading()"
-                class="flex items-center gap-1 text-sm text-primary hover:underline transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+		<button (click)="cancel()" [disabled]="isLoading()"
+		        class="flex items-center gap-1 text-sm text-primary hover:underline transition-all disabled:opacity-50 disabled:cursor-not-allowed">
 			<mat-icon class="!text-lg !w-5 !h-5 !leading-5">arrow_back</mat-icon>
 			Volver
 		</button>
@@ -21,8 +21,8 @@
 						{{ newRestaurantMode() ? 'Nuevo restaurante' : 'Restaurante' }}
 					</h3>
 					@if (!restaurantLocked()) {
-                        <mat-slide-toggle (change)="newRestaurantMode.set($event.checked)"
-                                          [checked]="newRestaurantMode()">
+						<mat-slide-toggle (change)="newRestaurantMode.set($event.checked)"
+						                  [checked]="newRestaurantMode()">
 							Nuevo restaurante
 						</mat-slide-toggle>
 					}
@@ -32,12 +32,12 @@
 					<form [formGroup]="existingRestaurantForm" class="flex flex-col gap-3">
 						<mat-form-field appearance="fill" class="w-full">
 							<mat-label>Buscar restaurante</mat-label>
-                            <input [errorStateMatcher]="matcher" [matAutocomplete]="auto"
-                                   formControlName="search" matInput
+							<input [errorStateMatcher]="matcher" [matAutocomplete]="auto"
+							       formControlName="search" matInput
 							       placeholder="Nombre o ciudad..."/>
 							<mat-autocomplete #auto="matAutocomplete"
-                                              (optionSelected)="selectRestaurant($event.option.value)"
-                                              [displayWith]="displayRestaurant">
+							                  (optionSelected)="selectRestaurant($event.option.value)"
+							                  [displayWith]="displayRestaurant">
 								@for (r of restaurantOptions(); track r.id) {
 									<mat-option [value]="r">
 										{{ r.name }} · {{ r.city }}
@@ -45,7 +45,7 @@
 								}
 							</mat-autocomplete>
 							@if (existingRestaurantForm.get('restaurantId')?.hasError('required')
-														&& existingRestaurantForm.get('restaurantId')?.touched) {
+							&& existingRestaurantForm.get('restaurantId')?.touched) {
 								<mat-error>Selecciona un restaurante</mat-error>
 							}
 						</mat-form-field>
@@ -54,27 +54,27 @@
 					<form [formGroup]="newRestaurantForm" class="flex flex-col gap-3">
 						<mat-form-field appearance="fill" class="w-full">
 							<mat-label>Nombre del restaurante</mat-label>
-                            <input [errorStateMatcher]="matcher" formControlName="name" matInput/>
+							<input [errorStateMatcher]="matcher" formControlName="name" matInput/>
 							@if (newRestaurantForm.get('name')?.hasError('required')
-														&& newRestaurantForm.get('name')?.touched) {
+							&& newRestaurantForm.get('name')?.touched) {
 								<mat-error>El nombre es obligatorio</mat-error>
 							}
 						</mat-form-field>
 						<mat-form-field appearance="fill" class="w-full">
 							<mat-label>Ciudad</mat-label>
-                            <input [errorStateMatcher]="matcher" formControlName="city" matInput/>
+							<input [errorStateMatcher]="matcher" formControlName="city" matInput/>
 							@if (newRestaurantForm.get('city')?.hasError('required')
-														&& newRestaurantForm.get('city')?.touched) {
+							&& newRestaurantForm.get('city')?.touched) {
 								<mat-error>La ciudad es obligatoria</mat-error>
 							}
 						</mat-form-field>
 						<mat-form-field appearance="fill" class="w-full">
 							<mat-label>Dirección</mat-label>
-                            <input [errorStateMatcher]="matcher" formControlName="address" matInput/>
+							<input [errorStateMatcher]="matcher" formControlName="address" matInput/>
 						</mat-form-field>
 						<mat-form-field appearance="fill" class="w-full">
 							<mat-label>Teléfono</mat-label>
-                            <input [errorStateMatcher]="matcher" formControlName="phone" matInput/>
+							<input [errorStateMatcher]="matcher" formControlName="phone" matInput/>
 						</mat-form-field>
 					</form>
 				}
@@ -87,16 +87,16 @@
 
 					<mat-form-field appearance="fill" class="w-full">
 						<mat-label>Nombre</mat-label>
-                        <input [errorStateMatcher]="matcher" formControlName="name" matInput/>
+						<input [errorStateMatcher]="matcher" formControlName="name" matInput/>
 						@if (francesinhaForm.get('name')?.hasError('required')
-												&& francesinhaForm.get('name')?.touched) {
+						&& francesinhaForm.get('name')?.touched) {
 							<mat-error>El nombre es obligatorio</mat-error>
 						}
 					</mat-form-field>
 
 					<mat-form-field appearance="fill" class="w-full">
 						<mat-label>Tipo</mat-label>
-                        <mat-select [errorStateMatcher]="matcher" formControlName="type">
+						<mat-select [errorStateMatcher]="matcher" formControlName="type">
 							@for (t of tiposFrancesinhas; track t.value) {
 								<mat-option [value]="t.value">{{ t.label }}</mat-option>
 							}
@@ -105,49 +105,49 @@
 
 					<mat-form-field appearance="fill" class="w-full">
 						<mat-label>Precio</mat-label>
-                        <input (blur)="formatPrice()" [errorStateMatcher]="matcher" formControlName="price"
-                               inputmode="decimal" matInput
-                               min="0" placeholder="0.00"
-                               step="0.01" type="number"/>
+						<input (blur)="formatPrice()" [errorStateMatcher]="matcher" formControlName="price"
+						       inputmode="decimal" matInput
+						       min="0" placeholder="0.00"
+						       step="0.01" type="number"/>
 						<span matTextSuffix>&nbsp;€</span>
 						@if ((francesinhaForm.get('price')?.hasError('min')
-													|| francesinhaForm.get('price')?.hasError('required'))
-												&& francesinhaForm.get('price')?.touched) {
+							|| francesinhaForm.get('price')?.hasError('required'))
+						&& francesinhaForm.get('price')?.touched) {
 							<mat-error>Precio debe ser mayor que 0</mat-error>
 						}
 					</mat-form-field>
 
 					<mat-form-field appearance="fill" class="w-full">
 						<mat-label>Descripción</mat-label>
-                        <textarea [errorStateMatcher]="matcher" formControlName="description" matInput
-                                  rows="2"></textarea>
+						<textarea [errorStateMatcher]="matcher" formControlName="description" matInput
+						          rows="2"></textarea>
 					</mat-form-field>
 
-					<p class="text-sm font-medium text-gray-500">Características</p>
+					<p class="text-sm font-bold text-text-main">Características</p>
 					<div class="flex justify-center gap-1.5">
-                        <button (click)="francesinhaForm.controls.hasFries.setValue(!francesinhaForm.controls.hasFries.value)"
+						<button (click)="francesinhaForm.controls.hasFries.setValue(!francesinhaForm.controls.hasFries.value)"
 						        [class]="francesinhaForm.controls.hasFries.value
 						          ? 'bg-amber-100 text-amber-900 border-amber-300'
 						          : 'bg-white text-gray-400 border-gray-300 opacity-60 hover:opacity-100'"
-                                class="flex-1 text-sm border px-2 py-1 rounded-full flex items-center justify-center gap-1 transition-opacity cursor-pointer"
-                                type="button">
-                            <img alt="" class="w-3.5 h-3.5" src="icons/fries.svg"/> Patatas
+						        class="flex-1 text-sm border px-2 py-1 rounded-full flex items-center justify-center gap-1 transition-opacity cursor-pointer"
+						        type="button">
+							<img alt="" class="w-3.5 h-3.5" src="icons/fries.svg"/> Patatas
 						</button>
-                        <button (click)="francesinhaForm.controls.hasEgg.setValue(!francesinhaForm.controls.hasEgg.value)"
+						<button (click)="francesinhaForm.controls.hasEgg.setValue(!francesinhaForm.controls.hasEgg.value)"
 						        [class]="francesinhaForm.controls.hasEgg.value
 						          ? 'bg-yellow-100 text-yellow-900 border-yellow-300'
 						          : 'bg-white text-gray-400 border-gray-300 opacity-60 hover:opacity-100'"
 						        class="flex-1 text-sm border px-2 py-1 rounded-full flex items-center justify-center gap-1 transition-opacity cursor-pointer"
-                                type="button">
-                            <img alt="" class="w-3.5 h-3.5" src="icons/egg.svg"/> Huevo
-                        </button>
-                        <button (click)="francesinhaForm.controls.isSpicy.setValue(!francesinhaForm.controls.isSpicy.value)"
+						        type="button">
+							<img alt="" class="w-3.5 h-3.5" src="icons/egg.svg"/> Huevo
+						</button>
+						<button (click)="francesinhaForm.controls.isSpicy.setValue(!francesinhaForm.controls.isSpicy.value)"
 						        [class]="francesinhaForm.controls.isSpicy.value
 						          ? 'bg-red-100 text-red-900 border-red-300'
 						          : 'bg-white text-gray-400 border-gray-300 opacity-60 hover:opacity-100'"
-                                class="flex-1 text-sm border px-2 py-1 rounded-full flex items-center justify-center gap-1 transition-opacity cursor-pointer"
-                                type="button">
-                            <img alt="" class="w-3.5 h-3.5" src="icons/chilli.svg"/> Picante
+						        class="flex-1 text-sm border px-2 py-1 rounded-full flex items-center justify-center gap-1 transition-opacity cursor-pointer"
+						        type="button">
+							<img alt="" class="w-3.5 h-3.5" src="icons/chilli.svg"/> Picante
 						</button>
 					</div>
 				</form>
@@ -172,10 +172,10 @@
 				<mat-icon class="icon-filled text-yellow-400! text-2xl! w-6! h-6! leading-6!">star</mat-icon>
 				<span class="text-xl font-bold text-text-main">{{ reviewFormRef.avgScore() | number:'1.2-2' }}</span>
 			</div>
-            <button (click)="cancel()" [disabled]="isLoading()" mat-stroked-button>
+			<button (click)="cancel()" [disabled]="isLoading()" mat-stroked-button>
 				<span class="flex items-center gap-1"><mat-icon>close</mat-icon>Cancelar</span>
 			</button>
-            <button (click)="submit()" [disabled]="isLoading() || !isFormValid()" color="primary" mat-flat-button>
+			<button (click)="submit()" [disabled]="isLoading() || !isFormValid()" color="primary" mat-flat-button>
 				@if (isLoading()) {
 					<mat-spinner diameter="18"/>
 				} @else {
@@ -199,14 +199,14 @@
 			<mat-icon class="icon-filled text-yellow-400! text-2xl! w-6! h-6! leading-6!">star</mat-icon>
 			<span class="text-xl font-bold text-text-main">{{ reviewFormRef.avgScore() | number:'1.2-2' }}</span>
 		</div>
-        <button (click)="submit()" [disabled]="isLoading() || !isFormValid()" color="primary" mat-flat-button>
+		<button (click)="submit()" [disabled]="isLoading() || !isFormValid()" color="primary" mat-flat-button>
 			@if (isLoading()) {
 				<mat-spinner diameter="18"/>
 			} @else {
 				<span class="flex items-center gap-1"><mat-icon>check</mat-icon>Enviar propuesta</span>
 			}
 		</button>
-        <button (click)="cancel()" [disabled]="isLoading()" mat-stroked-button>
+		<button (click)="cancel()" [disabled]="isLoading()" mat-stroked-button>
 			<span class="flex items-center gap-1"><mat-icon>close</mat-icon>Cancelar</span>
 		</button>
 	</div>

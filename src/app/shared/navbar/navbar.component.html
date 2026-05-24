@@ -2,7 +2,7 @@
 <header class="bg-white shadow-sm px-4 py-3 grid grid-cols-[auto_1fr_auto] items-center gap-2">
 
 	<div class="flex items-center gap-2 cursor-pointer" routerLink="/">
-		<img alt="Taste Francesinhas" class="w-10 h-10 md:w-12 md:h-12 opacity-90" src="fran_huevo-sinfondo.png"/>
+		<img alt="Taste Francesinhas" class="w-10 h-10 md:w-12 md:h-12 opacity-90" src="fran_huevo-sinfondo.webp"/>
 		<h1 class="text-lg font-bold text-primary md:text-xl">Taste Francesinhas</h1>
 	</div>
 
@@ -16,10 +16,14 @@
 
 	<!-- nombre y boton de logout -->
 	@if (isLoggedIn()) {
-		<div class="flex items-center gap-1">
+		<div class="flex items-center gap-5">
 			<span class="hidden sm:block text-sm font-medium text-secondary">Bienvenido, {{ userName() }}!</span>
-			<button (click)="logout()" class="text-gray-500" mat-icon-button matTooltip="Cerrar sesión">
-				<mat-icon>logout</mat-icon>
+			<button (click)="logout()"
+			        aria-label="Cerrar sesión"
+			        class="!bg-secondary !text-white !rounded-full !min-w-0 !w-10 !h-10 !p-0 sm:!w-auto sm:!h-9 sm:!px-3"
+			        mat-flat-button>
+				<mat-icon class="!m-0 sm:!mr-1">logout</mat-icon>
+				<span class="hidden sm:inline">Cerrar sesión</span>
 			</button>
 		</div>
 	} @else {

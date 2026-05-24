@@ -3,14 +3,13 @@ import {RouterLink} from '@angular/router';
 import {AuthService} from '../../core/services/auth.service';
 import {NavItemComponent} from './nav-item/nav-item.component';
 import {NavItem} from '../types/nav-item.model';
-import {MatIconButton} from '@angular/material/button';
+import {MatButton} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-import {MatTooltipModule} from '@angular/material/tooltip';
 
 @Component({
 	selector: 'app-navbar',
 	standalone: true,
-	imports: [RouterLink, NavItemComponent, MatIconButton, MatIconModule, MatTooltipModule],
+	imports: [RouterLink, NavItemComponent, MatButton, MatIconModule],
 	templateUrl: './navbar.component.html',
 	styleUrl: './navbar.component.scss',
 })
