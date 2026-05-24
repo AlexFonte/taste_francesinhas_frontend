@@ -58,7 +58,8 @@
 					<!-- animate.enter="card-enter" [style.--i]="i % 10" - animación desactivada -->
 					<app-francesinha-card (favoriteToggled)="onFavoriteToggle(f.id)"
 					                      [francesinha]="f"
-					                      [isFavorite]="favoriteIds().has(f.id)"/>
+					                      [isFavorite]="favoriteIds().has(f.id)"
+					                      [priority]="i === 0"/>
 				}
 			</div>
 		}

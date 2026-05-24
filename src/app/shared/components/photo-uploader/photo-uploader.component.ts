@@ -1,7 +1,8 @@
-import {Component, ElementRef, output, signal, viewChild} from '@angular/core';
+import {Component, ElementRef, inject, output, signal, viewChild} from '@angular/core';
 import {DecimalPipe} from '@angular/common';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
+import {ImageCompressService} from '../../services/image-compress.service';
 
 // Mismos limites que el backend (ReviewService.ALLOWED_PHOTO_MIME / 5MB). Aqui validamos
 // para cortar rapido y no hacer viajar el fichero, pero el backend nunca se fia y revalida.
@@ -28,8 +29,12 @@ export class PhotoUploaderComponent {
 	// URL "temporal" que crea el navegador para enseñar la miniatura sin que el fichero salga del cliente.
 	readonly previewUrl = signal<string | null>(null);
 	readonly errorMessage = signal<string | null>(null);
+	// True mientras se comprime la imagen. El template puede usarlo para deshabilitar el boton de subida.
+	readonly isCompressing = signal<boolean>(false);
 
-	onFileChange(event: Event): void {
+	private readonly compressor = inject(ImageCompressService);
+
+	async onFileChange(event: Event): Promise<void> {
 		const input = event.target as HTMLInputElement;
 		const file = input.files?.[0] ?? null;
 		if (!file) return;
@@ -43,12 +48,26 @@ export class PhotoUploaderComponent {
 			return;
 		}
 
+		// Comprimir/redimensionar antes de mostrar la preview o emitir al padre. Si la libreria
+		// falla por cualquier motivo (formato raro) la imagen original para no dejar al usuario sin poder subir.
+		this.isCompressing.set(true);
+		let finalFile: File;
+
+		try {
+			finalFile = await this.compressor.compress(file);
+			this.errorMessage.set(null);
+		} catch {
+			finalFile = file;
+			this.errorMessage.set('No se pudo optimizar la imagen, se subira tal cual.');
+		} finally {
+			this.isCompressing.set(false);
+		}
+
 		// Si habia un preview anterior la borarmos primero.
 		this.revokePreview();
-		this.selectedFile.set(file);
-		this.previewUrl.set(URL.createObjectURL(file));
-		this.errorMessage.set(null);
-		this.fileSelected.emit(file);
+		this.selectedFile.set(finalFile);
+		this.previewUrl.set(URL.createObjectURL(finalFile));
+		this.fileSelected.emit(finalFile);
 	}
 
 	triggerFilePicker(): void {

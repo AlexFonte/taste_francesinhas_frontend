@@ -18,6 +18,9 @@ import {AuthService} from '../../../core/services/auth.service';
 export class FrancesinhaCardComponent {
 	francesinha = input.required<Francesinha>();
 	isFavorite = input<boolean>(false);
+	// Solo la primera card del listado se marca como priority=true (LCP candidato).
+	// El resto se carga en lazy y sin fetchpriority.
+	priority = input<boolean>(false);
 
 	// Si nadie escucha el output, el icono sigue siendo decorativo (no rompe nada).
 	// El padre decide que hacer:

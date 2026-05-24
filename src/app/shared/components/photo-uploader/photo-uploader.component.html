@@ -8,7 +8,14 @@
 	       class="hidden"
 	       type="file"/>
 
-	@if (!selectedFile()) {
+	@if (isCompressing()) {
+		<!-- Mientras la libreria procesa, mostramos un placeholder con mensaje. -->
+		<div
+			class="flex items-center justify-center gap-2 border-2 border-dashed border-primary rounded-2xl py-6 px-4 text-primary">
+			<mat-icon>hourglass_empty</mat-icon>
+			<span class="text-sm font-medium animate-pulse">Optimizando imagen...</span>
+		</div>
+	} @else if (!selectedFile()) {
 		<!-- Sin foto: zona drop-style clicable que abre el selector -->
 		<button (click)="triggerFilePicker()"
 		        class="flex items-center justify-center gap-2 border-2 border-dashed border-gray-300 rounded-2xl py-6 px-4 text-gray-500 hover:border-primary hover:text-primary transition-colors cursor-pointer"
@@ -21,7 +28,8 @@
 		<div class="flex items-center gap-3 border border-gray-300 rounded-2xl p-3 bg-white">
 			<img [src]="previewUrl()"
 			     alt="Preview de la foto seleccionada"
-			     class="w-16 h-16 object-cover rounded-lg flex-shrink-0"/>
+			     class="w-16 h-16 object-cover rounded-lg flex-shrink-0"
+			     height="64" width="64"/>
 			<div class="flex-1 min-w-0">
 				<p class="text-sm font-medium text-text-main truncate">{{ selectedFile()!.name }}</p>
 				<p class="text-xs text-gray-500">{{ (selectedFile()!.size / 1024 / 1024) | number:'1.1-2' }} MB</p>

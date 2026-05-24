@@ -54,10 +54,11 @@
 		<!-- Grid de cards -->
 		@if (francesinhas().length > 0) {
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-				@for (f of francesinhas(); track f.id) {
+				@for (f of francesinhas(); track f.id; let i = $index) {
 					<app-francesinha-card (favoriteToggled)="onRemove(f.id)"
 					                      [francesinha]="f"
-					                      [isFavorite]="true">
+					                      [isFavorite]="true"
+					                      [priority]="i === 0">
 						<button (click)="onRemove(f.id)"
 						        card-actions
 						        class="w-full transition-colors !border-secondary !text-secondary hover:!bg-secondary hover:!text-white"

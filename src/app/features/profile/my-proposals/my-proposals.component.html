@@ -147,7 +147,8 @@
 					@if (p.userReview.photoUrl) {
 						<img [alt]="p.name"
 						     [src]="p.userReview.photoUrl"
-						     class="w-full h-40 object-cover rounded-xl mb-3"/>
+						     class="w-full h-40 object-cover rounded-xl mb-3"
+						     height="160" loading="lazy" width="320"/>
 					}
 
 					<!-- Comentario, arriba del detalle (estilo igual al de las reviews del detalle) -->
