@@ -14,10 +14,10 @@ export class ImageCompressService {
 	//  - useWebWorker libera el hilo principal: el usuario puede seguir usnado la pantalla mientras se procesa.
 	private readonly defaults: Options = {
 		maxSizeMB: 1,
-		maxWidthOrHeight: 1280,
+		maxWidthOrHeight: 1024,//1280,
 		useWebWorker: true,
 		fileType: 'image/webp',
-		initialQuality: 0.82,
+		initialQuality: 0.78,
 	};
 
 	// Comprime, redimensiona y renombra el fichero. Si la libreria peta (formato muy raro, navegador
