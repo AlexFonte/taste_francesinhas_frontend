@@ -3,7 +3,7 @@
 	<!-- cabecera con volver -->
 	<div class="max-w-6xl mx-auto px-4 py-6 grid grid-cols-3 items-center">
 		<button (click)="back()"
-		        class="justify-self-start flex items-center gap-1 text-sm text-primary hover:underline transition-all cursor-pointer">
+		        class="justify-self-start flex items-center gap-1 text-sm text-secondary hover:underline transition-all cursor-pointer">
 			<mat-icon class="!text-lg !w-5 !h-5 !leading-5">arrow_back</mat-icon>
 			VOLVER
 		</button>
@@ -11,7 +11,7 @@
 	</div>
 
 	@if (isLoading()) {
-		<div class="flex justify-center py-8">
+		<div class="flex justify-center items-center py-8 min-h-[70vh]">
 			<mat-spinner diameter="32"/>
 		</div>
 	} @else if (errorMessage()) {

@@ -68,7 +68,7 @@
 		<h2 class="text-base font-bold text-text-main mb-3">Propuestas pendientes</h2>
 
 		@if (isLoading()) {
-			<div class="flex justify-center py-8">
+			<div class="flex justify-center items-center py-8 min-h-[70vh]">
 				<mat-spinner diameter="32"/>
 			</div>
 		} @else if (errorMessage()) {

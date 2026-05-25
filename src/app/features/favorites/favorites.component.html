@@ -2,6 +2,8 @@
 
 	<div class="px-4 py-4 pb-24 md:pb-6 md:px-6 md:py-6 max-w-7xl mx-auto">
 
+		<h1 class="text-2xl font-bold text-primary mb-4">MIS FAVORITOS</h1>
+
 		<!-- Filtros colapsables -->
 		<mat-accordion class="block mb-4" id="filterPanel">
 			<mat-expansion-panel>
@@ -88,7 +90,7 @@
 
 		<!-- Loading -->
 		@if (isLoading()) {
-			<div class="flex flex-col items-center justify-center gap-3 py-16">
+			<div class="flex flex-col items-center justify-center gap-3 py-16 min-h-[70vh]">
 				<mat-spinner color="primary" diameter="48"/>
 				<p class="text-sm text-gray-400 animate-pulse">Cargando favoritos...</p>
 			</div>
