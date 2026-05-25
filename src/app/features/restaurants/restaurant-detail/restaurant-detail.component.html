@@ -10,7 +10,7 @@
 	</div>
 
 	@if (isLoading()) {
-		<div class="flex justify-center py-8">
+		<div class="flex justify-center items-center py-8 min-h-[70vh]">
 			<mat-spinner diameter="32"/>
 		</div>
 	} @else if (errorMessage()) {
@@ -26,7 +26,7 @@
 				class="border border-gray-200 rounded-2xl p-5 bg-white flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between lg:gap-6">
 				<div class="flex flex-col gap-2 flex-1">
 					<div class="flex items-start justify-between gap-2">
-						<h2 class="text-xl font-bold text-text-main uppercase">{{ r.name }}</h2>
+						<h1 class="text-xl font-bold text-text-main uppercase">{{ r.name }}</h1>
 						<span
 							class="text-sm font-medium border border-gray-300 px-3 py-1 rounded-full bg-neutral text-text-main shrink-0">
 							{{ r.totalFrancesinhas }} francesinhas
@@ -59,9 +59,9 @@
 
 			<!-- lista de francesinhas del restaurante -->
 			<section>
-				<h3 class="text-base font-bold text-text-main mb-3">
+				<h2 class="text-base font-bold text-text-main mb-3">
 					Francesinhas ({{ francesinhas().length }})
-				</h3>
+				</h2>
 
 				@if (francesinhas().length > 0) {
 					<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

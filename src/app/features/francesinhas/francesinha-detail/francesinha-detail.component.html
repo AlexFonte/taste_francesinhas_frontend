@@ -1,20 +1,23 @@
-<!-- loading -->
-@if (isLoading()) {
-	<div class="flex items-center justify-center py-24">
-		<mat-spinner color="primary" diameter="48"/>
+<div class="pb-24 lg:pb-10">
+
+	<!-- cabecera con volver -->
+	<div class="max-w-6xl mx-auto px-4 py-6">
+		<button (click)="goBack()"
+		        class="flex items-center gap-1 text-sm text-primary hover:underline transition-all cursor-pointer">
+			<mat-icon class="!text-lg !w-5 !h-5 !leading-5">arrow_back</mat-icon>
+			VOLVER
+		</button>
 	</div>
-}
 
-@if (!isLoading() && francesinha()) {
-	<div class="pb-24 lg:pb-10">
-
-		<div class="max-w-6xl mx-auto px-4 py-6">
-			<button (click)="goBack()"
-			        class="flex items-center gap-1 text-sm text-primary hover:underline transition-all">
-				<mat-icon class="!text-lg !w-5 !h-5 !leading-5">arrow_back</mat-icon>
-				Volver
-			</button>
+	@if (isLoading()) {
+		<div class="flex justify-center items-center py-8 min-h-[70vh]">
+			<mat-spinner color="primary" diameter="32"/>
 		</div>
+	} @else if (errorMessage()) {
+		<div class="max-w-6xl mx-auto px-4">
+			<p class="text-sm text-white bg-danger text-center px-4 py-2 rounded-full">{{ errorMessage() }}</p>
+		</div>
+	} @else if (francesinha()) {
 
 		<div class="max-w-6xl mx-auto px-4 pb-6 lg:grid lg:grid-cols-[3fr_2fr] lg:gap-10">
 
@@ -54,7 +57,8 @@
 					} @else {
 						<div class="absolute inset-0 flex items-center justify-center">
 							<div class="bg-white/60 border border-primary rounded-full p-6 shadow-xl">
-								<img alt="Imagen francesinha" class="w-20 h-20 opacity-70" height="80" loading="lazy" src="icons/francesinha.svg"
+								<img alt="Imagen francesinha" class="w-20 h-20 opacity-70" height="80" loading="lazy"
+								     src="icons/francesinha.svg"
 								     width="80"/>
 							</div>
 						</div>
@@ -70,7 +74,7 @@
 				<mat-card-content class="!p-3 flex flex-col gap-1.5">
 
 					<div class="flex items-start justify-between gap-2">
-						<h2 class="font-bold text-xl !text-text-main">{{ francesinha()!.name }}</h2>
+						<h1 class="font-bold text-xl !text-text-main">{{ francesinha()!.name }}</h1>
 						@if (isUser()) {
 							<button (click)="toggleFavorite()"
 							        [ngClass]="isFavorite()
@@ -108,7 +112,8 @@
 						@if (francesinha()!.hasFries) {
 							<span
 								class="text-sm bg-amber-100 text-amber-900 border border-amber-300 px-2 py-0.5 rounded-full flex items-center gap-1">
-                <img alt="Patatas fritas" aria-hidden="true" class="w-3.5 h-3.5" height="14" loading="lazy" src="icons/fries.svg"
+                <img alt="Patatas fritas" aria-hidden="true" class="w-3.5 h-3.5" height="14" loading="lazy"
+                     src="icons/fries.svg"
                      width="14"/> Patatas
               </span>
 						}
@@ -122,7 +127,8 @@
 						@if (francesinha()!.isSpicy) {
 							<span
 								class="text-sm bg-red-100 text-red-900 border border-red-300 px-2 py-0.5 rounded-full flex items-center gap-1">
-                <img alt="Picante" aria-hidden="true" class="w-3.5 h-3.5" height="14" loading="lazy" src="icons/chilli.svg"
+                <img alt="Picante" aria-hidden="true" class="w-3.5 h-3.5" height="14" loading="lazy"
+                     src="icons/chilli.svg"
                      width="14"/> Picante
               </span>
 						}
@@ -243,11 +249,12 @@
 			</div>
 		}
 
-		@if (reviews().length === 0 && !isLoading()) {
+		@if (reviews().length === 0) {
 			<div class="max-w-6xl mx-auto px-4">
 				<p class="text-sm text-gray-500 text-center py-6">Todavía no hay opiniones. ¡Sé el primero!</p>
 			</div>
 		}
 
-	</div>
-}
+	}
+
+</div>

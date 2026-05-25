@@ -1,6 +1,7 @@
 import {Component, computed, ElementRef, inject, OnInit, signal, viewChild} from '@angular/core';
 import {CommonModule, Location} from '@angular/common';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {HttpErrorResponse} from '@angular/common/http';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
@@ -30,6 +31,7 @@ export class FrancesinhaDetailComponent implements OnInit {
 	reviews = signal<Review[]>([]);
 	isFavorite = signal(false);
 	isLoading = signal(true);
+	readonly errorMessage = signal<string | null>(null);
 	// IDs de opiniones con su detalle por criterio expandido. Set para toggle O(1).
 	expandedReviews = signal<Set<number>>(new Set());
 	// Referencia al contenedor del carrusel para leer scrollLeft y calcular la foto activa.
@@ -71,7 +73,10 @@ export class FrancesinhaDetailComponent implements OnInit {
 				this.francesinha.set(f);
 				this.isLoading.set(false);
 			},
-			error: () => this.router.navigate(['/francesinhas']),
+			error: (err: HttpErrorResponse) => {
+				this.errorMessage.set(err.error?.detail ?? 'No se pudo cargar la francesinha');
+				this.isLoading.set(false);
+			},
 		});
 		this.reviewService.getByFrancesinha(id).subscribe({
 			next: res => this.reviews.set(res.reviews),
