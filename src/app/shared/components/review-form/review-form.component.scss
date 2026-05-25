@@ -1,10 +1,11 @@
 mat-slider {
 	--mat-slider-disabled-active-track-color: var(--color-secondary);
 	--mat-slider-disabled-handle-color: var(--color-secondary);
+}
 
-	.mdc-slider--disabled {
-		opacity: 0.80;
-	}
+mat-slider.mdc-slider--disabled {
+	opacity: 0.80;
+
 }
 
 mat-form-field {
