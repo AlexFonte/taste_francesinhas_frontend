@@ -17,7 +17,7 @@ export class ImageCompressService {
 		maxWidthOrHeight: 1024,//1280,
 		useWebWorker: true,
 		fileType: 'image/webp',
-		initialQuality: 0.75,
+		initialQuality: 0.80,
 	};
 
 	// Comprime, redimensiona y renombra el fichero. Si la libreria peta (formato muy raro, navegador
