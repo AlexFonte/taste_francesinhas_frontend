@@ -7,6 +7,7 @@
 			<mat-icon class="!text-lg !w-5 !h-5 !leading-5">arrow_back</mat-icon>
 			VOLVER
 		</button>
+		<h1 class="sr-only">Proponer francesinha</h1>
 	</div>
 
 	<div class="max-w-6xl mx-auto px-4 pb-6 lg:grid lg:grid-cols-[1fr_1fr_auto] lg:gap-6">
@@ -17,9 +18,8 @@
 			<!-- toggle nuevo restaurante (oculto si vienen con restaurantId precargado) -->
 			<div class="border border-gray-200 rounded-2xl p-5 bg-white">
 				<div class="flex items-center justify-between mb-4">
-					<h3 class="text-base font-bold text-text-main">
-						{{ newRestaurantMode() ? 'Nuevo restaurante' : 'Restaurante' }}
-					</h3>
+					<h2
+						class="text-base font-bold text-text-main">{{ newRestaurantMode() ? 'Nuevo restaurante' : 'Restaurante' }}</h2>
 					@if (!restaurantLocked()) {
 						<mat-slide-toggle (change)="newRestaurantMode.set($event.checked)"
 						                  [checked]="newRestaurantMode()">
@@ -82,7 +82,7 @@
 
 			<!-- datos francesinha -->
 			<div class="border border-gray-200 rounded-2xl p-5 bg-white">
-				<h3 class="text-base font-bold text-text-main mb-4">Propuesta de francesinha</h3>
+				<h2 class="text-base font-bold text-text-main mb-4">Propuesta de francesinha</h2>
 				<form [formGroup]="francesinhaForm" class="flex flex-col gap-3">
 
 					<mat-form-field appearance="fill" class="w-full">
