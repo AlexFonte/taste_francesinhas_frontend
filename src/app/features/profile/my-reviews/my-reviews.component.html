@@ -147,7 +147,7 @@
 
 		<!-- Estado vacio -->
 		@if (reviews().length === 0 && !isLoading()) {
-			<div class="text-center py-16 text-gray-400">
+			<div class="text-center py-16 text-text-muted">
 				<mat-icon class="text-5xl! w-auto! h-auto! opacity-30">rate_review</mat-icon>
 				<p class="text-lg mt-2">Aún no has hecho ninguna review</p>
 				<p class="text-sm mt-1 mb-4">Explora francesinhas y comparte tu opinión</p>
@@ -162,7 +162,7 @@
 		@if (isLoading()) {
 			<div class="flex flex-col items-center justify-center gap-3 py-16 min-h-[70vh]">
 				<mat-spinner color="primary" diameter="48"/>
-				<p class="text-sm text-gray-400 animate-pulse">Cargando reviews...</p>
+				<p class="text-sm text-text-muted animate-pulse">Cargando reviews...</p>
 			</div>
 		}
 

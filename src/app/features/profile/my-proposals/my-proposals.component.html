@@ -43,7 +43,7 @@
 
 		<!-- Estado vacio -->
 		@if (proposals().length === 0 && !isLoading()) {
-			<div class="text-center py-16 text-gray-400">
+			<div class="text-center py-16 text-text-muted">
 				<mat-icon class="text-5xl! w-auto! h-auto! opacity-30">lunch_dining</mat-icon>
 				<p class="text-lg mt-2">
 					@if (statusFilter() === null) {
@@ -66,7 +66,7 @@
 		@if (isLoading()) {
 			<div class="flex flex-col items-center justify-center gap-3 py-16 min-h-[70vh]">
 				<mat-spinner color="primary" diameter="48"/>
-				<p class="text-sm text-gray-400 animate-pulse">Cargando propuestas...</p>
+				<p class="text-sm text-text-muted animate-pulse">Cargando propuestas...</p>
 			</div>
 		}
 

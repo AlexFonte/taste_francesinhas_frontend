@@ -67,7 +67,7 @@
 					        [attr.aria-label]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'" mat-icon-button
 					        matSuffix
 					        type="button">
-						<mat-icon class="text-gray-400">{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+						<mat-icon class="text-text-muted">{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
 					</button>
 					@if (form.get('password')?.hasError('required')) {
 						<mat-error>La contraseña es obligatoria</mat-error>
@@ -85,7 +85,7 @@
 					        [attr.aria-label]="showConfirm() ? 'Ocultar contraseña' : 'Mostrar contraseña'" mat-icon-button
 					        matSuffix
 					        type="button">
-						<mat-icon class="text-gray-400">{{ showConfirm() ? 'visibility_off' : 'visibility' }}</mat-icon>
+						<mat-icon class="text-text-muted">{{ showConfirm() ? 'visibility_off' : 'visibility' }}</mat-icon>
 					</button>
 					@if (form.get('confirmPassword')?.hasError('required')) {
 						<mat-error>Confirma tu contraseña</mat-error>

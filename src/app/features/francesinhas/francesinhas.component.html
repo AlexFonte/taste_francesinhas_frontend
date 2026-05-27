@@ -66,7 +66,7 @@
 
 		<!-- Estado vacío -->
 		@if (francesinhasList().length === 0 && !isLoading()) {
-			<div class="text-center py-16 text-gray-400">
+			<div class="text-center py-16 text-text-muted">
 				<mat-icon class="text-5xl! w-auto! h-auto! opacity-30">lunch_dining</mat-icon>
 				<p class="text-lg mt-2">No se encontraron francesinhas</p>
 				<p class="text-sm mt-1">Prueba con otros filtros</p>
@@ -77,7 +77,7 @@
 		@if (isLoading()) {
 			<div class="flex flex-col items-center justify-center gap-3 py-16 min-h-[70vh]">
 				<mat-spinner color="primary" diameter="48"/>
-				<p class="text-sm text-gray-400 animate-pulse">Cargando francesinhas...</p>
+				<p class="text-sm text-text-muted animate-pulse">Cargando francesinhas...</p>
 			</div>
 		}
 

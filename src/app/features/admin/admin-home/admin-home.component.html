@@ -82,10 +82,10 @@
 					         class="border border-gray-200 rounded-2xl p-4 bg-white flex flex-col gap-3 cursor-pointer hover:shadow-md transition-shadow">
 						<div>
 							<h3 class="text-sm font-bold text-text-main uppercase">{{ f.name }}</h3>
-							<p class="text-xs text-gray-500 mt-1">
+							<p class="text-xs text-gray-600 mt-1">
 								{{ f.restaurant.name }} · {{ f.restaurant.city }} · {{ f.price | number:'1.2-2' }}€
 							</p>
-							<p class="text-xs text-gray-400 mt-1">
+							<p class="text-xs text-text-muted mt-1">
 								Propuesta por
 								<span class="font-medium text-text-main">{{ f.proposedByEmail }}</span>
 								· {{ f.createdAt | date:'dd/MM/yyyy' }}

@@ -163,7 +163,7 @@
 								{label: 'Presentación:', valor: avgPresentation()}
 							]; track criterio.label) {
 								<div class="flex items-center justify-between">
-									<span class="text-sm text-gray-600 font-semibold">{{ criterio.label }}</span>
+									<span class="text-sm text-gray-700 font-semibold">{{ criterio.label }}</span>
 									<div class="flex items-center gap-1">
 										<mat-icon class="icon-filled !text-yellow-400 !text-lg !w-5 !h-5 !leading-5">star</mat-icon>
 										<span class="text-sm font-semibold text-gray-700">{{ criterio.valor | number:'1.2-2' }}</span>
@@ -206,7 +206,7 @@
 							@if (review.comment) {
 								<p class="text-sm text-gray-600 leading-relaxed">{{ review.comment }}</p>
 							}
-							<p class="text-xs text-gray-400">{{ review.createdAt | date:'dd MMM yyyy' }}</p>
+							<p class="text-xs text-text-muted">{{ review.createdAt | date:'dd MMM yyyy' }}</p>
 
 							<!-- Indicador del panel expandible -->
 							<div
