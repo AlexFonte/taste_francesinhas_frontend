@@ -21,6 +21,8 @@ Frontend del TFM (UOC, 2025/2). Aplicación web **PWA** construida con **Angular
 | Tests            | Vitest                                               |
 | Deploy           | Netlify                                              |
 
+**Angular 21** es el framework principal del frontend, basado en componentes standalone, signals y la nueva sintaxis de control flow. Se aprovechan sus módulos oficiales: router para la navegación, formularios reactivos para los inputs validados, HttpClient con interceptores para las llamadas a la API, Service Worker para la PWA y Angular Material con CDK para los componentes de interfaz.
+
 ---
 
 ## Requisitos previos
@@ -110,25 +112,25 @@ src/
 - Tras `login` / `signup`, el `AuthService` guarda en un signal el `LoginResponse` (`accessToken`, `refreshToken`, `name`, `email`, `role`).
 - Un `effect()` sincroniza ese signal con `localStorage` (clave `auth`).
 - El `authInterceptor` añade `Authorization: Bearer <token>` a cada request.
-- Si el backend responde **401**, el interceptor llama a `auth.logout()` y redirige a `/auth/login`.
-- Guards: `authGuard` (logueado), `adminGuard` (rol ADMIN), `userGuard` (rol USER).
+- Si el backend responde **401**, el interceptor intenta primero `auth.refresh()`. Si el refresh también falla, ejecuta `auth.logout()` y redirige a `/login`.
+- Guards: `authGuard` (logueado), `adminGuard` (rol ADMIN), `userGuard` (rol USER), `notAdminGuard` (bloquea ADMIN en pantallas USER/anónimo).
 
 ---
 
 ## Rutas implementadas
 
-| Ruta                   | Componente                  | Auth   |
-|------------------------|-----------------------------|--------|
-| `/francesinhas`        | Listado público             | —      |
-| `/francesinhas/:id`    | Detalle francesinha         | —      |
-| `/restaurants`         | Listado restaurantes        | —      |
-| `/restaurants/:id`     | Detalle restaurante         | —      |
-| `/auth/login`          | Login                       | —      |
-| `/auth/register`       | Registro                    | —      |
-| `/propose`             | Proponer francesinha        | USER   |
-| `/favorites`           | Mis favoritos               | USER   |
-| `/profile`             | Perfil de usuario           | logueado |
-| `/admin`               | Panel de moderación         | ADMIN  |
+| Ruta                | Componente           | Auth     |
+|---------------------|----------------------|----------|
+| `/francesinhas`     | Listado público      | —        |
+| `/francesinhas/:id` | Detalle francesinha  | —        |
+| `/restaurants`      | Listado restaurantes | —        |
+| `/restaurants/:id`  | Detalle restaurante  | —        |
+| `/login`            | Login                | —        |
+| `/register`         | Registro             | —        |
+| `/propose`          | Proponer francesinha | USER     |
+| `/favorites`        | Mis favoritos        | USER     |
+| `/profile`          | Perfil de usuario    | logueado |
+| `/admin`            | Panel de moderación  | ADMIN    |
 
 ---
 
@@ -166,6 +168,26 @@ Para probar el SW localmente:
 npm run build
 npx http-server -p 4200 -c-1 dist/taste-francesinhas-frontend/browser
 ```
+---
+
+## Fotos en reviews
+
+El usuario puede adjuntar **una foto opcional** al publicar una review (o al proponer una francesinha). El binario nunca viaja al servidor sin tratar:
+
+- **Componente:** `PhotoUploaderComponent` (`shared/components/photo-uploader`) con preview vía `URL.createObjectURL` y limpieza con `revokeObjectURL`.
+- **Validación previa** (en cliente): MIME (`image/jpeg|jpg|png|webp`) y tamaño ≤ 5 MB sobre el fichero original.
+- **Compresión client-side:** `ImageCompressService` envuelve `browser-image-compression`:
+	- `maxWidthOrHeight: 1024`
+	- `fileType: image/webp`
+	- `initialQuality: 0.80`
+	- `useWebWorker: true` (no bloquea el hilo principal)
+- **Renombrado:** la extensión se ajusta al MIME real (`foto.png` → `foto.webp`).
+- **Fallback:** si la librería falla en algún navegador exótico, se sube el fichero original con aviso al usuario.
+- **Envío:** `ReviewService.create` construye un `FormData` con parte `review` (JSON envuelto en `Blob`) y parte `file` (binario WebP).
+- **Visualización:** carrusel de fotos en el detalle implementado con scroll-snap CSS (`overflow-x-auto snap-x snap-mandatory`) + indicadores de puntitos clicables. La foto activa se calcula con `Math.round(scrollLeft / clientWidth)`.
+
+Reducción típica: foto de móvil ~2.2 MB → ~0.5-0.8 MB. Impacta directamente en LCP y consumo de datos.
+
 ---
 
 ## Troubleshooting

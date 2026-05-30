@@ -10,7 +10,7 @@ export class ImageCompressService {
 	// Configuracion pensada para fotos de comida hechas con el movil:
 	//  - 1280 px da margen de sobra para las cards (640) y el detalle (800)
 	//  - WebP comprime un 40% mejor que JPEG con la misma calidad visual.
-	//  - Calidad 0.82 es el punto dulce para que la salsa y el huevo no salgan pixelados.
+	//  - Calidad 0.80 es el punto dulce para que la salsa y el huevo no salgan pixelados.
 	//  - useWebWorker libera el hilo principal: el usuario puede seguir usnado la pantalla mientras se procesa.
 	private readonly defaults: Options = {
 		maxSizeMB: 1,
