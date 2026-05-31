@@ -52,6 +52,20 @@ export class AdminValidateComponent {
 		const diffMs = Math.abs(new Date(f.createdAt).getTime() - new Date(f.restaurant.createdAt).getTime());
 		return diffMs < 60_000;
 	});
+
+	readonly pageTitle = computed(() => {
+		const f = this.francesinha();
+		if (!f) return 'Validar propuesta';
+		switch (f.status) {
+			case 'ACCEPTED':
+				return 'Propuesta aprobada';
+			case 'REJECTED':
+				return 'Propuesta rechazada';
+			default:
+				return 'Validar propuesta';
+		}
+	});
+
 	private readonly fb = inject(NonNullableFormBuilder);
 	// los otros cuando es nuevo (modo formulario completo).
 	readonly restaurantForm: RestaurantInfoForm = this.fb.group({
